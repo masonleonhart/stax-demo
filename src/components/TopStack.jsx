@@ -1,9 +1,10 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import { IconButton, Text, useTheme } from "react-native-paper";
+import { useTheme } from "react-native-paper";
 
-import Landing from "./TopStackNavigator.jsx/Landing";
+import Landing from "./TopStackNavigator/Landing";
+import BarcodeScanner from "./TopStackNavigator/BarcodeScanner";
 
 export default function TopStack() {
   const Stack = createStackNavigator();
@@ -28,7 +29,12 @@ export default function TopStack() {
         },
       }}
     >
-      <Stack.Screen name="Landing" component={Landing}></Stack.Screen>
+      <Stack.Screen name="Landing" component={Landing} />
+      <Stack.Screen
+        name="BarcodeScanner"
+        component={BarcodeScanner}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }
