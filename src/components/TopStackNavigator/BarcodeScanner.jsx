@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { BarCodeScanner } from "expo-barcode-scanner";
+import { useDispatch } from "react-redux";
 
 import { Appbar, useTheme } from "react-native-paper";
 import { StyleSheet, Text, View } from "react-native";
@@ -10,6 +11,7 @@ import EmptyStateView from "../reusedComponents/EmptyStateView";
 export default function BarcodeScanner({ navigation }) {
   const isFocused = useIsFocused();
   const myTheme = useTheme();
+  const dispatch = useDispatch();
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
 
@@ -26,7 +28,7 @@ export default function BarcodeScanner({ navigation }) {
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    dispatch({ type: "FETCH_BARCODE_DATA", payload: data });
   };
 
   const styles = StyleSheet.create({
