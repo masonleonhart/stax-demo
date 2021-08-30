@@ -2,9 +2,19 @@ import { all, takeLatest, put } from "redux-saga/effects";
 import axios from "axios";
 
 function* fetchBarcodeDataSaga(action) {
+  // Checks barcode type for UPC-E, if true, send barcode to upce enpoint, else, send barcode to upca endpoint
+
+  let upcE = false;
+
+  if (action.payload.type.includes("UPC-E")) {
+    upcE = true;
+  }
+
   try {
     const response = yield axios.get(
-      `http://dev.getstax.co/api/v1/upc/${action.payload}`,
+      `http://dev.getstax.co/api/v1/upc${upcE ? "e" : "a"}/${
+        action.payload.data
+      }`,
       {
         auth: {
           username: "stax",

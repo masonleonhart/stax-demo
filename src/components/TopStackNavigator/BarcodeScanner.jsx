@@ -28,7 +28,7 @@ export default function BarcodeScanner({ navigation }) {
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    dispatch({ type: "FETCH_BARCODE_DATA", payload: data });
+    dispatch({ type: "FETCH_BARCODE_DATA", payload: { type, data } });
   };
 
   const styles = StyleSheet.create({
