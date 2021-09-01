@@ -1,8 +1,10 @@
 import React from "react";
 import { useIsFocused } from "@react-navigation/native";
 
-import { Text, useTheme, Button } from "react-native-paper";
+import { Text, useTheme } from "react-native-paper";
 import { View, StyleSheet } from "react-native";
+
+import MyButton from "../reusedComponents/MyButton";
 
 import SharedStyles from "../reusedComponents/SharedStyles";
 import EmptyStateView from "../reusedComponents/EmptyStateView";
@@ -14,7 +16,6 @@ export default function Landing({ navigation }) {
   const styles = StyleSheet.create({
     container: {
       justifyContent: "center",
-      alignItems: "center",
     },
   });
 
@@ -26,12 +27,10 @@ export default function Landing({ navigation }) {
 
   return (
     <View style={[SharedStyles.container, styles.container]}>
-      <Button
-        mode="contained"
+      <MyButton
+        text="Get Started"
         onPress={() => navigation.navigate("BarcodeScanner")}
-      >
-        Get Started
-      </Button>
+      />
     </View>
   );
 }

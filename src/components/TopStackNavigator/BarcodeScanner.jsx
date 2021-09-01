@@ -2,18 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useDispatch } from "react-redux";
+import { Dimensions } from "react-native";
 
-import { Appbar, useTheme } from "react-native-paper";
 import { StyleSheet, Text, View } from "react-native";
 
+import SharedStyles from "../reusedComponents/SharedStyles";
 import EmptyStateView from "../reusedComponents/EmptyStateView";
 
 export default function BarcodeScanner({ navigation }) {
   const isFocused = useIsFocused();
-  const myTheme = useTheme();
   const dispatch = useDispatch();
+  const windowHeight = Dimensions.get("window").height;
+  const windowWidth = Dimensions.get("window").width;
   const [hasPermission, setHasPermission] = useState(null);
-  const [scanned, setScanned] = useState(false);
 
   // Gets camera permission
 
@@ -27,17 +28,51 @@ export default function BarcodeScanner({ navigation }) {
   // Function to call on scan of barcode
 
   const handleBarCodeScanned = ({ type, data }) => {
-    setScanned(true);
-    dispatch({ type: "FETCH_BARCODE_DATA", payload: { type, data } });
+    if (type.includes("UPC-E") || type.includes("EAN-13")) {
+      dispatch({ type: "FETCH_BARCODE_DATA", payload: { type, data } });
+
+      navigation.navigate("CompanyProfile");
+    }
   };
 
   const styles = StyleSheet.create({
     container: {
       flex: 1,
     },
-    appbar: {
-      backgroundColor: "rgba(237, 224, 207, .5)",
-      opacity: .01
+    barcodeScanner: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    scanBorder: {
+      height: windowHeight * 0.35,
+      width: windowWidth * 0.9,
+      justifyContent: "space-between",
+    },
+    borderCorner: {
+      height: 100,
+      width: 100,
+      borderColor: "white",
+    },
+    topLeft: {
+      borderTopWidth: 10,
+      borderLeftWidth: 10,
+      borderTopLeftRadius: 25,
+    },
+    topRight: {
+      borderTopWidth: 10,
+      borderRightWidth: 10,
+      borderTopRightRadius: 25,
+    },
+    bottomLeft: {
+      borderBottomWidth: 10,
+      borderLeftWidth: 10,
+      borderBottomLeftRadius: 25,
+    },
+    bottomRight: {
+      borderBottomWidth: 10,
+      borderRightWidth: 10,
+      borderBottomRightRadius: 25,
     },
   });
 
@@ -61,16 +96,17 @@ export default function BarcodeScanner({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <BarCodeScanner
-        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-        style={StyleSheet.absoluteFillObject}
-      >
-        <Appbar.Header style={styles.appbar}>
-          {/* <Appbar.Action
-            icon="chevron-left"
-            onPress={() => navigation.goBack()}
-          /> */}
-        </Appbar.Header>
+      <BarCodeScanner onBarCodeScanned={handleBarCodeScanned} style={styles.barcodeScanner}>
+        <View style={styles.scanBorder}>
+          <View style={SharedStyles.flexRow}>
+            <View style={[styles.borderCorner, styles.topLeft]} />
+            <View style={[styles.borderCorner, styles.topRight]} />
+          </View>
+          <View style={SharedStyles.flexRow}>
+            <View style={[styles.borderCorner, styles.bottomLeft]} />
+            <View style={[styles.borderCorner, styles.bottomRight]} />
+          </View>
+        </View>
       </BarCodeScanner>
     </View>
   );
