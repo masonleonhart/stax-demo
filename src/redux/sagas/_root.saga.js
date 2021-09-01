@@ -3,7 +3,7 @@ import axios from "axios";
 
 function* fetchBarcodeDataSaga(action) {
   // Checks barcode type for UPC-E, if true, send barcode to upce enpoint, else, send barcode to upca endpoint
-
+console.log(action.payload)
   let upcE = false;
 
   if (action.payload.type.includes("UPC-E")) {
@@ -22,12 +22,18 @@ function* fetchBarcodeDataSaga(action) {
         },
       }
     );
+    yield put({ type: "SET_SCAN_ERROR_FALSE" });
+
     yield put({
       type: "SET_BARCODE_DETAILS",
       payload: response.data.products[0],
     });
   } catch (error) {
     console.log("Error in fetching barcode details", error);
+
+    yield put({ type: "SET_SCAN_ERROR_TRUE" });
+
+    yield put({ type: "RESET_BARCODE_DETAILS" });
   }
 }
 

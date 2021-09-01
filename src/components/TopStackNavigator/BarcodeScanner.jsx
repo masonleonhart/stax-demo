@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Dimensions } from "react-native";
 
-import { Appbar, useTheme } from "react-native-paper";
+import { IconButton, useTheme } from "react-native-paper";
 import { StyleSheet, Text, View } from "react-native";
 
 import EmptyStateView from "../reusedComponents/EmptyStateView";
@@ -12,8 +13,9 @@ export default function BarcodeScanner({ navigation }) {
   const isFocused = useIsFocused();
   const myTheme = useTheme();
   const dispatch = useDispatch();
+  const windowHeight = Dimensions.get("window").height;
   const [hasPermission, setHasPermission] = useState(null);
-  const [scanned, setScanned] = useState(false);
+  const companyDetails = useSelector((store) => store.barcodeDetails);
 
   // Gets camera permission
 
@@ -27,17 +29,20 @@ export default function BarcodeScanner({ navigation }) {
   // Function to call on scan of barcode
 
   const handleBarCodeScanned = ({ type, data }) => {
-    setScanned(true);
-    dispatch({ type: "FETCH_BARCODE_DATA", payload: { type, data } });
+    if (type.includes("UPC-E") || type.includes("EAN-13")) {
+      dispatch({ type: "FETCH_BARCODE_DATA", payload: { type, data } });
+
+      navigation.navigate("Company Profile");
+    }
   };
 
   const styles = StyleSheet.create({
     container: {
       flex: 1,
     },
-    appbar: {
-      backgroundColor: "rgba(237, 224, 207, .5)",
-      opacity: .01
+    iconbutton: {
+      position: "absolute",
+      top: windowHeight * 0.025,
     },
   });
 
@@ -62,15 +67,16 @@ export default function BarcodeScanner({ navigation }) {
   return (
     <View style={styles.container}>
       <BarCodeScanner
-        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-        style={StyleSheet.absoluteFillObject}
+        onBarCodeScanned={handleBarCodeScanned}
+        style={styles.container}
       >
-        <Appbar.Header style={styles.appbar}>
-          {/* <Appbar.Action
-            icon="chevron-left"
-            onPress={() => navigation.goBack()}
-          /> */}
-        </Appbar.Header>
+        <IconButton
+          icon="chevron-left"
+          size={40}
+          color={myTheme.colors.cream}
+          onPress={() => navigation.goBack()}
+          style={styles.iconbutton}
+        />
       </BarCodeScanner>
     </View>
   );
