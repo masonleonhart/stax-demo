@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Dimensions } from "react-native";
 
-import { IconButton, useTheme } from "react-native-paper";
 import { StyleSheet, Text, View } from "react-native";
 
+import SharedStyles from "../reusedComponents/SharedStyles";
 import EmptyStateView from "../reusedComponents/EmptyStateView";
 
 export default function BarcodeScanner({ navigation }) {
   const isFocused = useIsFocused();
-  const myTheme = useTheme();
   const dispatch = useDispatch();
   const windowHeight = Dimensions.get("window").height;
+  const windowWidth = Dimensions.get("window").width;
   const [hasPermission, setHasPermission] = useState(null);
-  const companyDetails = useSelector((store) => store.barcodeDetails);
 
   // Gets camera permission
 
@@ -32,7 +31,7 @@ export default function BarcodeScanner({ navigation }) {
     if (type.includes("UPC-E") || type.includes("EAN-13")) {
       dispatch({ type: "FETCH_BARCODE_DATA", payload: { type, data } });
 
-      navigation.navigate("Company Profile");
+      navigation.navigate("CompanyProfile");
     }
   };
 
@@ -40,9 +39,40 @@ export default function BarcodeScanner({ navigation }) {
     container: {
       flex: 1,
     },
-    iconbutton: {
-      position: "absolute",
-      top: windowHeight * 0.025,
+    barcodeScanner: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    scanBorder: {
+      height: windowHeight * 0.35,
+      width: windowWidth * 0.9,
+      justifyContent: "space-between",
+    },
+    borderCorner: {
+      height: 100,
+      width: 100,
+      borderColor: "white",
+    },
+    topLeft: {
+      borderTopWidth: 10,
+      borderLeftWidth: 10,
+      borderTopLeftRadius: 25,
+    },
+    topRight: {
+      borderTopWidth: 10,
+      borderRightWidth: 10,
+      borderTopRightRadius: 25,
+    },
+    bottomLeft: {
+      borderBottomWidth: 10,
+      borderLeftWidth: 10,
+      borderBottomLeftRadius: 25,
+    },
+    bottomRight: {
+      borderBottomWidth: 10,
+      borderRightWidth: 10,
+      borderBottomRightRadius: 25,
     },
   });
 
@@ -66,17 +96,17 @@ export default function BarcodeScanner({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <BarCodeScanner
-        onBarCodeScanned={handleBarCodeScanned}
-        style={styles.container}
-      >
-        <IconButton
-          icon="chevron-left"
-          size={40}
-          color={myTheme.colors.cream}
-          onPress={() => navigation.goBack()}
-          style={styles.iconbutton}
-        />
+      <BarCodeScanner onBarCodeScanned={handleBarCodeScanned} style={styles.barcodeScanner}>
+        <View style={styles.scanBorder}>
+          <View style={SharedStyles.flexRow}>
+            <View style={[styles.borderCorner, styles.topLeft]} />
+            <View style={[styles.borderCorner, styles.topRight]} />
+          </View>
+          <View style={SharedStyles.flexRow}>
+            <View style={[styles.borderCorner, styles.bottomLeft]} />
+            <View style={[styles.borderCorner, styles.bottomRight]} />
+          </View>
+        </View>
       </BarCodeScanner>
     </View>
   );

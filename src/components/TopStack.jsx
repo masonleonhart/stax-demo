@@ -30,6 +30,9 @@ export default function TopStack() {
           shadowRadius: 5,
           shadowColor: "black",
         },
+        headerTitleStyle: {
+          color: myTheme.colors.green
+        },
         headerLeft: () => {
           if (route.name !== "Landing") {
             return (
@@ -44,14 +47,18 @@ export default function TopStack() {
         },
       })}
     >
-      <Stack.Screen name="Landing" component={Landing} />
+      <Stack.Screen
+        name="Landing"
+        component={Landing}
+        options={{ title: "STAX Scan Beta" }}
+      />
       <Stack.Screen
         name="BarcodeScanner"
         component={BarcodeScanner}
-        options={{ headerShown: false }}
+        options={{ title: "Scan A Barcode" }}
       />
       <Stack.Screen
-        name="Company Profile"
+        name="CompanyProfile"
         component={CompanyProfile}
         options={{
           title: companyDetails.manufacturer
