@@ -14,8 +14,12 @@ export default function MyButton({ onPress, text, style }) {
       marginBottom: "5%",
       ...style
     },
-    buttonContent: { height: 50, alignItems: "center" },
-    buttonLabel: { color: myTheme.colors.green },
+    buttonContent: {
+      height: 50, alignItems: "center"
+    },
+    buttonLabel: {
+      color: myTheme.colors.green
+    },
   });
 
   return (

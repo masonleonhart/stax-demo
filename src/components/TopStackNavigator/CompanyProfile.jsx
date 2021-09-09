@@ -11,9 +11,8 @@ import Collapsible from "react-native-collapsible";
 
 import SharedStyles from "../reusedComponents/SharedStyles";
 import EmptyStateView from "../reusedComponents/EmptyStateView";
-import NoScanReturn from "./NoScanReturn";
 
-export default function CompanyProfile() {
+export default function CompanyProfile({ navigation }) {
   const isFocused = useIsFocused();
   const myTheme = useTheme();
   const windowWidth = Dimensions.get("window").width;
@@ -36,7 +35,7 @@ export default function CompanyProfile() {
       color: myTheme.colors.green,
       fontSize: 24,
       fontWeight: "500",
-      textAlign: "center"
+      textAlign: "center",
     },
     sectionWrapper: {
       borderBottomColor: myTheme.colors.grey,
@@ -54,12 +53,19 @@ export default function CompanyProfile() {
       marginVertical: "5%",
       fontWeight: "500",
     },
-    progressText: { fontSize: 16 },
-    progressBar: { width: windowWidth * 0.7 },
+    progressText: {
+      fontSize: 16,
+    },
+    progressBar: {
+      width: windowWidth * 0.7,
+    },
     overallMatchWrapper: {
       marginVertical: "5%",
     },
-    overallMatch: { fontSize: 18, fontWeight: "500" },
+    overallMatch: {
+      fontSize: 18,
+      fontWeight: "500",
+    },
     matchValue: {
       fontSize: 18,
       fontWeight: "500",
@@ -86,10 +92,10 @@ export default function CompanyProfile() {
     return <EmptyStateView />;
   }
 
-  // If the barcode scan did not return anything, show an error page
+  // If the barcode scan did not return anything, navigate to new product form
 
   if (scanError) {
-    return <NoScanReturn />;
+    navigation.navigate("ProductForm");
   }
 
   return (

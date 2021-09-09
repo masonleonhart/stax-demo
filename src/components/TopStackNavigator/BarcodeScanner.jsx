@@ -26,9 +26,14 @@ export default function BarcodeScanner({ navigation }) {
   }, []);
 
   // Function to call on scan of barcode
+  // Checks to make sure the barcode is of type UPC-A / UPC-E, if so, save the barcode data and type
+  // in a reducer, send the type and data to a saga to be sent to our api, and navigates to the
+  // company profile page
 
   const handleBarCodeScanned = ({ type, data }) => {
     if (type.includes("UPC-E") || type.includes("EAN-13")) {
+      dispatch({ type: "SET_MOST_RECENT_SCAN", payload: { type, data } });
+
       dispatch({ type: "FETCH_BARCODE_DATA", payload: { type, data } });
 
       navigation.navigate("CompanyProfile");
@@ -96,7 +101,10 @@ export default function BarcodeScanner({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <BarCodeScanner onBarCodeScanned={handleBarCodeScanned} style={styles.barcodeScanner}>
+      <BarCodeScanner
+        onBarCodeScanned={handleBarCodeScanned}
+        style={styles.barcodeScanner}
+      >
         <View style={styles.scanBorder}>
           <View style={SharedStyles.flexRow}>
             <View style={[styles.borderCorner, styles.topLeft]} />

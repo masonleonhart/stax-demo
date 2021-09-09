@@ -7,6 +7,7 @@ import { useTheme, IconButton } from "react-native-paper";
 import Landing from "./TopStackNavigator/Landing";
 import BarcodeScanner from "./TopStackNavigator/BarcodeScanner";
 import CompanyProfile from "./TopStackNavigator/CompanyProfile";
+import NewProductForm from "./TopStackNavigator/NewProductForm";
 
 export default function TopStack() {
   const Stack = createStackNavigator();
@@ -69,6 +70,11 @@ export default function TopStack() {
             ? companyDetails.title
             : "Company Profile",
         }}
+      />
+      <Stack.Screen
+        name="ProductForm"
+        component={NewProductForm}
+        options={{ title: "New Product Form" }}
       />
     </Stack.Navigator>
   );

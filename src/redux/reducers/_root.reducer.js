@@ -11,12 +11,24 @@ const barcodeDetails = (state = {}, action) => {
   }
 };
 
-const scanError = (state = false, action) => {
+const scanError = (state = true, action) => {
   switch (action.type) {
     case "SET_SCAN_ERROR_TRUE":
       return true;
     case "SET_SCAN_ERROR_FALSE":
       return false;
+    default:
+      return state;
+  }
+};
+
+const mostRecentBarcodeScanned = (
+  state = { data: "0370030620203" },
+  action
+) => {
+  switch (action.type) {
+    case "SET_MOST_RECENT_SCAN":
+      return action.payload;
     default:
       return state;
   }
@@ -28,6 +40,7 @@ const scanError = (state = false, action) => {
 const rootReducer = combineReducers({
   barcodeDetails,
   scanError,
+  mostRecentBarcodeScanned,
 });
 
 export default rootReducer;
