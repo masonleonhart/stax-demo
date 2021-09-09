@@ -22,13 +22,23 @@ const scanError = (state = true, action) => {
   }
 };
 
-const mostRecentBarcodeScanned = (
-  state = { data: "0370030620203" },
-  action
-) => {
+const mostRecentBarcodeScanned = (state = {}, action) => {
   switch (action.type) {
     case "SET_MOST_RECENT_SCAN":
       return action.payload;
+    default:
+      return state;
+  }
+};
+
+const didUpcPostSuccessfully = (state = null, action) => {
+  switch (action.type) {
+    case "UPC_POST_SUCCESSFUL":
+      return true;
+    case "UPC_POST_ERROR":
+      return false;
+    case "RESET_UPC_POST_STATUS":
+      return null;
     default:
       return state;
   }
@@ -41,6 +51,7 @@ const rootReducer = combineReducers({
   barcodeDetails,
   scanError,
   mostRecentBarcodeScanned,
+  didUpcPostSuccessfully,
 });
 
 export default rootReducer;

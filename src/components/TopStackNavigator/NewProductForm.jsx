@@ -1,22 +1,27 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import { ScrollView, StyleSheet } from "react-native";
 import { Text, TextInput, useTheme } from "react-native-paper";
 
 import SharedStyles from "../reusedComponents/SharedStyles";
 import MyButton from "../reusedComponents/MyButton";
+import NewProductModal from "./NewProductModal";
 
 export default function NoScanReturn() {
   const myTheme = useTheme();
+  const dispatch = useDispatch();
   const recentScan = useSelector((store) => store.mostRecentBarcodeScanned);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [isDialogVisible, setIsDialogVisible] = useState(false);
+
   const [formDetails, setFormDetails] = useState({
     id: recentScan.data,
     upc: recentScan.data,
-    user_id: 1,
+    user_id: null,
     store: "",
     product_name: "",
-    company: "",
+    company_id: null,
     price: "",
     user_email: "",
   });
@@ -58,10 +63,28 @@ export default function NoScanReturn() {
     }
   };
 
-  // Function to run on submit press, converts price to number and dispatches data to saga to send to api
+  // Function to disable button or not based on if form fields are filled out with the price field foramtted
+
+  useEffect(() => {
+    if (
+      formDetails.store &&
+      formDetails.product_name &&
+      formDetails.price &&
+      formDetails.price.includes(".") &&
+      formDetails.price.indexOf(".") + 3 === formDetails.price.length
+    ) {
+      setIsButtonDisabled(false);
+    } else {
+      setIsButtonDisabled(true);
+    }
+  }, [formDetails]);
+
+  // Function to run on submit press, shows dialog and dispatches data to saga to send to api
 
   const submitButtonPress = () => {
-    setFormDetails({ ...formDetails, price: Number(formDetails.price) });
+    setIsDialogVisible(true);
+
+    dispatch({ type: "POST_NEW_UPC", payload: formDetails });
   };
 
   const styles = StyleSheet.create({
@@ -76,6 +99,11 @@ export default function NoScanReturn() {
       style={SharedStyles.container}
       keyboardShouldPersistTaps="handled"
     >
+      <NewProductModal
+        isDialogVisible={isDialogVisible}
+        setIsDialogVisible={setIsDialogVisible}
+      />
+
       <TextInput
         onChangeText={(text) => setFormDetails({ ...formDetails, store: text })}
         value={formDetails.store}
@@ -96,16 +124,16 @@ export default function NoScanReturn() {
         style={styles.textInput}
       />
 
-      <TextInput
+      {/* <TextInput
         onChangeText={(text) =>
-          setFormDetails({ ...formDetails, company: text })
+          setFormDetails({ ...formDetails, company_id: text })
         }
-        value={formDetails.company}
+        value={formDetails.company_id}
         label="Who makes the product?"
         left={<TextInput.Icon name="domain" color={myTheme.colors.green} />}
         theme={inputTheme}
         style={styles.textInput}
-      />
+      /> */}
 
       <TextInput
         onChangeText={(text) => setFormDetails({ ...formDetails, price: text })}
@@ -132,7 +160,11 @@ export default function NoScanReturn() {
         style={styles.textInput}
       />
 
-      <MyButton text="Submit" onPress={submitButtonPress} />
+      <MyButton
+        text="Submit"
+        onPress={submitButtonPress}
+        disabled={isButtonDisabled}
+      />
     </ScrollView>
   );
 }
