@@ -7,12 +7,12 @@ import { useTheme, IconButton } from "react-native-paper";
 import Landing from "./TopStackNavigator/Landing";
 import BarcodeScanner from "./TopStackNavigator/BarcodeScanner";
 import CompanyProfile from "./TopStackNavigator/CompanyProfile";
-import NewProductForm from "./TopStackNavigator/NewProductForm";
 
 export default function TopStack() {
   const Stack = createStackNavigator();
   const myTheme = useTheme();
   const companyDetails = useSelector((store) => store.barcodeDetails);
+  const scanError = useSelector((store) => store.scanError);
 
   // Renders the top stack navigator of the application
 
@@ -32,7 +32,7 @@ export default function TopStack() {
           shadowColor: "black",
         },
         headerTitleStyle: {
-          color: myTheme.colors.green
+          color: myTheme.colors.green,
         },
         headerLeft: () => {
           if (route.name !== "Landing") {
@@ -62,7 +62,9 @@ export default function TopStack() {
         name="CompanyProfile"
         component={CompanyProfile}
         options={{
-          title: companyDetails.manufacturer
+          title: scanError
+            ? "New Product Form"
+            : companyDetails.manufacturer
             ? companyDetails.manufacturer
             : companyDetails.brand
             ? companyDetails.brand
@@ -70,11 +72,6 @@ export default function TopStack() {
             ? companyDetails.title
             : "Company Profile",
         }}
-      />
-      <Stack.Screen
-        name="ProductForm"
-        component={NewProductForm}
-        options={{ title: "New Product Form" }}
       />
     </Stack.Navigator>
   );

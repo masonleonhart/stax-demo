@@ -11,8 +11,9 @@ import Collapsible from "react-native-collapsible";
 
 import SharedStyles from "../reusedComponents/SharedStyles";
 import EmptyStateView from "../reusedComponents/EmptyStateView";
+import NewProductForm from "./NewProductForm";
 
-export default function CompanyProfile({ navigation }) {
+export default function CompanyProfile() {
   const isFocused = useIsFocused();
   const myTheme = useTheme();
   const windowWidth = Dimensions.get("window").width;
@@ -92,10 +93,10 @@ export default function CompanyProfile({ navigation }) {
     return <EmptyStateView />;
   }
 
-  // If the barcode scan did not return anything, navigate to new product form
+  // If the barcode scan did not return anything, display new product form
 
   if (scanError) {
-    navigation.navigate("ProductForm");
+    return <NewProductForm />
   }
 
   return (
