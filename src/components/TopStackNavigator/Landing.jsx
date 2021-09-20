@@ -15,7 +15,13 @@ export default function Landing({ navigation }) {
 
   const styles = StyleSheet.create({
     container: {
-      justifyContent: "center",
+      justifyContent: "center"
+    },
+    text: {
+      marginBottom: "30%",
+      fontSize: 18,
+      lineHeight: 27,
+      textAlign: "center"
     },
   });
 
@@ -27,6 +33,10 @@ export default function Landing({ navigation }) {
 
   return (
     <View style={[SharedStyles.container, styles.container]}>
+      <Text style={styles.text}>
+        Welcome to the Stax Barcode Scanner! Use this application to scan any
+        product to see how it will align to your personal values
+      </Text>
       <MyButton
         text="Get Started"
         onPress={() => navigation.navigate("BarcodeScanner")}

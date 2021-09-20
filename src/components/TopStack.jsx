@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 
 import { useTheme, IconButton } from "react-native-paper";
 
+import Login from "./TopStackNavigator/Login";
 import Landing from "./TopStackNavigator/Landing";
 import BarcodeScanner from "./TopStackNavigator/BarcodeScanner";
 import CompanyProfile from "./TopStackNavigator/CompanyProfile";
@@ -11,7 +12,8 @@ import CompanyProfile from "./TopStackNavigator/CompanyProfile";
 export default function TopStack() {
   const Stack = createStackNavigator();
   const myTheme = useTheme();
-  const companyDetails = useSelector((store) => store.barcodeDetails);
+  const companyDetails = useSelector((store) => store.barcode.barcodeDetails);
+  const scanError = useSelector((store) => store.barcode.scanError);
 
   // Renders the top stack navigator of the application
 
@@ -31,7 +33,7 @@ export default function TopStack() {
           shadowColor: "black",
         },
         headerTitleStyle: {
-          color: myTheme.colors.green
+          color: myTheme.colors.green,
         },
         headerLeft: () => {
           if (route.name !== "Landing") {
@@ -48,6 +50,11 @@ export default function TopStack() {
       })}
     >
       <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
         name="Landing"
         component={Landing}
         options={{ title: "STAX Scan Beta" }}
@@ -61,7 +68,9 @@ export default function TopStack() {
         name="CompanyProfile"
         component={CompanyProfile}
         options={{
-          title: companyDetails.manufacturer
+          title: scanError
+            ? "New Product Form"
+            : companyDetails.manufacturer
             ? companyDetails.manufacturer
             : companyDetails.brand
             ? companyDetails.brand

@@ -11,14 +11,14 @@ import Collapsible from "react-native-collapsible";
 
 import SharedStyles from "../reusedComponents/SharedStyles";
 import EmptyStateView from "../reusedComponents/EmptyStateView";
-import NoScanReturn from "./NoScanReturn";
+import NewProductForm from "./NewProductForm";
 
 export default function CompanyProfile() {
   const isFocused = useIsFocused();
   const myTheme = useTheme();
   const windowWidth = Dimensions.get("window").width;
-  const companyDetails = useSelector((store) => store.barcodeDetails);
-  const scanError = useSelector((store) => store.scanError);
+  const companyDetails = useSelector((store) => store.barcode.barcodeDetails);
+  const scanError = useSelector((store) => store.barcode.scanError);
   const [isCollapsed1, setIsCollapsed1] = useState(true);
   const [isCollapsed2, setIsCollapsed2] = useState(true);
   const [isCollapsed3, setIsCollapsed3] = useState(true);
@@ -36,7 +36,7 @@ export default function CompanyProfile() {
       color: myTheme.colors.green,
       fontSize: 24,
       fontWeight: "500",
-      textAlign: "center"
+      textAlign: "center",
     },
     sectionWrapper: {
       borderBottomColor: myTheme.colors.grey,
@@ -54,12 +54,19 @@ export default function CompanyProfile() {
       marginVertical: "5%",
       fontWeight: "500",
     },
-    progressText: { fontSize: 16 },
-    progressBar: { width: windowWidth * 0.7 },
+    progressText: {
+      fontSize: 16,
+    },
+    progressBar: {
+      width: windowWidth * 0.7,
+    },
     overallMatchWrapper: {
       marginVertical: "5%",
     },
-    overallMatch: { fontSize: 18, fontWeight: "500" },
+    overallMatch: {
+      fontSize: 18,
+      fontWeight: "500",
+    },
     matchValue: {
       fontSize: 18,
       fontWeight: "500",
@@ -86,10 +93,10 @@ export default function CompanyProfile() {
     return <EmptyStateView />;
   }
 
-  // If the barcode scan did not return anything, show an error page
+  // If the barcode scan did not return anything, display new product form
 
   if (scanError) {
-    return <NoScanReturn />;
+    return <NewProductForm />
   }
 
   return (
