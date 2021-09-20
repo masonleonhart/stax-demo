@@ -4,25 +4,22 @@ import axios from "axios";
 // Checks barcode type for UPC-E, if true, send barcode to upce enpoint, else, send barcode to upca endpoint
 
 function* fetchBarcodeDataSaga(action) {
-  let upcE = false;
-
-  if (action.payload.type.includes("UPC-E")) {
-    upcE = true;
-  }
-
+  console.log(action.payload)
   try {
     const response = yield axios.get(
-      `http://dev.getstax.co/api/v1/upc${upcE ? "e" : "a"}/${
-        action.payload.data
-      }`,
+      // `http://dev.getstax.co/api/v1/upc`,
+      `http://192.168.0.44:5050/api/v1/upc`,
       {
+        params: action.payload,
         auth: {
           username: "stax",
-          password: "testpass",
+          password: "g3tSTAX",
         },
       }
     );
     yield put({ type: "SET_SCAN_ERROR_FALSE" });
+
+    yield console.log(response.data);
 
     yield put({
       type: "SET_BARCODE_DETAILS",

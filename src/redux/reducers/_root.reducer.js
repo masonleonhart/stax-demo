@@ -11,7 +11,7 @@ const barcodeDetails = (state = {}, action) => {
   }
 };
 
-const scanError = (state = true, action) => {
+const scanError = (state = null, action) => {
   switch (action.type) {
     case "SET_SCAN_ERROR_TRUE":
       return true;

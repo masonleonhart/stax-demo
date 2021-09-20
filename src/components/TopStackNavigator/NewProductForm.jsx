@@ -65,9 +65,18 @@ export default function NoScanReturn() {
   };
 
   const styles = StyleSheet.create({
+    text: {
+      marginVertical: "5%",
+      fontSize: 18,
+      lineHeight: 27,
+      textAlign: "center"
+    },
     textInput: {
       backgroundColor: "transparent",
       marginTop: "5%",
+    },
+    button: {
+      marginTop: "15%"
     },
   });
 
@@ -76,6 +85,12 @@ export default function NoScanReturn() {
       style={SharedStyles.container}
       keyboardShouldPersistTaps="handled"
     >
+      <Text style={styles.text}>
+        Congratulations, you found a product that we have not yet indexed!
+        Please fill out this quick form to help us store off this product
+        information.
+      </Text>
+
       <TextInput
         onChangeText={(text) => setFormDetails({ ...formDetails, store: text })}
         value={formDetails.store}
@@ -132,7 +147,7 @@ export default function NoScanReturn() {
         style={styles.textInput}
       />
 
-      <MyButton text="Submit" onPress={submitButtonPress} />
+      <MyButton text="Submit" onPress={submitButtonPress} style={styles.button} />
     </ScrollView>
   );
 }
