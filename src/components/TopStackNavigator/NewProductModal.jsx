@@ -20,7 +20,7 @@ export default function NewProductModal({
   const myTheme = useTheme();
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const upcPostStatus = useSelector((store) => store.didUpcPostSuccessfully);
+  const upcPostStatus = useSelector((store) => store.barcode.didUpcPostSuccessfully);
   const [didUpcPostReturn, setDidUpcPostReturn] = useState(false);
 
   // Check if the upcPost returned or not (true is successful return and false means error while null

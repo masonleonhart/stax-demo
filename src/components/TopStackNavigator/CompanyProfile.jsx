@@ -17,8 +17,8 @@ export default function CompanyProfile() {
   const isFocused = useIsFocused();
   const myTheme = useTheme();
   const windowWidth = Dimensions.get("window").width;
-  const companyDetails = useSelector((store) => store.barcodeDetails);
-  const scanError = useSelector((store) => store.scanError);
+  const companyDetails = useSelector((store) => store.barcode.barcodeDetails);
+  const scanError = useSelector((store) => store.barcode.scanError);
   const [isCollapsed1, setIsCollapsed1] = useState(true);
   const [isCollapsed2, setIsCollapsed2] = useState(true);
   const [isCollapsed3, setIsCollapsed3] = useState(true);
