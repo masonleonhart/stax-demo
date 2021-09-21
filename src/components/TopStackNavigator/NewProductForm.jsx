@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useIsFocused } from "@react-navigation/core";
+import axios from "axios";
+import config from "../../redux/sagas/server.config";
 
 import { ScrollView, StyleSheet } from "react-native";
 import { Text, TextInput, useTheme } from "react-native-paper";
@@ -13,12 +15,12 @@ import EmptyStateView from "../reusedComponents/EmptyStateView";
 export default function NoScanReturn() {
   const myTheme = useTheme();
   const isFocused = useIsFocused();
-  const dispatch = useDispatch();
   const recentScan = useSelector(
     (store) => store.barcode.mostRecentBarcodeScanned
   );
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [isDialogVisible, setIsDialogVisible] = useState(false);
+  const [upcPostStatus, setUpcPostStatus] = useState(null);
 
   const [formDetails, setFormDetails] = useState({
     id: recentScan.data,
@@ -79,15 +81,25 @@ export default function NoScanReturn() {
     }
   }, [formDetails, formStore]);
 
-  // Function to run on submit press, shows dialog and dispatches data to saga to send to api
+  // Function to run on submit press, shows dialog and dispatches data to to api
 
-  const submitButtonPress = () => {
+  const submitButtonPress = async () => {
     setIsDialogVisible(true);
 
-    dispatch({
-      type: "POST_NEW_UPC",
-      payload: { ...formDetails, stores: [formStore] },
-    });
+    try {
+      const response = await axios.post(
+        `${config.serverAddress}/api/v1/new_upc`,
+        { ...formDetails, stores: [formStore] },
+        { auth: config.creds }
+      );
+
+      await setUpcPostStatus(true);
+    } catch (error) {
+      console.log("Error in posting new upc");
+      console.log(error);
+
+      await setUpcPostStatus(false);
+    }
   };
 
   // Shared theme for text inputs
@@ -130,6 +142,7 @@ export default function NoScanReturn() {
       <NewProductModal
         isDialogVisible={isDialogVisible}
         setIsDialogVisible={setIsDialogVisible}
+        upcPostStatus={upcPostStatus}
       />
 
       <Text style={styles.text}>

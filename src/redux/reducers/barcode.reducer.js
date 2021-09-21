@@ -24,25 +24,9 @@ const mostRecentBarcodeScanned = (state = {}, action) => {
   }
 };
 
-// if there was an error in the post of a new upc to db
-
-const didUpcPostSuccessfully = (state = null, action) => {
-  switch (action.type) {
-    case "UPC_POST_SUCCESSFUL":
-      return true;
-    case "UPC_POST_ERROR":
-      return false;
-    case "RESET_UPC_POST_STATUS":
-      return null;
-    default:
-      return state;
-  }
-};
-
 // Combines all of our redcuers to be exported to _root.reducer
 
 export default combineReducers({
   barcodeDetails,
   mostRecentBarcodeScanned,
-  didUpcPostSuccessfully,
 });

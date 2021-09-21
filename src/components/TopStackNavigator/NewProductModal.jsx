@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/core";
 
 import { StyleSheet } from "react-native";
@@ -16,11 +16,11 @@ import MyButton from "../reusedComponents/MyButton";
 export default function NewProductModal({
   isDialogVisible,
   setIsDialogVisible,
+  upcPostStatus
 }) {
   const myTheme = useTheme();
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const upcPostStatus = useSelector((store) => store.barcode.didUpcPostSuccessfully);
   const [didUpcPostReturn, setDidUpcPostReturn] = useState(false);
 
   // Check if the upcPost returned or not (true is successful return and false means error while null
