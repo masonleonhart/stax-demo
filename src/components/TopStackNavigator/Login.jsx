@@ -53,7 +53,7 @@ function Login({ navigation }) {
   //   });
   // };
 
-  // Fetches all user to so emails of the current sign in and current users can be compared
+  // Fetches all user so emails of the current sign in and current users can be compared
 
   //  useEffect(() => {
   //    dispatch({ type: "FETCH_ALL_USERS" });

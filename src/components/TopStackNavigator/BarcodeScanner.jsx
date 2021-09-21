@@ -59,7 +59,7 @@ export default function BarcodeScanner({ navigation }) {
 
         await dispatch({
           type: "SET_BARCODE_DETAILS",
-          payload: response.data.products[0],
+          payload: response.data,
         });
 
         await navigation.navigate("CompanyProfile");
