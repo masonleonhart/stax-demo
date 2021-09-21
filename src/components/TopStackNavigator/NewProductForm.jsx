@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useIsFocused } from "@react-navigation/core";
 
 import { ScrollView, StyleSheet } from "react-native";
 import { Text, TextInput, useTheme } from "react-native-paper";
@@ -7,9 +8,11 @@ import { Text, TextInput, useTheme } from "react-native-paper";
 import SharedStyles from "../reusedComponents/SharedStyles";
 import MyButton from "../reusedComponents/MyButton";
 import NewProductModal from "./NewProductModal";
+import EmptyStateView from "../reusedComponents/EmptyStateView";
 
 export default function NoScanReturn() {
   const myTheme = useTheme();
+  const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const recentScan = useSelector(
     (store) => store.barcode.mostRecentBarcodeScanned
@@ -112,6 +115,12 @@ export default function NoScanReturn() {
       marginTop: "15%",
     },
   });
+
+  // If the screen isn't in focus yet, render a placeholder screen
+
+  if (!isFocused) {
+    return <EmptyStateView />;
+  }
 
   return (
     <ScrollView

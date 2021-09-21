@@ -8,12 +8,12 @@ import Login from "./TopStackNavigator/Login";
 import Landing from "./TopStackNavigator/Landing";
 import BarcodeScanner from "./TopStackNavigator/BarcodeScanner";
 import CompanyProfile from "./TopStackNavigator/CompanyProfile";
+import NewProductForm from "./TopStackNavigator/NewProductForm";
 
 export default function TopStack() {
   const Stack = createStackNavigator();
   const myTheme = useTheme();
   const companyDetails = useSelector((store) => store.barcode.barcodeDetails);
-  const scanError = useSelector((store) => store.barcode.scanError);
 
   // Renders the top stack navigator of the application
 
@@ -68,9 +68,7 @@ export default function TopStack() {
         name="CompanyProfile"
         component={CompanyProfile}
         options={{
-          title: scanError
-            ? "New Product Form"
-            : companyDetails.manufacturer
+          title: companyDetails.manufacturer
             ? companyDetails.manufacturer
             : companyDetails.brand
             ? companyDetails.brand
@@ -78,6 +76,11 @@ export default function TopStack() {
             ? companyDetails.title
             : "Company Profile",
         }}
+      />
+      <Stack.Screen
+        name="NewProductForm"
+        component={NewProductForm}
+        options={{ title: "New Product Form" }}
       />
     </Stack.Navigator>
   );

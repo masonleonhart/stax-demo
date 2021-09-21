@@ -3,11 +3,14 @@ import { useIsFocused } from "@react-navigation/native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useDispatch } from "react-redux";
 import { Dimensions } from "react-native";
+import axios from "axios";
+import config from "../../redux/sagas/server.config";
 
 import { StyleSheet, Text, View } from "react-native";
 
 import SharedStyles from "../reusedComponents/SharedStyles";
 import EmptyStateView from "../reusedComponents/EmptyStateView";
+import BarcodeScannerModal from "./BarcodeScannerModal";
 
 export default function BarcodeScanner({ navigation }) {
   const isFocused = useIsFocused();
@@ -15,6 +18,8 @@ export default function BarcodeScanner({ navigation }) {
   const windowHeight = Dimensions.get("window").height;
   const windowWidth = Dimensions.get("window").width;
   const [hasPermission, setHasPermission] = useState(null);
+  const [scanned, setScanned] = useState(false);
+  const [isDialogVisible, setIsDialogVisible] = useState(false);
 
   // Gets camera permission
 
@@ -25,18 +30,47 @@ export default function BarcodeScanner({ navigation }) {
     })();
   }, []);
 
+  // Sets scanned and isDialogVisible to false when the screen comes into focus
+
+  useEffect(() => {
+    setScanned(false);
+
+    setIsDialogVisible(false);
+  }, [isFocused]);
+
   // Function to call on scan of barcode
   // Checks to make sure the barcode is of type UPC-A / UPC-E, if so, save the barcode data and type
-  // in a reducer, send the type and data to a saga to be sent to our api, and navigates to the
-  // company profile page
+  // in a reducer, send the type and data to the api and navigate to company profile if successful return,
+  // or to new product form if error
 
-  const handleBarCodeScanned = ({ type, data }) => {
+  const handleBarCodeScanned = async ({ type, data }) => {
+    setScanned(true);
+
+    setIsDialogVisible(true);
+
     if (type.includes("UPC-E") || type.includes("EAN-13")) {
       dispatch({ type: "SET_MOST_RECENT_SCAN", payload: { type, data } });
 
-      dispatch({ type: "FETCH_BARCODE_DATA", payload: { type, data } });
+      try {
+        const response = await axios.get(`${config.serverAddress}/api/v1/upc`, {
+          params: { type, data },
+          auth: config.creds,
+        });
 
-      navigation.navigate("CompanyProfile");
+        await dispatch({
+          type: "SET_BARCODE_DETAILS",
+          payload: response.data.products[0],
+        });
+
+        await navigation.navigate("CompanyProfile");
+      } catch (error) {
+        console.log("Error in fetching barcode details");
+        console.log(error);
+
+        await dispatch({ type: "RESET_BARCODE_DETAILS" });
+
+        await navigation.navigate("NewProductForm");
+      }
     }
   };
 
@@ -102,9 +136,14 @@ export default function BarcodeScanner({ navigation }) {
   return (
     <View style={styles.container}>
       <BarCodeScanner
-        onBarCodeScanned={handleBarCodeScanned}
+        onBarCodeScanned={!scanned && handleBarCodeScanned}
         style={styles.barcodeScanner}
       >
+        <BarcodeScannerModal
+          isDialogVisible={isDialogVisible}
+          setIsDialogVisible={setIsDialogVisible}
+        />
+
         <View style={styles.scanBorder}>
           <View style={SharedStyles.flexRow}>
             <View style={[styles.borderCorner, styles.topLeft]} />

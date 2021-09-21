@@ -13,19 +13,6 @@ const barcodeDetails = (state = {}, action) => {
   }
 };
 
-// if there was an error in scan
-
-const scanError = (state = null, action) => {
-  switch (action.type) {
-    case "SET_SCAN_ERROR_TRUE":
-      return true;
-    case "SET_SCAN_ERROR_FALSE":
-      return false;
-    default:
-      return state;
-  }
-};
-
 // most recent upc that was scanned
 
 const mostRecentBarcodeScanned = (state = {}, action) => {
@@ -56,7 +43,6 @@ const didUpcPostSuccessfully = (state = null, action) => {
 
 export default combineReducers({
   barcodeDetails,
-  scanError,
   mostRecentBarcodeScanned,
   didUpcPostSuccessfully,
 });
