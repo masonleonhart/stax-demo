@@ -24,7 +24,7 @@ export default function NoScanReturn() {
 
   const [formDetails, setFormDetails] = useState({
     id: recentScan.data,
-    // user_id: null,
+    contributor_id: 1,
     barcode_formats: `${recentScan.type.split(".")[2]} ${recentScan.data}`,
     barcode_number: recentScan.data,
     brand: "",
