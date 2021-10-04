@@ -1,0 +1,65 @@
+import React from "react";
+
+import { StyleSheet } from "react-native";
+import { Portal, Dialog, Text, useTheme } from "react-native-paper";
+
+import MyButton from "../reusedComponents/MyButton";
+
+export default function ValuesModal({ isDialogVisible, setIsDialogVisible }) {
+  const myTheme = useTheme();
+
+  // Function that doesn't allow the dialog to be dismissed
+
+  const onDialogDismiss = () => {
+    return;
+  };
+
+  const styles = StyleSheet.create({
+    dialog: {
+      marginLeft: "10%",
+      marginRight: "10%",
+      backgroundColor: myTheme.colors.cream,
+    },
+    text: {
+      color: myTheme.colors.green,
+      fontSize: 18,
+      lineHeight: 27,
+      fontWeight: "600",
+      textAlign: "center",
+    },
+    dialogActions: {
+      justifyContent: "center",
+    },
+    button: {
+      marginTop: "0%",
+    },
+    buttonContent: {
+      width: 200,
+    },
+  });
+
+  return (
+    <Portal>
+      <Dialog
+        style={styles.dialog}
+        visible={isDialogVisible}
+        onDismiss={onDialogDismiss}
+      >
+        <Dialog.Content style={styles.dialogContent}>
+          <Text style={styles.text}>
+            Select your top four values from the list below. The order in which
+            you select will determine how the values will be ranked.
+          </Text>
+        </Dialog.Content>
+        <Dialog.Actions style={styles.dialogActions}>
+          <MyButton
+            text="Ok"
+            style={styles.button}
+            contentStyle={styles.buttonContent}
+            onPress={() => setIsDialogVisible(false)}
+          />
+        </Dialog.Actions>
+      </Dialog>
+    </Portal>
+  );
+}
