@@ -91,6 +91,8 @@ export default function CompanyProfile() {
     return <EmptyStateView />;
   }
 
+  console.log(companyDetails.manufacturer)
+
   return (
     <ScrollView style={SharedStyles.container}>
       <View style={styles.companyHeader}>

@@ -39,7 +39,7 @@ export default function Landing({ navigation }) {
       </Text>
       <MyButton
         text="Get Started"
-        onPress={() => navigation.navigate("BarcodeScanner")}
+        onPress={() => navigation.navigate("Values")}
       />
     </View>
   );

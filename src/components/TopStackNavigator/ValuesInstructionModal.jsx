@@ -5,14 +5,8 @@ import { Portal, Dialog, Text, useTheme } from "react-native-paper";
 
 import MyButton from "../reusedComponents/MyButton";
 
-export default function ValuesModal({ isDialogVisible, setIsDialogVisible }) {
+export default function ValuesInstructionModal({ isInstructionDialogVisible, setIsInstructionDialogVisible }) {
   const myTheme = useTheme();
-
-  // Function that doesn't allow the dialog to be dismissed
-
-  const onDialogDismiss = () => {
-    return;
-  };
 
   const styles = StyleSheet.create({
     dialog: {
@@ -42,8 +36,7 @@ export default function ValuesModal({ isDialogVisible, setIsDialogVisible }) {
     <Portal>
       <Dialog
         style={styles.dialog}
-        visible={isDialogVisible}
-        onDismiss={onDialogDismiss}
+        visible={isInstructionDialogVisible}
       >
         <Dialog.Content style={styles.dialogContent}>
           <Text style={styles.text}>
@@ -56,7 +49,7 @@ export default function ValuesModal({ isDialogVisible, setIsDialogVisible }) {
             text="Ok"
             style={styles.button}
             contentStyle={styles.buttonContent}
-            onPress={() => setIsDialogVisible(false)}
+            onPress={() => setIsInstructionDialogVisible(false)}
           />
         </Dialog.Actions>
       </Dialog>

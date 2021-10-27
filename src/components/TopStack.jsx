@@ -50,16 +50,16 @@ export default function TopStack() {
         },
       })}
     >
-      {/* <Stack.Screen
+      <Stack.Screen
         name="Login"
         component={Login}
         options={{ headerShown: false }}
-      /> */}
-      {/* <Stack.Screen
+      />
+      <Stack.Screen
         name="Landing"
         component={Landing}
         options={{ title: "STAX Scan Beta" }}
-      /> */}
+      />
       <Stack.Screen
         name="Values"
         component={Values}
