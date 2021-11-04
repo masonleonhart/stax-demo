@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useIsFocused } from "@react-navigation/core";
+import { useDispatch } from "react-redux";
 
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 
 import { ScrollView, StyleSheet, View, Pressable } from "react-native";
-import { Text, useTheme, IconButton } from "react-native-paper";
+import { Text, useTheme } from "react-native-paper";
 
 import MyButton from "../reusedComponents/MyButton";
 
@@ -16,6 +17,7 @@ import EmptyStateView from "../reusedComponents/EmptyStateView";
 export default function Values({ navigation }) {
   const isFocused = useIsFocused();
   const myTheme = useTheme();
+  const dispatch = useDispatch();
   const [isInstructionDialogVisible, setIsInstructionDialogVisible] =
     useState(true);
   const [isTooManyDialogVisible, setIsTooManyDialogVisible] = useState(false);
@@ -100,15 +102,23 @@ export default function Values({ navigation }) {
     setValuesList(valuesList.sort((a, b) => (a.id > b.id ? 1 : -1)));
   };
 
+  // stores the selected values in redux store and navigates to the landing page
+
+  const onSubmitPress = () => {
+    dispatch({ type: "SET_VALUES", payload: selectedValues });
+
+    navigation.navigate("Landing");
+  };
+
   const SelectedValue = ({ id, icon, name }) => {
     return (
-      <View style={stlyes.selectedValue}>
+      <View style={styles.selectedValue}>
         <MaterialCommunityIcons
           name={icon}
           color={myTheme.colors.green}
           size={30}
         />
-        <Text style={stlyes.selectedValueText}>{name}</Text>
+        <Text style={styles.selectedValueText}>{name}</Text>
         <Pressable onPress={() => onSelectedDelete({ id, icon, name })}>
           <MaterialCommunityIcons
             name="close"
@@ -168,7 +178,7 @@ export default function Values({ navigation }) {
     }
   };
 
-  const stlyes = StyleSheet.create({
+  const styles = StyleSheet.create({
     selectedList: {
       marginBottom: "10%",
     },
@@ -198,10 +208,14 @@ export default function Values({ navigation }) {
       marginBottom: "0%",
     },
     continueButton: {
-      borderTopColor: myTheme.colors.green,
+      borderTopColor: myTheme.colors.gray,
       borderTopWidth: 1,
       paddingTop: "10%",
       marginTop: "10%",
+    },
+    continueButtonLabel: {
+      color: myTheme.colors.cream,
+      fontWeight: "bold",
     },
   });
 
@@ -223,21 +237,21 @@ export default function Values({ navigation }) {
         setIsTooManyDialogVisible={setIsTooManyDialogVisible}
       />
 
-      <View style={stlyes.selectedList}>
-        <View style={stlyes.selectedWrapper}>
-          <Text style={stlyes.selectedNumberText}>1.</Text>
+      <View style={styles.selectedList}>
+        <View style={styles.selectedWrapper}>
+          <Text style={styles.selectedNumberText}>1.</Text>
           {renderSelected1()}
         </View>
-        <View style={stlyes.selectedWrapper}>
-          <Text style={stlyes.selectedNumberText}>2.</Text>
+        <View style={styles.selectedWrapper}>
+          <Text style={styles.selectedNumberText}>2.</Text>
           {renderSelected2()}
         </View>
-        <View style={stlyes.selectedWrapper}>
-          <Text style={stlyes.selectedNumberText}>3.</Text>
+        <View style={styles.selectedWrapper}>
+          <Text style={styles.selectedNumberText}>3.</Text>
           {renderSelected3()}
         </View>
-        <View style={stlyes.selectedWrapper}>
-          <Text style={stlyes.selectedNumberText}>4.</Text>
+        <View style={styles.selectedWrapper}>
+          <Text style={styles.selectedNumberText}>4.</Text>
           {renderSelected4()}
         </View>
       </View>
@@ -245,7 +259,7 @@ export default function Values({ navigation }) {
       {valuesList.map((value) => (
         <MyButton
           key={value.id}
-          style={stlyes.valueButton}
+          style={styles.valueButton}
           icon={value.icon}
           text={value.name}
           onPress={() => onValuePress(value)}
@@ -253,10 +267,12 @@ export default function Values({ navigation }) {
       ))}
 
       <MyButton
-        style={stlyes.continueButton}
-        text="Continue"
+        style={styles.continueButton}
+        text="Submit"
         disabled={selectedValues.length !== 4}
-        onPress={() => navigation.navigate("BarcodeScanner")}
+        buttonColor={myTheme.colors.red}
+        labelStyle={styles.continueButtonLabel}
+        onPress={onSubmitPress}
       />
     </ScrollView>
   );

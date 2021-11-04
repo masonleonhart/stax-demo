@@ -56,14 +56,14 @@ export default function TopStack() {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Landing"
-        component={Landing}
-        options={{ title: "STAX Scan Beta" }}
-      />
-      <Stack.Screen
         name="Values"
         component={Values}
         options={{ title: "Pick Your Values" }}
+      />
+      <Stack.Screen
+        name="Landing"
+        component={Landing}
+        options={{ title: "Stax Scan Beta" }}
       />
       <Stack.Screen
         name="BarcodeScanner"

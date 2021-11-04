@@ -4,4 +4,4 @@ import config from "./server.config";
 
 // Combines all of our redcuers to be exported to _root.saga
 
-export default function* barcodeSaga() {}
+export default function* userSaga() {}
