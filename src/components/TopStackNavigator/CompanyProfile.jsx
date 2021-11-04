@@ -17,6 +17,7 @@ export default function CompanyProfile() {
   const myTheme = useTheme();
   const windowWidth = Dimensions.get("window").width;
   const companyDetails = useSelector((store) => store.barcode.barcodeDetails);
+  const userValues = useSelector((store) => store.user.values);
   const [isCollapsed1, setIsCollapsed1] = useState(true);
   const [isCollapsed2, setIsCollapsed2] = useState(true);
   const [isCollapsed3, setIsCollapsed3] = useState(true);
@@ -83,6 +84,9 @@ export default function CompanyProfile() {
     myButton: {
       marginBottom: "10%",
     },
+    myButtonLabel: {
+      color: myTheme.colors.cream,
+    },
   });
 
   // If the screen isn't in focus yet, render a placeholder screen
@@ -113,7 +117,7 @@ export default function CompanyProfile() {
         </View>
 
         <View style={SharedStyles.flexRow}>
-          <Text style={styles.sectionText}>Diversity & Inclusion</Text>
+          <Text style={styles.sectionText}>{userValues[0].name}</Text>
           <IconButton
             icon={isCollapsed1 ? "chevron-down" : "chevron-up"}
             size={30}
@@ -137,7 +141,7 @@ export default function CompanyProfile() {
         </Collapsible>
 
         <View style={SharedStyles.flexRow}>
-          <Text style={styles.sectionText}>Civic Engagement & Giving</Text>
+          <Text style={styles.sectionText}>{userValues[1].name}</Text>
           <IconButton
             icon={isCollapsed2 ? "chevron-down" : "chevron-up"}
             size={30}
@@ -161,7 +165,7 @@ export default function CompanyProfile() {
         </Collapsible>
 
         <View style={SharedStyles.flexRow}>
-          <Text style={styles.sectionText}>Low Emissions</Text>
+          <Text style={styles.sectionText}>{userValues[2].name}</Text>
           <IconButton
             icon={isCollapsed3 ? "chevron-down" : "chevron-up"}
             size={30}
@@ -185,7 +189,7 @@ export default function CompanyProfile() {
         </Collapsible>
 
         <View style={SharedStyles.flexRow}>
-          <Text style={styles.sectionText}>Low Resource Consumption</Text>
+          <Text style={styles.sectionText}>{userValues[3].name}</Text>
           <IconButton
             icon={isCollapsed4 ? "chevron-down" : "chevron-up"}
             size={30}
@@ -212,6 +216,8 @@ export default function CompanyProfile() {
           onPress={() => {}}
           text="Discover Better Aligned Companies"
           style={styles.myButton}
+          labelStyle={styles.myButtonLabel}
+          buttonColor={myTheme.colors.red}
         />
       </View>
     </ScrollView>

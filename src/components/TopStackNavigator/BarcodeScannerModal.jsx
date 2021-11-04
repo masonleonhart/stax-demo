@@ -8,7 +8,7 @@ import {
   useTheme,
 } from "react-native-paper";
 
-export default function NewProductModal({
+export default function BarcodeScannerModal({
   isDialogVisible,
 }) {
   const myTheme = useTheme();

@@ -6,6 +6,7 @@ import { useTheme, IconButton } from "react-native-paper";
 
 import Login from "./TopStackNavigator/Login";
 import Landing from "./TopStackNavigator/Landing";
+import Values from "./TopStackNavigator/Values";
 import BarcodeScanner from "./TopStackNavigator/BarcodeScanner";
 import CompanyProfile from "./TopStackNavigator/CompanyProfile";
 import NewProductForm from "./TopStackNavigator/NewProductForm";
@@ -55,9 +56,14 @@ export default function TopStack() {
         options={{ headerShown: false }}
       />
       <Stack.Screen
+        name="Values"
+        component={Values}
+        options={{ title: "Pick Your Values" }}
+      />
+      <Stack.Screen
         name="Landing"
         component={Landing}
-        options={{ title: "STAX Scan Beta" }}
+        options={{ title: "Stax Scan Beta" }}
       />
       <Stack.Screen
         name="BarcodeScanner"

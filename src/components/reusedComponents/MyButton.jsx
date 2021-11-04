@@ -10,6 +10,8 @@ export default function MyButton({
   disabled,
   contentStyle,
   labelStyle,
+  icon,
+  buttonColor
 }) {
   const myTheme = useTheme();
 
@@ -40,10 +42,11 @@ export default function MyButton({
         contentStyle={styles.buttonContent}
         labelStyle={styles.buttonLabel}
         onPress={onPress}
+        icon={icon}
         theme={{
           roundness: "100%",
           colors: {
-            primary: myTheme.colors.cream,
+            primary: buttonColor ? buttonColor : myTheme.colors.cream,
           },
         }}
       >

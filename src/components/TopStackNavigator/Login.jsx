@@ -32,7 +32,7 @@ function Login({ navigation }) {
 
   const handleSignIn = () => {
     if (demoUser.email === loginForm.email) {
-      navigation.navigate("Landing");
+      navigation.navigate("Values");
     }
   };
 
