@@ -18,6 +18,9 @@ export default function Landing({ navigation }) {
   const userValues = useSelector((store) => store.user.values);
 
   const styles = StyleSheet.create({
+    landingHeader: {
+      backgroundColor: myTheme.colors.red
+    },
     welcomeTextWrapper: {
       borderBottomColor: myTheme.colors.gray,
       borderBottomWidth: 1,
@@ -85,7 +88,11 @@ export default function Landing({ navigation }) {
   }
 
   return (
-    <ScrollView style={SharedStyles.container}>
+    <ScrollView>
+      <View style={[SharedStyles.flexRow, styles.landingHeader]}>
+        <View><Text>Welcome Back</Text></View>
+        <View></View>
+      </View>
       <View style={styles.welcomeTextWrapper}>
         <Text style={styles.welcomeText}>
           Welcome to the Stax Barcode Scanner! Use this application to scan any

@@ -52,14 +52,14 @@ export default function BarcodeScanner({ navigation }) {
       dispatch({ type: "SET_MOST_RECENT_SCAN", payload: { type, data } });
 
       try {
-        const response = await axios.get(`${config.serverAddress}/api/v1/upc`, {
-          params: { type, data },
-          auth: config.creds,
-        });
+        const response = await axios.post(
+          `${config.serverAddress}/api/v1/upc`,
+          { data, type }
+        );
 
         await dispatch({
           type: "SET_BARCODE_DETAILS",
-          payload: response.data.upc,
+          payload: response.data.products[0],
         });
 
         await navigation.navigate("CompanyProfile");

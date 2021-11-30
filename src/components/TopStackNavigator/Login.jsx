@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";
+import axios from "axios";
+import config from "../../redux/sagas/server.config";
 
 import { Image, StyleSheet, View, ScrollView, Pressable } from "react-native";
 
@@ -30,9 +32,13 @@ function Login({ navigation }) {
     email: "Nathalie",
   };
 
+  // useEffect(async() => {
+
+  // })
+
   const handleSignIn = () => {
     if (demoUser.email === loginForm.email) {
-      navigation.navigate("Values");
+      navigation.navigate("Landing");
     }
   };
 

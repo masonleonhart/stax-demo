@@ -7,6 +7,7 @@ import { useTheme, IconButton } from "react-native-paper";
 import Login from "./TopStackNavigator/Login";
 import Landing from "./TopStackNavigator/Landing";
 import Values from "./TopStackNavigator/Values";
+import ValuesPairWiseMatching from "./TopStackNavigator/ValuesPairWiseMatching";
 import BarcodeScanner from "./TopStackNavigator/BarcodeScanner";
 import CompanyProfile from "./TopStackNavigator/CompanyProfile";
 import NewProductForm from "./TopStackNavigator/NewProductForm";
@@ -24,14 +25,7 @@ export default function TopStack() {
         headerMode: "screen",
         gestureEnabled: true,
         cardStyle: {
-          backgroundColor: myTheme.colors.cream,
-        },
-        headerStyle: {
-          backgroundColor: myTheme.colors.cream,
-          elevation: 1,
-          shadowOpacity: 0.35,
-          shadowRadius: 5,
-          shadowColor: "black",
+          backgroundColor: "white",
         },
         headerTitleStyle: {
           color: myTheme.colors.green,
@@ -50,20 +44,26 @@ export default function TopStack() {
         },
       })}
     >
+      {/* <Stack.Screen
+        name="ValuesPairWiseMatching"
+        component={ValuesPairWiseMatching}
+      /> */}
       <Stack.Screen
         name="Login"
         component={Login}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="Values"
         component={Values}
         options={{ title: "Pick Your Values" }}
-      />
+      /> */}
       <Stack.Screen
         name="Landing"
         component={Landing}
-        options={{ title: "Stax Scan Beta" }}
+        options={{ title: "", headerStyle: {
+          backgroundColor: myTheme.colors.red
+        } }}
       />
       <Stack.Screen
         name="BarcodeScanner"
