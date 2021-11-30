@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";
 import axios from "axios";
 import config from "../../redux/sagas/server.config";
+import * as AuthSession from "expo-auth-session";
 
 import { Image, StyleSheet, View, ScrollView, Pressable } from "react-native";
 
@@ -24,6 +25,8 @@ function Login({ navigation }) {
   const isFocused = useIsFocused();
   const userStore = useSelector((store) => store.user);
   const myTheme = useTheme();
+  const auth0Domain = "dev-ndj3izs8.us.auth0.com";
+  const auth0ClientId = "SXnendrTRmYP6v3oWkMHEK3QHQTVL8sz";
   const [loginForm, setLoginForm] = useState({
     email: "Nathalie",
   });
@@ -32,9 +35,43 @@ function Login({ navigation }) {
     email: "Nathalie",
   };
 
-  // useEffect(async() => {
+  const toQueryString = (params) =>
+    "?" +
+    Object.entries(params)
+      .map(
+        ([key, value]) =>
+          `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+      )
+      .join("&");
 
-  // })
+      console.log(AuthSession.getRedirectUrl())
+
+  const loginWithAuth0 = async () => {
+    // Retrieve the redirect URL, add this to the callback URL list
+    // of your Auth0 application.
+    const redirectUrl = AuthSession.getRedirectUrl();
+
+    // Structure the auth parameters and URL
+    const params = {
+      client_id: auth0ClientId,
+      redirect_uri: redirectUrl,
+      // response_type:
+      // id_token will return a JWT token with the profile as described on the scope
+      // token will return access_token to use with further api calls
+      response_type: "token id_token",
+      nonce: "nonce", // ideally, this will be a random value
+    };
+
+    const queryParams = toQueryString(params);
+    const authUrl = `https://${auth0Domain}/authorize${queryParams}`;
+
+    const response = await AuthSession.startAsync({
+      authUrl,
+      showInRecents: true,
+    });
+
+    console.log(response)
+  };
 
   const handleSignIn = () => {
     if (demoUser.email === loginForm.email) {
@@ -157,9 +194,14 @@ function Login({ navigation }) {
         />
 
         <MyButton
-          onPress={() => handleSignIn()}
+          onPress={loginWithAuth0}
           text="Sign In"
           style={styles.myButton}
+        />
+
+        <MyButton
+          onPress={() => AuthSession.dismiss()}
+          text="log out"
         />
 
         <Text style={styles.forgotPassword}>Forgot your password?</Text>
