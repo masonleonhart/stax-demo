@@ -11,8 +11,8 @@ import SharedStyles from "../reusedComponents/SharedStyles";
 export default function ValuesPairWiseMatching() {
   const isFocused = useIsFocused();
 
-  const [numbers, setNumbers] = useState([0, 1, 2, 3, 4]);
-  const [numbersIndex, setNumbersIndex] = useState(0);
+  const [values, setValues] = useState([0, 1, 2, 3, 4]);
+  const [valuesIndex, setValuesIndex] = useState(0);
   const [savedIndex, setSavedIndex] = useState(0);
 
   // Fisher-Yates Shuffle function
@@ -41,39 +41,44 @@ export default function ValuesPairWiseMatching() {
   // if it's not (moving something up in ranking or to a lower index) return the current item index to the saved index position
 
   const moveToNextArrayIndex = () => {
-    let currentNumbersIndex = numbersIndex;
+    let currentValuesIndex = valuesIndex;
 
-    if (numbersIndex === savedIndex) {
-      currentNumbersIndex++;
+    if (valuesIndex === savedIndex) {
+      currentValuesIndex++;
 
-      setNumbersIndex(currentNumbersIndex);
-      setSavedIndex(currentNumbersIndex);
+      setValuesIndex(currentValuesIndex);
+      setSavedIndex(currentValuesIndex);
     } else {
-      setNumbersIndex(savedIndex);
+      setValuesIndex(savedIndex);
     }
   };
 
-  // Moves the item index down
+  // Moves the item index down and increments the saved index by 1 so when you return to the saved spot you aren't comparing two
+  // items that you have compared before
 
   const moveToPreviousArrayIndex = () => {
-    let currentNumbersIndex = numbersIndex;
+    let currentValuesIndex = valuesIndex;
 
-    currentNumbersIndex--;
+    if (valuesIndex === savedIndex) {
+      setSavedIndex(currentValuesIndex + 1)
+    };
 
-    setNumbersIndex(currentNumbersIndex);
+    currentValuesIndex--;
+
+    setValuesIndex(currentValuesIndex);
   };
 
   // Takes the item at 1 past the index we are checking and removes it from the list, then adds it back in the position
   // of the item that we are checking so it is of higher rank or at a lower index
 
-  const moveArrayIndexLeft = (numberToMove) => {
-    let arrayToChange = [...numbers];
+  const moveArrayIndexLeft = (valueToMove) => {
+    let arrayToChange = [...values];
 
-    arrayToChange.splice(numbersIndex + 1, 1);
+    arrayToChange.splice(valuesIndex + 1, 1);
 
-    arrayToChange.splice(numbersIndex, 0, numberToMove);
+    arrayToChange.splice(valuesIndex, 0, valueToMove);
 
-    setNumbers(arrayToChange);
+    setValues(arrayToChange);
   };
 
   // Calls the function to change order of array index with the item 1 past that we are checking so it can be moved
@@ -82,9 +87,9 @@ export default function ValuesPairWiseMatching() {
   // moved to the item that is now in front of it in ranking or at a lower index
 
   const onBottomButtonClick = () => {
-    moveArrayIndexLeft(numbers[numbersIndex + 1]);
+    moveArrayIndexLeft(values[valuesIndex + 1]);
 
-    if (numbersIndex === 0) {
+    if (valuesIndex === 0) {
       moveToNextArrayIndex();
     } else {
       moveToPreviousArrayIndex();
@@ -92,7 +97,7 @@ export default function ValuesPairWiseMatching() {
   };
 
   const stlyes = StyleSheet.create({
-    numbersArray: {
+    valuesArray: {
       textAlign: "center",
       fontSize: 26,
       marginTop: "5%",
@@ -108,28 +113,36 @@ export default function ValuesPairWiseMatching() {
 
   return (
     <View style={SharedStyles.container}>
-      <Text style={stlyes.numbersArray}>{numbers}</Text>
+      <Text style={stlyes.valuesArray}>{values}</Text>
 
-      {numbersIndex !== 4 && (
-        <Text style={stlyes.numbersArray}>
-          Current array index: {numbersIndex}
-        </Text>
+      {valuesIndex !== 4 && (
+        <>
+          <Text style={stlyes.valuesArray}>
+            Current array index: {valuesIndex}
+          </Text>
+          <Text style={stlyes.valuesArray}>
+            Current saved index: {savedIndex}
+          </Text>
+        </>
       )}
-      {numbersIndex !== 4 ? (
+      {valuesIndex !== 4 ? (
         <>
           <MyButton
             text="randomize array"
             style={stlyes.randomizeButton}
-            onPress={() => setNumbers(shuffle([...numbers]))}
+            onPress={() => setValues(shuffle([...values]))}
           />
-          <MyButton text={numbers[numbersIndex]} onPress={moveToNextArrayIndex} />
           <MyButton
-            text={numbers[numbersIndex + 1]}
+            text={values[valuesIndex]}
+            onPress={moveToNextArrayIndex}
+          />
+          <MyButton
+            text={values[valuesIndex + 1]}
             onPress={onBottomButtonClick}
           />
         </>
       ) : (
-        <Text style={stlyes.numbersArray}>Complete!</Text>
+        <Text style={stlyes.valuesArray}>Complete!</Text>
       )}
     </View>
   );

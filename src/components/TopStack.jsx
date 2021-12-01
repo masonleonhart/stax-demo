@@ -44,10 +44,10 @@ export default function TopStack() {
         },
       })}
     >
-      {/* <Stack.Screen
+      <Stack.Screen
         name="ValuesPairWiseMatching"
         component={ValuesPairWiseMatching}
-      /> */}
+      />
       <Stack.Screen
         name="Login"
         component={Login}
