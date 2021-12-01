@@ -5,17 +5,18 @@ import { Portal, Dialog, Text, useTheme } from "react-native-paper";
 
 import MyButton from "../reusedComponents/MyButton";
 
-export default function ValuesTooManyModal({ isTooManyDialogVisible, setIsTooManyDialogVisible }) {
+export default function ValuesTooManyModal({
+  isTooManyDialogVisible,
+  setIsTooManyDialogVisible,
+}) {
   const myTheme = useTheme();
 
   const styles = StyleSheet.create({
     dialog: {
       marginLeft: "10%",
       marginRight: "10%",
-      backgroundColor: myTheme.colors.cream,
     },
     text: {
-      color: myTheme.colors.green,
       fontSize: 18,
       lineHeight: 27,
       fontWeight: "600",
@@ -41,8 +42,8 @@ export default function ValuesTooManyModal({ isTooManyDialogVisible, setIsTooMan
       >
         <Dialog.Content style={styles.dialogContent}>
           <Text style={styles.text}>
-            You cannot select more than five values, please remove one from your list or
-            finish your selection.
+            You cannot select more than five values, please remove one from your
+            list or finish your selection.
           </Text>
         </Dialog.Content>
         <Dialog.Actions style={styles.dialogActions}>

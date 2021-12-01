@@ -15,10 +15,8 @@ export default function ValuesInstructionModal({
     dialog: {
       marginLeft: "10%",
       marginRight: "10%",
-      backgroundColor: myTheme.colors.cream,
     },
     text: {
-      color: myTheme.colors.green,
       fontSize: 18,
       lineHeight: 27,
       fontWeight: "600",

@@ -84,9 +84,6 @@ export default function CompanyProfile() {
     myButton: {
       marginBottom: "10%",
     },
-    myButtonLabel: {
-      color: myTheme.colors.cream,
-    },
   });
 
   // If the screen isn't in focus yet, render a placeholder screen
@@ -216,7 +213,6 @@ export default function CompanyProfile() {
           onPress={() => {}}
           text="Discover Better Aligned Companies"
           style={styles.myButton}
-          labelStyle={styles.myButtonLabel}
         />
       </View>
     </ScrollView>

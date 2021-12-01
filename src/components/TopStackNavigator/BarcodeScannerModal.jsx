@@ -23,7 +23,6 @@ export default function BarcodeScannerModal({
     dialog: {
       marginLeft: "auto",
       marginRight: "auto",
-      backgroundColor: myTheme.colors.cream,
     },
     dialogContent: {
       margin: "5%",
@@ -38,7 +37,7 @@ export default function BarcodeScannerModal({
         onDismiss={onDialogDismiss}
       >
         <Dialog.Content style={styles.dialogContent}>
-          <ActivityIndicator size={100} color={myTheme.colors.green} />
+          <ActivityIndicator size={100} color={myTheme.colors.red} />
         </Dialog.Content>
       </Dialog>
     </Portal>

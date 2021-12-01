@@ -222,7 +222,6 @@ export default function Values({ navigation }) {
       marginTop: "10%",
     },
     continueButtonLabel: {
-      color: myTheme.colors.cream,
       fontWeight: "bold",
     },
   });
@@ -282,7 +281,6 @@ export default function Values({ navigation }) {
         style={styles.continueButton}
         text="Submit"
         disabled={selectedValues.length !== 5}
-        labelStyle={styles.continueButtonLabel}
         onPress={onSubmitPress}
       />
     </ScrollView>
