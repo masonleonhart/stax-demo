@@ -25,10 +25,7 @@ export default function TopStack() {
         headerMode: "screen",
         gestureEnabled: true,
         cardStyle: {
-          backgroundColor: "white",
-        },
-        headerTitleStyle: {
-          color: myTheme.colors.green,
+          backgroundColor: "#f9f9fb",
         },
         headerLeft: () => {
           if (route.name !== "Landing") {
@@ -45,25 +42,32 @@ export default function TopStack() {
       })}
     >
       <Stack.Screen
+        name="Values"
+        component={Values}
+        options={{ title: "Select Values to Compare" }}
+      />
+      <Stack.Screen
         name="ValuesPairWiseMatching"
         component={ValuesPairWiseMatching}
+        options={{
+          title: "Questionnaire",
+          headerTitleStyle: { fontWeight: "bold", fontSize: 22 },
+        }}
       />
       <Stack.Screen
         name="Login"
         component={Login}
         options={{ headerShown: false }}
       />
-      {/* <Stack.Screen
-        name="Values"
-        component={Values}
-        options={{ title: "Pick Your Values" }}
-      /> */}
       <Stack.Screen
         name="Landing"
         component={Landing}
-        options={{ title: "", headerStyle: {
-          backgroundColor: myTheme.colors.red
-        } }}
+        options={{
+          title: "",
+          headerStyle: {
+            backgroundColor: myTheme.colors.red,
+          },
+        }}
       />
       <Stack.Screen
         name="BarcodeScanner"

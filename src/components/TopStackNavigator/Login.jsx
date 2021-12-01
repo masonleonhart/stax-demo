@@ -98,6 +98,9 @@ function Login({ navigation }) {
       marginTop: "10%",
       marginBottom: "0%",
     },
+    signInLabel: {
+      color: myTheme.colors.green
+    },
     forgotPassword: {
       marginTop: "15%",
       color: myTheme.colors.cream,
@@ -160,6 +163,8 @@ function Login({ navigation }) {
           onPress={() => handleSignIn()}
           text="Sign In"
           style={styles.myButton}
+          buttonColor={myTheme.colors.cream}
+          labelStyle={styles.signInLabel}
         />
 
         <Text style={styles.forgotPassword}>Forgot your password?</Text>

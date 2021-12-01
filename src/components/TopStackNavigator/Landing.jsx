@@ -109,7 +109,6 @@ export default function Landing({ navigation }) {
 
         <MyButton
           style={styles.valuesButton}
-          buttonColor={myTheme.colors.red}
           labelStyle={styles.buttonLabels}
           text="Change your Values"
           onPress={() => navigation.navigate("Values")}
@@ -118,7 +117,6 @@ export default function Landing({ navigation }) {
 
       <MyButton
         style={styles.getStartedButton}
-        buttonColor={myTheme.colors.red}
         labelStyle={styles.buttonLabels}
         text="Get Started"
         onPress={() => navigation.navigate("BarcodeScanner")}

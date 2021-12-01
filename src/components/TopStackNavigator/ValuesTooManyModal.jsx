@@ -41,7 +41,7 @@ export default function ValuesTooManyModal({ isTooManyDialogVisible, setIsTooMan
       >
         <Dialog.Content style={styles.dialogContent}>
           <Text style={styles.text}>
-            You cannot select more than four values, please remove one from your list or
+            You cannot select more than five values, please remove one from your list or
             finish your selection.
           </Text>
         </Dialog.Content>

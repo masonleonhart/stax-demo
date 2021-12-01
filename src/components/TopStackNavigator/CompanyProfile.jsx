@@ -217,7 +217,6 @@ export default function CompanyProfile() {
           text="Discover Better Aligned Companies"
           style={styles.myButton}
           labelStyle={styles.myButtonLabel}
-          buttonColor={myTheme.colors.red}
         />
       </View>
     </ScrollView>

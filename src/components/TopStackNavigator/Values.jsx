@@ -79,7 +79,7 @@ export default function Values({ navigation }) {
   // alert the user, else, takes the selected value and removes it from the list of buttons, then adds it to the selected list
 
   const onValuePress = (selectedValue) => {
-    if (selectedValues.length === 4) {
+    if (selectedValues.length === 5) {
       setIsTooManyDialogVisible(true);
     } else {
       setSelectedValues([...selectedValues, selectedValue]);
@@ -107,7 +107,7 @@ export default function Values({ navigation }) {
   const onSubmitPress = () => {
     dispatch({ type: "SET_VALUES", payload: selectedValues });
 
-    navigation.navigate("Landing");
+    navigation.navigate("ValuesPairWiseMatching", selectedValues);
   };
 
   const SelectedValue = ({ id, icon, name }) => {
@@ -115,14 +115,12 @@ export default function Values({ navigation }) {
       <View style={styles.selectedValue}>
         <MaterialCommunityIcons
           name={icon}
-          color={myTheme.colors.green}
           size={30}
         />
         <Text style={styles.selectedValueText}>{name}</Text>
         <Pressable onPress={() => onSelectedDelete({ id, icon, name })}>
           <MaterialCommunityIcons
             name="close"
-            color={myTheme.colors.green}
             size={30}
           />
         </Pressable>
@@ -178,6 +176,18 @@ export default function Values({ navigation }) {
     }
   };
 
+  const renderSelected5 = () => {
+    if (selectedValues[4]) {
+      return (
+        <SelectedValue
+          id={selectedValues[4].id}
+          icon={selectedValues[4].icon}
+          name={selectedValues[4].name}
+        />
+      );
+    }
+  };
+
   const styles = StyleSheet.create({
     selectedList: {
       marginBottom: "10%",
@@ -188,7 +198,6 @@ export default function Values({ navigation }) {
       marginTop: "5%",
     },
     selectedNumberText: {
-      color: myTheme.colors.green,
       fontSize: 26,
       fontWeight: "600",
     },
@@ -200,7 +209,6 @@ export default function Values({ navigation }) {
       flex: 1,
     },
     selectedValueText: {
-      color: myTheme.colors.green,
       fontSize: 20,
       fontWeight: "600",
     },
@@ -254,6 +262,10 @@ export default function Values({ navigation }) {
           <Text style={styles.selectedNumberText}>4.</Text>
           {renderSelected4()}
         </View>
+        <View style={styles.selectedWrapper}>
+          <Text style={styles.selectedNumberText}>5.</Text>
+          {renderSelected5()}
+        </View>
       </View>
 
       {valuesList.map((value) => (
@@ -269,8 +281,7 @@ export default function Values({ navigation }) {
       <MyButton
         style={styles.continueButton}
         text="Submit"
-        disabled={selectedValues.length !== 4}
-        buttonColor={myTheme.colors.red}
+        disabled={selectedValues.length !== 5}
         labelStyle={styles.continueButtonLabel}
         onPress={onSubmitPress}
       />
