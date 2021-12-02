@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "stax-mobile",
-    "slug": "stax-mobile",
+    "name": "stax-scan-prototype",
+    "slug": "stax-scan-prototype",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -27,6 +27,7 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "scheme": "stax-scan-prototype"
   }
 }

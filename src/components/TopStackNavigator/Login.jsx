@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";
+import * as AuthSession from "expo-auth-session";
+import jwtDecode from "jwt-decode";
 import axios from "axios";
+
 import config from "../../redux/sagas/server.config";
 
-import { Image, StyleSheet, View, ScrollView, Pressable } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 
-import { TextInput, Text, Appbar, useTheme } from "react-native-paper";
+import { Appbar } from "react-native-paper";
 
 import { LinearGradient } from "expo-linear-gradient";
 
-import MyButton from "../reusedComponents/MyButton";
-
-import StaxLogo from "../../../assets/StaxLogoVerticleWhiteNew.png";
-
 import SharedStyles from "../reusedComponents/SharedStyles";
+import MyButton from "../reusedComponents/MyButton";
+import StaxLogo from "../../../assets/StaxLogoVerticleWhiteNew.png";
 import EmptyStateView from "../reusedComponents/EmptyStateView";
 
 // Renders the login page
@@ -23,56 +24,76 @@ function Login({ navigation }) {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const userStore = useSelector((store) => store.user);
-  const myTheme = useTheme();
-  const [loginForm, setLoginForm] = useState({
-    email: "Nathalie",
-  });
 
-  const demoUser = {
-    email: "Nathalie",
-  };
+  const auth0Domain = "dev-ndj3izs8.us.auth0.com";
+  const auth0ClientId = "SXnendrTRmYP6v3oWkMHEK3QHQTVL8sz";
 
-  // useEffect(async() => {
+  // on sign in press, opens a web view to auth0 to login, on successful return from auth0 save the access
+  // token into redux store for further use, decode the jwt id token, set the state of user info with the
+  // gathered data from auth0, and send the data to the backend to create a new user or update the access token
+  // then navigates to the landing page if successful login
 
-  // })
+  const loginWithAuth0 = async () => {
+    // Retrieve the redirect URL, add this to the callback URL list
+    // of your Auth0 application.
+    const useProxy = Platform.select({ web: false, default: true });
+    const redirectUri = AuthSession.makeRedirectUri({ useProxy });
 
-  const handleSignIn = () => {
-    if (demoUser.email === loginForm.email) {
-      navigation.navigate("Landing");
+    const toQueryString = (params) =>
+      "?" +
+      Object.entries(params)
+        .map(
+          ([key, value]) =>
+            `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+        )
+        .join("&");
+
+    // Structure the auth parameters and URL
+    const params = {
+      prompt: "login",
+      client_id: auth0ClientId,
+      redirect_uri: redirectUri,
+      // response_type:
+      // id_token will return a JWT token with the profile as described on the scope
+      // token will return access_token to use with further api calls
+      response_type: "token id_token",
+      nonce: "nonce", // ideally, this will be a random value
+      scope: "openid profile email",
+    };
+
+    const queryParams = toQueryString(params);
+    const authUrl = `https://${auth0Domain}/authorize${queryParams}`;
+
+    let response;
+
+    try {
+      response = await AuthSession.startAsync({
+        authUrl,
+        showInRecents: true,
+      });
+    } catch (error) {
+      console.log("error in validating user from auth0", error);
     }
-  };
 
-  // Compares the email text field to a current list of users, if the email matches, get the rest of the user information,
-  // clear the login form, and send the user into the application
+    const decodedIdToken = jwtDecode(response.params.id_token);
 
-  // const handleSignIn = () => {
-  //   userStore.allUsersReducer.map((user) => {
-  //     if (user.email === loginForm.email) {
-  //       dispatch({ type: "FETCH_USER", payload: user.id });
+    dispatch({
+      type: "SET_ACCESS_TOKEN",
+      payload: response.params.access_token,
+    });
 
-  //       setLoginForm({
-  //         email: "",
-  //       });
-
-  //       navigation.navigate("Tabs");
-  //     }
-  //   });
-  // };
-
-  // Fetches all user so emails of the current sign in and current users can be compared
-
-  //  useEffect(() => {
-  //    dispatch({ type: "FETCH_ALL_USERS" });
-  //  }, []);
-
-  // Shared theme for text inputs
-
-  const inputTheme = {
-    colors: {
-      primary: myTheme.colors.blue,
-      text: "white",
-      placeholder: "white",
-    },
+    try {
+      await axios
+        .post(`${config.serverAddress}/api/v1/authenticate-user`, {
+          access_token: userStore.userAccessToken,
+          first_name: decodedIdToken.given_name,
+          last_name: decodedIdToken.family_name,
+          email: decodedIdToken.email,
+        })
+        .then(() => navigation.navigate("Landing"));
+    } catch (error) {
+      console.log("error in sending userInfo to data service", error);
+    }
   };
 
   const styles = StyleSheet.create({
@@ -90,33 +111,9 @@ function Login({ navigation }) {
       marginRight: "auto",
       marginBottom: "5%",
     },
-    textInput: {
-      backgroundColor: "transparent",
-      marginTop: "5%",
-    },
     myButton: {
       marginTop: "10%",
       marginBottom: "0%",
-    },
-    forgotPassword: {
-      marginTop: "15%",
-      color: myTheme.colors.cream,
-      marginLeft: "auto",
-      marginRight: "auto",
-    },
-    registerWrapper: {
-      marginTop: "15%",
-      marginLeft: "auto",
-      marginRight: "auto",
-      padding: "1%",
-    },
-    registerTextCream: {
-      color: myTheme.colors.cream,
-    },
-    registerTextWhite: {
-      marginLeft: "5%",
-      color: "white",
-      fontWeight: "bold",
     },
   });
 
@@ -135,47 +132,13 @@ function Login({ navigation }) {
 
       <Image source={StaxLogo} resizeMode="contain" style={styles.staxLogo} />
 
-      <ScrollView contentContainerStyle={SharedStyles.container}>
-        <TextInput
-          value={loginForm.email}
-          onChangeText={(text) => setLoginForm({ ...loginForm, email: text })}
-          underlineColor="white"
-          label="Email"
-          autoCapitalize="none"
-          left={<TextInput.Icon name="email" color="white" />}
-          style={styles.textInput}
-          theme={inputTheme}
-        />
-
-        <TextInput
-          secureTextEntry={true}
-          underlineColor="white"
-          label="Password"
-          left={<TextInput.Icon name="lock" color="white" />}
-          style={styles.textInput}
-          theme={inputTheme}
-        />
-
+      <View style={SharedStyles.container}>
         <MyButton
-          onPress={() => handleSignIn()}
-          text="Sign In"
+          onPress={loginWithAuth0}
+          text="Log in with Auth0"
           style={styles.myButton}
         />
-
-        <Text style={styles.forgotPassword}>Forgot your password?</Text>
-
-        <Pressable
-          style={styles.registerWrapper}
-          underlayColor="rgba(0, 0, 0, .1)"
-          rippleColor="rgba(0, 0, 0, .1)"
-          onPress={() => navigation.navigate("Register")}
-        >
-          <View style={SharedStyles.flexRow}>
-            <Text style={styles.registerTextCream}>Don't have an account?</Text>
-            <Text style={styles.registerTextWhite}>Join</Text>
-          </View>
-        </Pressable>
-      </ScrollView>
+      </View>
     </LinearGradient>
   );
 }
