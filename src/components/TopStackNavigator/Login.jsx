@@ -88,13 +88,6 @@ function Login({ navigation }) {
         console.log("error in validating user from auth0", error);
       }
 
-      console.log({
-        access_token: userStore.userAccessToken,
-        first_name: decodedIdToken.given_name,
-        last_name: decodedIdToken.family_name,
-        email: decodedIdToken.email,
-      });
-
       if (response.type === "success") {
         try {
           await axios
