@@ -57,7 +57,7 @@ function Login({ navigation }) {
         // token will return access_token to use with further api calls
         response_type: "token id_token",
         nonce: "nonce", // ideally, this will be a random value
-        scope: "openid profile email",
+        scope: "openid profile email family_name given_name",
       };
 
       const queryParams = toQueryString(params);
@@ -88,13 +88,25 @@ function Login({ navigation }) {
         console.log("error in validating user from auth0", error);
       }
 
+      // checks the id token for a "...user_metadata" property that is an object with keys of given_name and family_name,
+      // if it is there, set first and last name to the given and family names in the metadata object, if it is not there, 
+      // set first and last names to the regular given and family name keys that appear with social accounts
+
+      let first_name = decodedIdToken["https://dev.getstax.co/user_metadata"]
+        ? decodedIdToken["https://dev.getstax.co/user_metadata"].given_name
+        : decodedIdToken.given_name;
+
+      let last_name = decodedIdToken["https://dev.getstax.co/user_metadata"]
+      ? decodedIdToken["https://dev.getstax.co/user_metadata"].family_name
+      : decodedIdToken.family_name;
+
       if (response.type === "success") {
         try {
           await axios
             .post(`${config.serverAddress}/api/v1/authenticate-user`, {
-              access_token: userStore.userAccessToken,
-              first_name: decodedIdToken.given_name,
-              last_name: decodedIdToken.family_name,
+              access_token: response.params.access_token,
+              first_name,
+              last_name,
               email: decodedIdToken.email,
             })
             .then(() => navigation.navigate("Landing"));
