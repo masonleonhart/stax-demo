@@ -30,6 +30,7 @@ export default function MyButton({
     },
     buttonLabel: {
       color: "white",
+      fontWeight: "bold",
       ...labelStyle,
     },
   });

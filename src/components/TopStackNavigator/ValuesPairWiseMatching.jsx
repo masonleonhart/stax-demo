@@ -33,7 +33,7 @@ export default function ValuesPairWiseMatching({ route, navigation }) {
       currentValuesIndex++;
 
       if (currentValuesIndex === 4) {
-        navigation.navigate("Login");
+        navigation.navigate("ValuesComplete", values);
       } else {
         setValuesIndex(currentValuesIndex);
         setSavedIndex(currentValuesIndex);
@@ -43,7 +43,7 @@ export default function ValuesPairWiseMatching({ route, navigation }) {
     }
   };
 
-  // Moves the item index down and increments the saved index by 1 if the values index and the saved index equal each other 
+  // Moves the item index down and increments the saved index by 1 if the values index and the saved index equal each other
   // so when you return to the saved spot you aren't comparing two items that you have compared before
 
   const moveToPreviousArrayIndex = () => {
@@ -125,6 +125,8 @@ export default function ValuesPairWiseMatching({ route, navigation }) {
       color: "white",
     },
   });
+
+  // If the screen isn't in focus yet, render a placeholder screen
 
   if (!isFocused) {
     return <EmptyStateView />;

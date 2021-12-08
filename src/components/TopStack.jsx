@@ -6,8 +6,10 @@ import { useTheme, IconButton } from "react-native-paper";
 
 import Login from "./TopStackNavigator/Login";
 import Landing from "./TopStackNavigator/Landing";
+import ValuesIntro from "./TopStackNavigator/ValuesIntro";
 import Values from "./TopStackNavigator/Values";
 import ValuesPairWiseMatching from "./TopStackNavigator/ValuesPairWiseMatching";
+import ValuesComplete from "./TopStackNavigator/ValuesComplete";
 import BarcodeScanner from "./TopStackNavigator/BarcodeScanner";
 import CompanyProfile from "./TopStackNavigator/CompanyProfile";
 import NewProductForm from "./TopStackNavigator/NewProductForm";
@@ -41,6 +43,7 @@ export default function TopStack() {
         },
       })}
     >
+      <Stack.Screen name="ValuesIntro" component={ValuesIntro} />
       <Stack.Screen
         name="Values"
         component={Values}
@@ -54,6 +57,7 @@ export default function TopStack() {
           headerTitleStyle: { fontWeight: "bold", fontSize: 22 },
         }}
       />
+      <Stack.Screen name="ValuesComplete" component={ValuesComplete} />
       <Stack.Screen
         name="Login"
         component={Login}
