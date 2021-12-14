@@ -1,4 +1,4 @@
-const serverAddress = "http://192.168.0.49:8000";
+const serverAddress = "http://dev.getstax.co";
 
 const creds = {
   username: "stax",

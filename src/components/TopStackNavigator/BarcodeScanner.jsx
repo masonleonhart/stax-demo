@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Dimensions } from "react-native";
 import axios from "axios";
 import config from "../../redux/sagas/server.config";
@@ -17,6 +17,7 @@ export default function BarcodeScanner({ navigation }) {
   const dispatch = useDispatch();
   const windowHeight = Dimensions.get("window").height;
   const windowWidth = Dimensions.get("window").width;
+  const accessToken = useSelector((store) => store.user.userAccessToken);
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [isDialogVisible, setIsDialogVisible] = useState(false);
@@ -54,12 +55,13 @@ export default function BarcodeScanner({ navigation }) {
       try {
         const response = await axios.post(
           `${config.serverAddress}/api/v1/upc`,
-          { data, type }
+          { data, type },
+          { headers: { "X-CSRF-Token": accessToken } }
         );
 
         await dispatch({
           type: "SET_BARCODE_DETAILS",
-          payload: response.data.products[0],
+          payload: response.data.data,
         });
 
         await navigation.navigate("CompanyProfile");
