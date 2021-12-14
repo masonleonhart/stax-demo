@@ -80,14 +80,29 @@ export default function Values({ navigation }) {
     },
   ]);
 
-  // checks if the selected list is full, if it is, set the too many modal to true so no more can be added and
-  // alert the user, else, takes the selected value and removes it from the list of buttons, then adds it to the selected list
+  // chekcs if the clicked value appears in the selected list, if it does then remove the value, else checks if the selected list is full,
+  // if it is, set the too many modal to true so no more can be added and alert the user, else, takes the selected value and
+  // removes it from the list of buttons, then adds it to the selected list
 
-  const onValuePress = (selectedValue) => {
-    if (selectedValues.length === 5) {
+  const onValuePress = (clickedValue) => {
+    if (checkIfSelectd(clickedValue.name)) {
+      setSelectedValues(
+        selectedValues.filter((value) => value.id !== clickedValue.id)
+      );
+    } else if (selectedValues.length === 5) {
       setIsTooManyDialogVisible(true);
     } else {
-      setSelectedValues([...selectedValues, selectedValue]);
+      setSelectedValues([...selectedValues, clickedValue]);
+    }
+  };
+
+  // Checks if the selected value is in the selected list of values to show a check or not
+
+  const checkIfSelectd = (valueToCheck) => {
+    for (const value of selectedValues) {
+      if (valueToCheck === value.name) {
+        return true;
+      }
     }
   };
 
@@ -129,12 +144,17 @@ export default function Values({ navigation }) {
       flex: 1,
       padding: "5%",
       backgroundColor: "rgba(0, 0, 0, .2)",
+      justifyContent: "space-between",
+    },
+    valueNameWrapper: {
+      flexWrap: "wrap",
+      marginBottom: "10%",
     },
     valueCardName: {
       fontSize: 20,
       fontWeight: "bold",
       color: "white",
-      marginBottom: "20%",
+      width: "75%",
     },
     valueCardDescription: {
       fontSize: 18,
@@ -183,7 +203,16 @@ export default function Values({ navigation }) {
           >
             <ImageBackground source={image} style={styles.imageBackground}>
               <View style={styles.scrim}>
-                <Text style={styles.valueCardName}>{value.name}</Text>
+                <View style={[SharedStyles.flexRow, styles.valueNameWrapper]}>
+                  <Text style={styles.valueCardName}>{value.name}</Text>
+                  {checkIfSelectd(value.name) && (
+                    <MaterialCommunityIcons
+                      name="check-circle-outline"
+                      color="white"
+                      size={25}
+                    />
+                  )}
+                </View>
                 <Text style={styles.valueCardDescription}>
                   This is a description. Such a good description.
                 </Text>
