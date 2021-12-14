@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useIsFocused } from "@react-navigation/core";
+import { useDispatch } from "react-redux";
 
 import { View, StyleSheet, ScrollView } from "react-native";
 import { Text } from "react-native-paper";
@@ -11,7 +12,16 @@ import EmptyStateView from "../reusedComponents/EmptyStateView";
 
 export default function ValuesComplete({ route, navigation }) {
   const isFocused = useIsFocused();
+  const dispatch = useDispatch();
   const [values, setValues] = useState(route.params);
+
+  // Sends the values to be stored into state and navigates to landing
+
+  const onContinuePress = () => {
+    dispatch({ type: "SET_VALUES", payload: values });
+
+    navigation.navigate("Landing");
+  };
 
   const styles = StyleSheet.create({
     headerText: {
@@ -63,7 +73,7 @@ export default function ValuesComplete({ route, navigation }) {
 
       <MyButton
         style={styles.button}
-        onPress={() => navigation.navigate("ValuesIntro")}
+        onPress={onContinuePress}
         text="continue to my dashboard"
       />
     </ScrollView>

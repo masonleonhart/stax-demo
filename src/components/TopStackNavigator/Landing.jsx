@@ -107,7 +107,7 @@ export default function Landing({ navigation }) {
         <MyButton
           style={styles.valuesButton}
           text="Change your Values"
-          onPress={() => navigation.navigate("Values")}
+          onPress={() => navigation.navigate("ValuesIntro")}
         />
       </View>
 

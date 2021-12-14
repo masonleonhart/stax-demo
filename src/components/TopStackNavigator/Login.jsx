@@ -109,7 +109,7 @@ function Login({ navigation }) {
               last_name,
               email: decodedIdToken.email,
             })
-            .then(() => navigation.navigate("Landing"));
+            .then(() => navigation.navigate("ValuesIntro"));
         } catch (error) {
           console.log("error in sending userInfo to data service", error);
         }

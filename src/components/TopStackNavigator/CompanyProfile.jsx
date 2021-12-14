@@ -12,7 +12,7 @@ import Collapsible from "react-native-collapsible";
 import SharedStyles from "../reusedComponents/SharedStyles";
 import EmptyStateView from "../reusedComponents/EmptyStateView";
 
-export default function CompanyProfile() {
+export default function CompanyProfile({ navigation }) {
   const isFocused = useIsFocused();
   const myTheme = useTheme();
   const windowWidth = Dimensions.get("window").width;
@@ -22,6 +22,7 @@ export default function CompanyProfile() {
   const [isCollapsed2, setIsCollapsed2] = useState(true);
   const [isCollapsed3, setIsCollapsed3] = useState(true);
   const [isCollapsed4, setIsCollapsed4] = useState(true);
+  const [isCollapsed5, setIsCollapsed5] = useState(true);
 
   const styles = StyleSheet.create({
     companyHeader: {
@@ -209,8 +210,32 @@ export default function CompanyProfile() {
           </Text>
         </Collapsible>
 
+        <View style={SharedStyles.flexRow}>
+          <Text style={styles.sectionText}>{userValues[4].name}</Text>
+          <IconButton
+            icon={isCollapsed5 ? "chevron-down" : "chevron-up"}
+            size={30}
+            color={myTheme.colors.green}
+            onPress={() => setIsCollapsed5(!isCollapsed5)}
+          />
+        </View>
+        <View style={[SharedStyles.flexRow, { marginBottom: "5%" }]}>
+          <Text style={styles.progressText}>30%</Text>
+          <ProgressBar
+            progress={0.3}
+            color={myTheme.colors.blue}
+            style={styles.progressBar}
+          />
+        </View>
+        <Collapsible collapsed={isCollapsed5} style={styles.collapsible}>
+          <Text style={styles.collapsedText}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis tempor
+            vitae justo ac molestie. Suspendisse eu arcu metus. Lorem ipsum.
+          </Text>
+        </Collapsible>
+
         <MyButton
-          onPress={() => {}}
+          onPress={() => navigation.navigate("Landing")}
           text="Discover Better Aligned Companies"
           style={styles.myButton}
         />

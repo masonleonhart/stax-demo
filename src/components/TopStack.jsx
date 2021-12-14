@@ -43,6 +43,11 @@ export default function TopStack() {
         },
       })}
     >
+      <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen name="ValuesIntro" component={ValuesIntro} />
       <Stack.Screen
         name="Values"
@@ -58,11 +63,6 @@ export default function TopStack() {
         }}
       />
       <Stack.Screen name="ValuesComplete" component={ValuesComplete} />
-      <Stack.Screen
-        name="Login"
-        component={Login}
-        options={{ headerShown: false }}
-      />
       <Stack.Screen
         name="Landing"
         component={Landing}
