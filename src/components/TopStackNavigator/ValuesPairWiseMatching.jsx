@@ -1,136 +1,176 @@
 import React, { useState } from "react";
 import { useIsFocused } from "@react-navigation/core";
 
-import { View, StyleSheet } from "react-native";
-import { Text } from "react-native-paper";
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  Pressable,
+  ImageBackground,
+} from "react-native";
+import { Text, ProgressBar, useTheme } from "react-native-paper";
 
 import MyButton from "../reusedComponents/MyButton";
 
 import SharedStyles from "../reusedComponents/SharedStyles";
+import EmptyStateView from "../reusedComponents/EmptyStateView";
+import image from "../../../assets/placeholder.png";
 
-export default function ValuesPairWiseMatching() {
+export default function ValuesPairWiseMatching({ route, navigation }) {
   const isFocused = useIsFocused();
-
-  const [numbers, setNumbers] = useState([0, 1, 2, 3, 4]);
-  const [numbersIndex, setNumbersIndex] = useState(0);
+  const myTheme = useTheme();
+  const [values, setValues] = useState(route.params);
+  const [valuesIndex, setValuesIndex] = useState(0);
   const [savedIndex, setSavedIndex] = useState(0);
-
-  // Fisher-Yates Shuffle function
-
-  function shuffle(array) {
-    let currentIndex = array.length,
-      randomIndex;
-
-    // While there remain elements to shuffle...
-    while (currentIndex != 0) {
-      // Pick a remaining element...
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
-
-      // And swap it with the current element.
-      [array[currentIndex], array[randomIndex]] = [
-        array[randomIndex],
-        array[currentIndex],
-      ];
-    }
-
-    return array;
-  }
 
   // Checks if the item index is the same as saved index, if it is then move to the next array position normally
   // if it's not (moving something up in ranking or to a lower index) return the current item index to the saved index position
 
   const moveToNextArrayIndex = () => {
-    let currentNumbersIndex = numbersIndex;
+    let currentValuesIndex = valuesIndex;
 
-    if (numbersIndex === savedIndex) {
-      currentNumbersIndex++;
+    if (valuesIndex === savedIndex) {
+      currentValuesIndex++;
 
-      setNumbersIndex(currentNumbersIndex);
-      setSavedIndex(currentNumbersIndex);
+      if (currentValuesIndex === 4) {
+        navigation.navigate("ValuesComplete", values);
+      } else {
+        setValuesIndex(currentValuesIndex);
+        setSavedIndex(currentValuesIndex);
+      }
     } else {
-      setNumbersIndex(savedIndex);
+      setValuesIndex(savedIndex);
     }
   };
 
-  // Moves the item index down
+  // Moves the item index down and increments the saved index by 1 if the values index and the saved index equal each other
+  // so when you return to the saved spot you aren't comparing two items that you have compared before
 
   const moveToPreviousArrayIndex = () => {
-    let currentNumbersIndex = numbersIndex;
+    let currentValuesIndex = valuesIndex;
 
-    currentNumbersIndex--;
+    if (valuesIndex === savedIndex) {
+      setSavedIndex(currentValuesIndex + 1);
+    }
 
-    setNumbersIndex(currentNumbersIndex);
+    currentValuesIndex--;
+
+    setValuesIndex(currentValuesIndex);
   };
 
   // Takes the item at 1 past the index we are checking and removes it from the list, then adds it back in the position
   // of the item that we are checking so it is of higher rank or at a lower index
 
-  const moveArrayIndexLeft = (numberToMove) => {
-    let arrayToChange = [...numbers];
+  const moveArrayIndexLeft = (valueToMove) => {
+    let arrayToChange = [...values];
 
-    arrayToChange.splice(numbersIndex + 1, 1);
+    arrayToChange.splice(valuesIndex + 1, 1);
 
-    arrayToChange.splice(numbersIndex, 0, numberToMove);
+    arrayToChange.splice(valuesIndex, 0, valueToMove);
 
-    setNumbers(arrayToChange);
+    setValues(arrayToChange);
   };
 
   // Calls the function to change order of array index with the item 1 past that we are checking so it can be moved
-  // up in ranking or into a lower index and checks to see if the current index is the start of the array, if it is then
+  // up in ranking or into a lower index and checks if the saved index is 4 and if the current index is at the start of the array,
+  // if it is then conitnue to the next screen else checks to see if just the current index is the start of the array, if it is then
   // move on to the next index to check, otherwise move to the previous index position so we can compare the item that was just
   // moved to the item that is now in front of it in ranking or at a lower index
 
   const onBottomButtonClick = () => {
-    moveArrayIndexLeft(numbers[numbersIndex + 1]);
+    moveArrayIndexLeft(values[valuesIndex + 1]);
 
-    if (numbersIndex === 0) {
+    if (valuesIndex === 0 && savedIndex === 4) {
+      navigation.navigate("Login");
+    } else if (valuesIndex === 0) {
       moveToNextArrayIndex();
     } else {
       moveToPreviousArrayIndex();
     }
   };
 
-  const stlyes = StyleSheet.create({
-    numbersArray: {
-      textAlign: "center",
-      fontSize: 26,
-      marginTop: "5%",
+  const onSubmitPress = () => {
+    console.log(values);
+  };
+
+  const styles = StyleSheet.create({
+    appreciateText: {
+      marginTop: "10%",
+      fontSize: 20,
+      fontWeight: "bold",
     },
-    randomizeButton: {
-      marginBottom: "15%",
+    pressable: {
+      height: "40%",
+      marginVertical: "10%",
+      borderRadius: 10,
+      overflow: "hidden",
+    },
+    imageBackground: {
+      flex: 1,
+    },
+    scrim: {
+      flex: 1,
+      padding: "5%",
+      justifyContent: "center",
+      backgroundColor: "rgba(0, 0, 0, .2)",
+    },
+    valueNameText: {
+      fontWeight: "bold",
+      color: "white",
+      fontSize: 30,
+      marginBottom: "5%",
+    },
+    valueDescriptionText: {
+      fontSize: 28,
+      color: "white",
     },
   });
+
+  // If the screen isn't in focus yet, render a placeholder screen
 
   if (!isFocused) {
     return <EmptyStateView />;
   }
 
   return (
-    <View style={SharedStyles.container}>
-      <Text style={stlyes.numbersArray}>{numbers}</Text>
-
-      {numbersIndex !== 4 && (
-        <Text style={stlyes.numbersArray}>
-          Current array index: {numbersIndex}
-        </Text>
-      )}
-      {numbersIndex !== 4 ? (
+    <ScrollView style={SharedStyles.container}>
+      {valuesIndex < 4 ? (
         <>
-          <MyButton
-            text="randomize array"
-            style={stlyes.randomizeButton}
-            onPress={() => setNumbers(shuffle([...numbers]))}
+          <Text style={styles.appreciateText}>I appreciate companies with</Text>
+          <Pressable style={styles.pressable} onPress={moveToNextArrayIndex}>
+            <ImageBackground source={image} style={styles.imageBackground}>
+              <View style={styles.scrim}>
+                <Text style={styles.valueNameText}>
+                  {values[valuesIndex].name}
+                </Text>
+                <Text style={styles.valueDescriptionText}>
+                  This is a description. Such a good description.
+                </Text>
+              </View>
+            </ImageBackground>
+          </Pressable>
+
+          <ProgressBar
+            color={myTheme.colors.red}
+            progress={(savedIndex + 1) / values.length}
           />
-          <MyButton text={numbers[numbersIndex]} onPress={moveToNextArrayIndex} />
-          <MyButton
-            text={numbers[numbersIndex + 1]}
-            onPress={onBottomButtonClick}
-          />
+
+          <Pressable style={styles.pressable} onPress={onBottomButtonClick}>
+            <ImageBackground source={image} style={styles.imageBackground}>
+              <View style={styles.scrim}>
+                <Text style={styles.valueNameText}>
+                  {values[valuesIndex + 1].name}
+                </Text>
+                <Text style={styles.valueDescriptionText}>
+                  This is a description. Such a good description.
+                </Text>
+              </View>
+            </ImageBackground>
+          </Pressable>
         </>
       ) : (
-        <Text style={stlyes.numbersArray}>Complete!</Text>
+        <MyButton text="submit" onPress={onSubmitPress} />
       )}
-    </View>
+    </ScrollView>
   );
 }

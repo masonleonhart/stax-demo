@@ -6,8 +6,10 @@ import { useTheme, IconButton } from "react-native-paper";
 
 import Login from "./TopStackNavigator/Login";
 import Landing from "./TopStackNavigator/Landing";
+import ValuesIntro from "./TopStackNavigator/ValuesIntro";
 import Values from "./TopStackNavigator/Values";
 import ValuesPairWiseMatching from "./TopStackNavigator/ValuesPairWiseMatching";
+import ValuesComplete from "./TopStackNavigator/ValuesComplete";
 import BarcodeScanner from "./TopStackNavigator/BarcodeScanner";
 import CompanyProfile from "./TopStackNavigator/CompanyProfile";
 import NewProductForm from "./TopStackNavigator/NewProductForm";
@@ -25,10 +27,7 @@ export default function TopStack() {
         headerMode: "screen",
         gestureEnabled: true,
         cardStyle: {
-          backgroundColor: "white",
-        },
-        headerTitleStyle: {
-          color: myTheme.colors.green,
+          backgroundColor: "#f9f9fb",
         },
         headerLeft: () => {
           if (route.name !== "Landing") {
@@ -44,26 +43,35 @@ export default function TopStack() {
         },
       })}
     >
-      {/* <Stack.Screen
+      <Stack.Screen name="ValuesIntro" component={ValuesIntro} />
+      <Stack.Screen
+        name="Values"
+        component={Values}
+        options={{ title: "Select Values to Compare" }}
+      />
+      <Stack.Screen
         name="ValuesPairWiseMatching"
         component={ValuesPairWiseMatching}
-      /> */}
+        options={{
+          title: "Questionnaire",
+          headerTitleStyle: { fontWeight: "bold", fontSize: 22 },
+        }}
+      />
+      <Stack.Screen name="ValuesComplete" component={ValuesComplete} />
       <Stack.Screen
         name="Login"
         component={Login}
         options={{ headerShown: false }}
       />
-      {/* <Stack.Screen
-        name="Values"
-        component={Values}
-        options={{ title: "Pick Your Values" }}
-      /> */}
       <Stack.Screen
         name="Landing"
         component={Landing}
-        options={{ title: "", headerStyle: {
-          backgroundColor: myTheme.colors.red
-        } }}
+        options={{
+          title: "",
+          headerStyle: {
+            backgroundColor: myTheme.colors.red,
+          },
+        }}
       />
       <Stack.Screen
         name="BarcodeScanner"

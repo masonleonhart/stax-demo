@@ -29,7 +29,8 @@ export default function MyButton({
       ...contentStyle,
     },
     buttonLabel: {
-      color: myTheme.colors.green,
+      color: "white",
+      fontWeight: "bold",
       ...labelStyle,
     },
   });
@@ -44,9 +45,9 @@ export default function MyButton({
         onPress={onPress}
         icon={icon}
         theme={{
-          roundness: "100%",
+          roundness: 10,
           colors: {
-            primary: buttonColor ? buttonColor : myTheme.colors.cream,
+            primary: buttonColor ? buttonColor : myTheme.colors.red,
           },
         }}
       >

@@ -60,9 +60,6 @@ export default function Landing({ navigation }) {
       marginTop: "10%%",
       marginBottom: "0%",
     },
-    buttonLabels: {
-      color: myTheme.colors.cream,
-    },
     getStartedButton: {
       marginTop: "10%",
     },
@@ -109,8 +106,6 @@ export default function Landing({ navigation }) {
 
         <MyButton
           style={styles.valuesButton}
-          buttonColor={myTheme.colors.red}
-          labelStyle={styles.buttonLabels}
           text="Change your Values"
           onPress={() => navigation.navigate("Values")}
         />
@@ -118,8 +113,6 @@ export default function Landing({ navigation }) {
 
       <MyButton
         style={styles.getStartedButton}
-        buttonColor={myTheme.colors.red}
-        labelStyle={styles.buttonLabels}
         text="Get Started"
         onPress={() => navigation.navigate("BarcodeScanner")}
       />

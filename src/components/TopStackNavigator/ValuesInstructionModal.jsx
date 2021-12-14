@@ -5,17 +5,18 @@ import { Portal, Dialog, Text, useTheme } from "react-native-paper";
 
 import MyButton from "../reusedComponents/MyButton";
 
-export default function ValuesInstructionModal({ isInstructionDialogVisible, setIsInstructionDialogVisible }) {
+export default function ValuesInstructionModal({
+  isInstructionDialogVisible,
+  setIsInstructionDialogVisible,
+}) {
   const myTheme = useTheme();
 
   const styles = StyleSheet.create({
     dialog: {
       marginLeft: "10%",
       marginRight: "10%",
-      backgroundColor: myTheme.colors.cream,
     },
     text: {
-      color: myTheme.colors.green,
       fontSize: 18,
       lineHeight: 27,
       fontWeight: "600",
@@ -34,14 +35,11 @@ export default function ValuesInstructionModal({ isInstructionDialogVisible, set
 
   return (
     <Portal>
-      <Dialog
-        style={styles.dialog}
-        visible={isInstructionDialogVisible}
-      >
+      <Dialog style={styles.dialog} visible={isInstructionDialogVisible}>
         <Dialog.Content style={styles.dialogContent}>
           <Text style={styles.text}>
-            Select your top four values from the list below. The order in which
-            you select will determine how the values will be ranked.
+            Select five values from the list below. The order in which you
+            select does not matter.
           </Text>
         </Dialog.Content>
         <Dialog.Actions style={styles.dialogActions}>

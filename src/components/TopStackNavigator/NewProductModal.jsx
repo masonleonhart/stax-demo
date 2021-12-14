@@ -16,7 +16,7 @@ import MyButton from "../reusedComponents/MyButton";
 export default function NewProductModal({
   isDialogVisible,
   setIsDialogVisible,
-  upcPostStatus
+  upcPostStatus,
 }) {
   const myTheme = useTheme();
   const dispatch = useDispatch();
@@ -58,7 +58,6 @@ export default function NewProductModal({
     dialog: {
       marginLeft: "auto",
       marginRight: "auto",
-      backgroundColor: myTheme.colors.cream,
     },
     dialogContent: {
       marginHorizontal:
@@ -69,7 +68,6 @@ export default function NewProductModal({
       justifyContent: "center",
     },
     successText: {
-      color: myTheme.colors.green,
       fontSize: 25,
       fontWeight: "600",
       textAlign: "center",
@@ -99,7 +97,7 @@ export default function NewProductModal({
               Error in adding new product, please try again.
             </Text>
           ) : (
-            <ActivityIndicator size={100} color={myTheme.colors.green} />
+            <ActivityIndicator size={100} color={myTheme.colors.red} />
           )}
         </Dialog.Content>
         {didUpcPostReturn ? (

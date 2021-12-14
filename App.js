@@ -1,6 +1,10 @@
-import React from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { DefaultTheme, Provider as PaperProvider } from "react-native-paper";
+import React from "react";
+import { StatusBar } from "expo-status-bar";
+import {
+  configureFonts,
+  DefaultTheme,
+  Provider as PaperProvider,
+} from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStore, applyMiddleware } from "redux";
 import { Provider as StoreProvider } from "react-redux";
@@ -8,7 +12,7 @@ import createSagaMiddlware from "redux-saga";
 import logger from "redux-logger";
 import { enableScreens } from "react-native-screens";
 
-import TopStack from './src/components/TopStack';
+import TopStack from "./src/components/TopStack";
 
 // Redux
 
@@ -20,9 +24,7 @@ import rootSaga from "./src/redux/sagas/_root.saga";
 const sagaMiddleware = createSagaMiddlware();
 
 const middlewareList =
-  process.env.NODE_ENV === "development"
-    ? [sagaMiddleware]
-    : [sagaMiddleware];
+  process.env.NODE_ENV === "development" ? [sagaMiddleware] : [sagaMiddleware];
 
 const store = createStore(rootReducer, applyMiddleware(...middlewareList));
 
@@ -52,6 +54,24 @@ export default function App() {
 
 const myTheme = {
   ...DefaultTheme,
+  fonts: configureFonts({
+    regular: {
+      fontFamily: "sans-serif",
+      fontWeight: "normal",
+    },
+    medium: {
+      fontFamily: "sans-serif-medium",
+      fontWeight: "normal",
+    },
+    light: {
+      fontFamily: "sans-serif-light",
+      fontWeight: "normal",
+    },
+    thin: {
+      fontFamily: "sans-serif-thin",
+      fontWeight: "normal",
+    },
+  }),
   colors: {
     ...DefaultTheme.colors,
     blue: "#8DD0EF",
@@ -59,7 +79,5 @@ const myTheme = {
     cream: "#ede0cf",
     green: "#3c5b46",
     grey: "#665e59",
-    text: "#665e59"
   },
 };
-
