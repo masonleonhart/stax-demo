@@ -15,8 +15,8 @@ import { Text, useTheme } from "react-native-paper";
 import MyButton from "../reusedComponents/MyButton";
 
 import SharedStyles from "../reusedComponents/SharedStyles";
-import ValuesInstructionModal from "./ValuesInstructionModal";
-import ValuesTooManyModal from "./ValuesTooManyModal";
+import ValuesInstructionModal from "../modals/ValuesInstructionModal";
+import ValuesTooManyModal from "../modals/ValuesTooManyModal";
 import EmptyStateView from "../reusedComponents/EmptyStateView";
 import image from "../../../assets/placeholder.png";
 

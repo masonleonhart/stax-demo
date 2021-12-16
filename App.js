@@ -12,7 +12,7 @@ import createSagaMiddlware from "redux-saga";
 import logger from "redux-logger";
 import { enableScreens } from "react-native-screens";
 
-import TopStack from "./src/components/TopStack";
+import TopStack from "./src/components/navigation/TopStack";
 
 // Redux
 

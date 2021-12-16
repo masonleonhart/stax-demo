@@ -4,13 +4,13 @@ import { BarCodeScanner } from "expo-barcode-scanner";
 import { useDispatch, useSelector } from "react-redux";
 import { Dimensions } from "react-native";
 import axios from "axios";
-import config from "../../redux/sagas/server.config";
+import { SERVER_ADDRESS, AUTH_HEADER } from "@env";
 
 import { StyleSheet, Text, View } from "react-native";
 
 import SharedStyles from "../reusedComponents/SharedStyles";
 import EmptyStateView from "../reusedComponents/EmptyStateView";
-import BarcodeScannerModal from "./BarcodeScannerModal";
+import BarcodeScannerModal from "../modals/BarcodeScannerModal";
 
 export default function BarcodeScanner({ navigation }) {
   const isFocused = useIsFocused();
@@ -54,10 +54,12 @@ export default function BarcodeScanner({ navigation }) {
 
       try {
         const response = await axios.post(
-          `${config.serverAddress}/api/v1/upc`,
+          `${SERVER_ADDRESS}/api/v1/upc`,
           { data, type },
-          { headers: { "X-CSRF-Token": accessToken } }
+          { headers: { [AUTH_HEADER]: accessToken } }
         );
+
+        console.log(response);
 
         await dispatch({
           type: "SET_BARCODE_DETAILS",

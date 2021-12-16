@@ -1,20 +1,14 @@
 import { takeLatest, put } from "redux-saga/effects";
 import axios from "axios";
-import config from "./server.config";
+import { SERVER_ADDRESS } from "@env";
 
 // Posts a new upc to api
 
 function* postUpcSaga(action) {
   try {
     const response = yield axios.post(
-      `${config.serverAddress}/api/v1/new_upc`,
-      action.payload,
-      {
-        auth: {
-          username: "stax",
-          password: "testpass",
-        },
-      }
+      `${SERVER_ADDRESS}/api/v1/new_upc`,
+      action.payload
     );
 
     yield put({ type: "UPC_POST_SUCCESSFUL" });

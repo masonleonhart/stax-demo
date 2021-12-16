@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useIsFocused } from "@react-navigation/core";
 import axios from "axios";
-import config from "../../redux/sagas/server.config";
+import { SERVER_ADDRESS } from "@env";
 
 import { ScrollView, StyleSheet } from "react-native";
 import { Text, TextInput, useTheme } from "react-native-paper";
 
 import SharedStyles from "../reusedComponents/SharedStyles";
 import MyButton from "../reusedComponents/MyButton";
-import NewProductModal from "./NewProductModal";
+import NewProductModal from "../modals/NewProductModal";
 import EmptyStateView from "../reusedComponents/EmptyStateView";
 
 export default function NoScanReturn() {
@@ -87,11 +87,10 @@ export default function NoScanReturn() {
     setIsDialogVisible(true);
 
     try {
-      const response = await axios.post(
-        `${config.serverAddress}/api/v1/new_upc`,
-        { ...formDetails, stores: [formStore] },
-        { auth: config.creds }
-      );
+      const response = await axios.post(`${SERVER_ADDRESS}/api/v1/new_upc`, {
+        ...formDetails,
+        stores: [formStore],
+      });
 
       await setUpcPostStatus(true);
     } catch (error) {

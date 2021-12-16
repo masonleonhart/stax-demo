@@ -4,15 +4,15 @@ import { useSelector } from "react-redux";
 
 import { useTheme, IconButton } from "react-native-paper";
 
-import Login from "./TopStackNavigator/Login";
-import Landing from "./TopStackNavigator/Landing";
-import ValuesIntro from "./TopStackNavigator/ValuesIntro";
-import Values from "./TopStackNavigator/Values";
-import ValuesPairWiseMatching from "./TopStackNavigator/ValuesPairWiseMatching";
-import ValuesComplete from "./TopStackNavigator/ValuesComplete";
-import BarcodeScanner from "./TopStackNavigator/BarcodeScanner";
-import CompanyProfile from "./TopStackNavigator/CompanyProfile";
-import NewProductForm from "./TopStackNavigator/NewProductForm";
+import Login from "../screens/Login";
+import Landing from "../screens/Landing";
+import ValuesIntro from "../screens/ValuesIntro";
+import Values from "../screens/Values";
+import ValuesPairWiseMatching from "../screens/ValuesPairWiseMatching";
+import ValuesComplete from "../screens/ValuesComplete";
+import BarcodeScanner from "../screens/BarcodeScanner";
+import CompanyProfile from "../screens/CompanyProfile";
+import NewProductForm from "../screens/NewProductForm";
 
 export default function TopStack() {
   const Stack = createStackNavigator();
