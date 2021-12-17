@@ -16,7 +16,6 @@ import MyButton from "../../reusedComponents/MyButton";
 
 import fonts from "../../reusedComponents/fonts";
 import SharedStyles from "../../reusedComponents/SharedStyles";
-import ValuesInstructionModal from "../../modals/ValuesInstructionModal";
 import ValuesTooManyModal from "../../modals/ValuesTooManyModal";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
 import image from "../../../../assets/placeholder.png";
@@ -24,8 +23,6 @@ import image from "../../../../assets/placeholder.png";
 export default function Values({ navigation }) {
   const isFocused = useIsFocused();
   const myTheme = useTheme();
-  const [isInstructionDialogVisible, setIsInstructionDialogVisible] =
-    useState(true);
   const [isTooManyDialogVisible, setIsTooManyDialogVisible] = useState(false);
   const [selectedValues, setSelectedValues] = useState([]);
   const [valuesList, setValuesList] = useState([
@@ -110,7 +107,7 @@ export default function Values({ navigation }) {
   // stores the selected values in redux store and navigates to the landing page
 
   const onSubmitPress = () => {
-    navigation.navigate("ValuesPairWiseMatching", selectedValues);
+    navigation.navigate("ValuesBreak", selectedValues);
   };
 
   const styles = StyleSheet.create({
@@ -180,11 +177,6 @@ export default function Values({ navigation }) {
 
   return (
     <ScrollView style={styles.container}>
-      <ValuesInstructionModal
-        isInstructionDialogVisible={isInstructionDialogVisible}
-        setIsInstructionDialogVisible={setIsInstructionDialogVisible}
-      />
-
       <ValuesTooManyModal
         isTooManyDialogVisible={isTooManyDialogVisible}
         setIsTooManyDialogVisible={setIsTooManyDialogVisible}
