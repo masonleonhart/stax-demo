@@ -19,6 +19,7 @@ export default function Landing({ navigation }) {
   const myTheme = useTheme();
   const deviceHeight = Dimensions.get("screen").height;
   const userValues = useSelector((store) => store.user.values);
+  const userInfo = useSelector((store) => store.user.userInfo);
 
   const topValuesButtonPress = () => {
     if (userValues.length === 0) {
@@ -116,7 +117,7 @@ export default function Landing({ navigation }) {
       <View style={[SharedStyles.flexRow, styles.landingHeader]}>
         <View style={styles.headerTextContainer}>
           <Text style={styles.headerWelcomeText}>Welcome back</Text>
-          <Text style={styles.headerNameText}>UserName</Text>
+          <Text style={styles.headerNameText}>{userInfo.first_name}</Text>
         </View>
         <Image
           source={userImage}

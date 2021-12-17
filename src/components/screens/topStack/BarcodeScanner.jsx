@@ -17,7 +17,7 @@ export default function BarcodeScanner({ navigation }) {
   const dispatch = useDispatch();
   const windowHeight = Dimensions.get("window").height;
   const windowWidth = Dimensions.get("window").width;
-  const accessToken = useSelector((store) => store.user.userAccessToken);
+  const accessToken = useSelector((store) => store.user.userInfo.access_token);
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [isDialogVisible, setIsDialogVisible] = useState(false);

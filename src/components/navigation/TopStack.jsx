@@ -50,11 +50,6 @@ export default function TopStack() {
       })}
     >
       <Stack.Screen
-        name="ValuesStack"
-        component={ValuesStack}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
         name="Login"
         component={Login}
         options={{ headerShown: false }}
@@ -66,7 +61,11 @@ export default function TopStack() {
           headerTransparent: true,
         }}
       />
-
+      <Stack.Screen
+        name="ValuesStack"
+        component={ValuesStack}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name="BarcodeScanner"
         component={BarcodeScanner}

@@ -99,13 +99,17 @@ function Login({ navigation }) {
 
       if (response.type === "success") {
         try {
+          const userData = {
+            access_token: response.params.access_token,
+            first_name,
+            last_name,
+            email: decodedIdToken.email,
+          };
+
+          await dispatch({ type: "SET_USER_INFO", payload: userData });
+
           await axios
-            .post(`${SERVER_ADDRESS}/api/v1/authenticate-user`, {
-              access_token: response.params.access_token,
-              first_name,
-              last_name,
-              email: decodedIdToken.email,
-            })
+            .post(`${SERVER_ADDRESS}/api/v1/authenticate-user`, userData)
             .then(() => navigation.navigate("Landing"));
         } catch (error) {
           console.log("error in sending userInfo to data service", error);
