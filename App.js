@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
-  configureFonts,
   DefaultTheme,
   Provider as PaperProvider,
 } from "react-native-paper";
