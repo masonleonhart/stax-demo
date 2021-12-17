@@ -164,7 +164,7 @@ export default function Values({ navigation }) {
       fontFamily: fonts.regular,
     },
     continueButton: {
-      borderTopColor: myTheme.colors.gray,
+      borderTopColor: myTheme.colors.grey,
       borderTopWidth: 1,
       paddingTop: "10%",
       marginTop: "10%",

@@ -6,6 +6,8 @@ import { Dimensions } from "react-native";
 import axios from "axios";
 import { SERVER_ADDRESS, AUTH_HEADER } from "@env";
 
+console.log(SERVER_ADDRESS)
+
 import { StyleSheet, Text, View } from "react-native";
 
 import SharedStyles from "../../reusedComponents/SharedStyles";

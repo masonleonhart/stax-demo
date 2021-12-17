@@ -43,6 +43,7 @@ export default function ValuesComplete({ route, navigation }) {
       fontFamily: fonts.bold,
       fontSize: 38,
       textAlign: "center",
+      color: myTheme.colors.grey,
     },
     subheaderText: {
       marginTop: "5%",
@@ -50,6 +51,7 @@ export default function ValuesComplete({ route, navigation }) {
       fontSize: 20,
       textAlign: "center",
       fontFamily: fonts.regular,
+      color: myTheme.colors.grey,
     },
     valueContainer: {
       backgroundColor: "#e3e3e3",
@@ -61,15 +63,16 @@ export default function ValuesComplete({ route, navigation }) {
       textAlign: "center",
       fontSize: 22,
       fontFamily: fonts.regular,
+      color: myTheme.colors.grey,
     },
     retakeButton: {
-      borderTopColor: myTheme.colors.gray,
+      borderTopColor: myTheme.colors.grey,
       borderTopWidth: 1,
       paddingTop: "10%",
       marginBottom: "0%",
     },
     RetakeLabel: {
-      color: myTheme.colors.darkGray,
+      color: myTheme.colors.grey,
     },
   });
 

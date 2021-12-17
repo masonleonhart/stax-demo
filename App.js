@@ -81,7 +81,7 @@ const myTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    blue: "#8DD0EF",
+    blue: "#001a72",
     red: "#FF3F12",
     cream: "#ede0cf",
     green: "#3c5b46",

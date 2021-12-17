@@ -22,7 +22,9 @@ export default function Landing({ navigation }) {
 
   const topValuesButtonPress = () => {
     if (userValues.length === 0) {
-      return;
+      navigation.navigate("ValuesStack", {
+        screen: "ValuesIntro",
+      });
     } else {
       navigation.navigate("ValuesStack", {
         screen: "ValuesComplete",
@@ -58,12 +60,12 @@ export default function Landing({ navigation }) {
       borderRadius: 100,
     },
     valuesWrapper: {
-      borderBottomColor: myTheme.colors.gray,
+      borderBottomColor: myTheme.colors.grey,
       borderBottomWidth: 1,
       paddingBottom: "10%",
     },
     valuesHeaderText: {
-      color: myTheme.colors.darkGrey,
+      color: myTheme.colors.grey,
       fontSize: 20,
       fontFamily: fonts.medium,
     },
@@ -77,7 +79,7 @@ export default function Landing({ navigation }) {
       paddingBottom: "5%",
     },
     valueText: {
-      color: myTheme.colors.darkGrey,
+      color: myTheme.colors.grey,
       fontSize: 20,
       fontFamily: "DMSans-Regular",
       marginLeft: "5%",
@@ -93,7 +95,11 @@ export default function Landing({ navigation }) {
   const RenderValue = ({ icon, name }) => {
     return (
       <View style={styles.value}>
-        <MaterialCommunityIcons name={icon} color="#001a72" size={30} />
+        <MaterialCommunityIcons
+          name={icon}
+          color={myTheme.colors.blue}
+          size={30}
+        />
         <Text style={styles.valueText}>{name}</Text>
       </View>
     );
@@ -126,7 +132,7 @@ export default function Landing({ navigation }) {
             <IconButton
               icon="chevron-right"
               size={30}
-              color={myTheme.colors.darkGrey}
+              color={myTheme.colors.grey}
               onPress={topValuesButtonPress}
             />
           </View>
@@ -147,7 +153,11 @@ export default function Landing({ navigation }) {
         <MyButton
           style={styles.getStartedButton}
           disabled={userValues.length === 0}
-          text="Get Started"
+          text={
+            userValues.length === 0
+              ? "Please Take the Values Quiz"
+              : "Scan a Products Barcode"
+          }
           onPress={() => navigation.navigate("BarcodeScanner")}
         />
       </View>

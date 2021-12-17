@@ -35,19 +35,25 @@ export default function TopStack() {
               <IconButton
                 icon="chevron-left"
                 size={30}
-                color={myTheme.colors.green}
+                color={
+                  route.name === "BarcodeScanner"
+                    ? "white"
+                    : myTheme.colors.grey
+                }
                 onPress={() => navigation.goBack()}
               />
             );
+          } else if (route.name === "Landing") {
+            return <></>;
           }
         },
       })}
     >
-      {/* <Stack.Screen
+      <Stack.Screen
         name="Login"
         component={Login}
         options={{ headerShown: false }}
-      /> */}
+      />
       <Stack.Screen
         name="Landing"
         component={Landing}
@@ -60,19 +66,15 @@ export default function TopStack() {
         component={ValuesStack}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name="BarcodeScanner" component={BarcodeScanner} />
+      <Stack.Screen
+        name="BarcodeScanner"
+        component={BarcodeScanner}
+        options={{ headerTransparent: true }}
+      />
       <Stack.Screen
         name="CompanyProfile"
         component={CompanyProfile}
-        options={{
-          title: companyDetails.manufacturer
-            ? companyDetails.manufacturer
-            : companyDetails.brand
-            ? companyDetails.brand
-            : companyDetails.title
-            ? companyDetails.title
-            : "Company Profile",
-        }}
+        options={{ headerTransparent: true }}
       />
       <Stack.Screen name="NewProductForm" component={NewProductForm} />
     </Stack.Navigator>
