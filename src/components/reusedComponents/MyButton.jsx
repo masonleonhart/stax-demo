@@ -3,6 +3,8 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { Button, Surface, useTheme } from "react-native-paper";
 
+import fonts from "./fonts"
+
 export default function MyButton({
   onPress,
   text,
@@ -30,7 +32,7 @@ export default function MyButton({
     },
     buttonLabel: {
       color: "white",
-      fontWeight: "bold",
+      fontFamily: fonts.bold,
       ...labelStyle,
     },
   });
@@ -44,6 +46,7 @@ export default function MyButton({
         labelStyle={styles.buttonLabel}
         onPress={onPress}
         icon={icon}
+        uppercase={false}
         theme={{
           roundness: 10,
           colors: {

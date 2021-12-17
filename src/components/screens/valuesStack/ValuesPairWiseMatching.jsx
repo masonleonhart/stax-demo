@@ -10,11 +10,12 @@ import {
 } from "react-native";
 import { Text, ProgressBar, useTheme } from "react-native-paper";
 
-import MyButton from "../reusedComponents/MyButton";
+import MyButton from "../../reusedComponents/MyButton";
 
-import SharedStyles from "../reusedComponents/SharedStyles";
-import EmptyStateView from "../reusedComponents/EmptyStateView";
-import image from "../../../assets/placeholder.png";
+import fonts from "../../reusedComponents/fonts";
+import SharedStyles from "../../reusedComponents/SharedStyles";
+import EmptyStateView from "../../reusedComponents/EmptyStateView";
+import image from "../../../../assets/placeholder.png";
 
 export default function ValuesPairWiseMatching({ route, navigation }) {
   const isFocused = useIsFocused();
@@ -97,7 +98,7 @@ export default function ValuesPairWiseMatching({ route, navigation }) {
     appreciateText: {
       marginTop: "10%",
       fontSize: 20,
-      fontWeight: "bold",
+      fontFamily: fonts.bold,
     },
     pressable: {
       height: "40%",
@@ -115,14 +116,15 @@ export default function ValuesPairWiseMatching({ route, navigation }) {
       backgroundColor: "rgba(0, 0, 0, .2)",
     },
     valueNameText: {
-      fontWeight: "bold",
+      fontFamily: fonts.bold,
       color: "white",
-      fontSize: 30,
+      fontSize: 28,
       marginBottom: "5%",
     },
     valueDescriptionText: {
-      fontSize: 28,
+      fontSize: 26,
       color: "white",
+      fontFamily: fonts.regular,
     },
   });
 

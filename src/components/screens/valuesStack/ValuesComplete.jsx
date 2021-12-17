@@ -1,19 +1,33 @@
 import React, { useState } from "react";
 import { useIsFocused } from "@react-navigation/core";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { View, StyleSheet, ScrollView } from "react-native";
-import { Text } from "react-native-paper";
-
+import { Text, useTheme } from "react-native-paper";
 import DraggableFlatList from "react-native-draggable-flatlist";
-import MyButton from "../reusedComponents/MyButton";
-import SharedStyles from "../reusedComponents/SharedStyles";
-import EmptyStateView from "../reusedComponents/EmptyStateView";
+
+import MyButton from "../../reusedComponents/MyButton";
+
+import SharedStyles from "../../reusedComponents/SharedStyles";
+import EmptyStateView from "../../reusedComponents/EmptyStateView";
+import fonts from "../../reusedComponents/fonts";
 
 export default function ValuesComplete({ route, navigation }) {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
-  const [values, setValues] = useState(route.params);
+  const userValues = useSelector((store) => store.user.values);
+  const myTheme = useTheme();
+  const [values, setValues] = useState(
+    userValues.length !== 0 ? userValues : route.params
+  );
+
+  // Resets values stored in state and returns user to values select
+
+  const onRetakePress = () => {
+    dispatch({ type: "RESET_VALUES" });
+
+    navigation.navigate("ValuesSelect");
+  };
 
   // Sends the values to be stored into state and navigates to landing
 
@@ -26,15 +40,18 @@ export default function ValuesComplete({ route, navigation }) {
   const styles = StyleSheet.create({
     headerText: {
       marginVertical: "5%",
-      fontWeight: "bold",
-      fontSize: 40,
+      fontFamily: fonts.bold,
+      fontSize: 38,
       textAlign: "center",
+      color: myTheme.colors.grey,
     },
     subheaderText: {
       marginTop: "5%",
       marginBottom: "10%",
       fontSize: 20,
       textAlign: "center",
+      fontFamily: fonts.regular,
+      color: myTheme.colors.grey,
     },
     valueContainer: {
       backgroundColor: "#e3e3e3",
@@ -44,10 +61,18 @@ export default function ValuesComplete({ route, navigation }) {
     },
     valueText: {
       textAlign: "center",
-      fontSize: 24,
+      fontSize: 22,
+      fontFamily: fonts.regular,
+      color: myTheme.colors.grey,
     },
-    button: {
-      marginTop: "10%",
+    retakeButton: {
+      borderTopColor: myTheme.colors.grey,
+      borderTopWidth: 1,
+      paddingTop: "10%",
+      marginBottom: "0%",
+    },
+    RetakeLabel: {
+      color: myTheme.colors.grey,
     },
   });
 
@@ -59,7 +84,9 @@ export default function ValuesComplete({ route, navigation }) {
 
   return (
     <ScrollView style={SharedStyles.container}>
-      <Text style={styles.headerText}>Congratulations!</Text>
+      <Text style={styles.headerText}>
+        {userValues.length !== 0 ? "Your Values" : "Congratulations!"}
+      </Text>
       <Text style={styles.subheaderText}>
         Here are your values ranked. You can drag each item up or down if you
         are not satisfied with your ranking.
@@ -72,10 +99,14 @@ export default function ValuesComplete({ route, navigation }) {
       ))}
 
       <MyButton
-        style={styles.button}
-        onPress={onContinuePress}
-        text="continue to my dashboard"
+        text="Retake Quiz"
+        style={styles.retakeButton}
+        buttonColor="#e3e3e3"
+        labelStyle={styles.RetakeLabel}
+        onPress={onRetakePress}
       />
+
+      <MyButton onPress={onContinuePress} text="Return to my Dashboard" />
     </ScrollView>
   );
 }

@@ -5,14 +5,14 @@ import * as AuthSession from "expo-auth-session";
 import jwtDecode from "jwt-decode";
 import axios from "axios";
 
-import config from "../../redux/sagas/server.config";
+import { SERVER_ADDRESS, AUTH_0_DOMAIN, AUTH_0_CLIENT_ID } from "@env";
 
 import { Image, StyleSheet } from "react-native";
 
 import { LinearGradient } from "expo-linear-gradient";
 
-import StaxLogo from "../../../assets/StaxLogoVerticleWhiteNew.png";
-import EmptyStateView from "../reusedComponents/EmptyStateView";
+import StaxLogo from "../../../../assets/StaxLogoVerticleWhiteNew.png";
+import EmptyStateView from "../../reusedComponents/EmptyStateView";
 
 // Renders the login page
 
@@ -20,9 +20,6 @@ function Login({ navigation }) {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const userStore = useSelector((store) => store.user);
-
-  const auth0Domain = "dev-ndj3izs8.us.auth0.com";
-  const auth0ClientId = "SXnendrTRmYP6v3oWkMHEK3QHQTVL8sz";
 
   // When the page finishes rendering, open the webview to run login
 
@@ -50,7 +47,7 @@ function Login({ navigation }) {
       // Structure the auth parameters and URL
       const params = {
         prompt: "login",
-        client_id: auth0ClientId,
+        client_id: AUTH_0_CLIENT_ID,
         redirect_uri: redirectUri,
         // response_type:
         // id_token will return a JWT token with the profile as described on the scope
@@ -61,7 +58,7 @@ function Login({ navigation }) {
       };
 
       const queryParams = toQueryString(params);
-      const authUrl = `https://${auth0Domain}/authorize${queryParams}`;
+      const authUrl = `https://${AUTH_0_DOMAIN}/authorize${queryParams}`;
 
       let response;
       let decodedIdToken;
@@ -89,7 +86,7 @@ function Login({ navigation }) {
       }
 
       // checks the id token for a "...user_metadata" property that is an object with keys of given_name and family_name,
-      // if it is there, set first and last name to the given and family names in the metadata object, if it is not there, 
+      // if it is there, set first and last name to the given and family names in the metadata object, if it is not there,
       // set first and last names to the regular given and family name keys that appear with social accounts
 
       let first_name = decodedIdToken["https://dev.getstax.co/user_metadata"]
@@ -97,19 +94,23 @@ function Login({ navigation }) {
         : decodedIdToken.given_name;
 
       let last_name = decodedIdToken["https://dev.getstax.co/user_metadata"]
-      ? decodedIdToken["https://dev.getstax.co/user_metadata"].family_name
-      : decodedIdToken.family_name;
+        ? decodedIdToken["https://dev.getstax.co/user_metadata"].family_name
+        : decodedIdToken.family_name;
 
       if (response.type === "success") {
         try {
+          const userData = {
+            access_token: response.params.access_token,
+            first_name,
+            last_name,
+            email: decodedIdToken.email,
+          };
+
+          await dispatch({ type: "SET_USER_INFO", payload: userData });
+
           await axios
-            .post(`${config.serverAddress}/api/v1/authenticate-user`, {
-              access_token: response.params.access_token,
-              first_name,
-              last_name,
-              email: decodedIdToken.email,
-            })
-            .then(() => navigation.navigate("ValuesIntro"));
+            .post(`${SERVER_ADDRESS}/api/v1/authenticate-user`, userData)
+            .then(() => navigation.navigate("Landing"));
         } catch (error) {
           console.log("error in sending userInfo to data service", error);
         }

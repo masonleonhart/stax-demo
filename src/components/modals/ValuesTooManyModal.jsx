@@ -4,10 +4,11 @@ import { StyleSheet } from "react-native";
 import { Portal, Dialog, Text, useTheme } from "react-native-paper";
 
 import MyButton from "../reusedComponents/MyButton";
+import fonts from "../reusedComponents/fonts";
 
-export default function ValuesInstructionModal({
-  isInstructionDialogVisible,
-  setIsInstructionDialogVisible,
+export default function ValuesTooManyModal({
+  isTooManyDialogVisible,
+  setIsTooManyDialogVisible,
 }) {
   const myTheme = useTheme();
 
@@ -19,7 +20,7 @@ export default function ValuesInstructionModal({
     text: {
       fontSize: 18,
       lineHeight: 27,
-      fontWeight: "600",
+      fontFamily: fonts.medium,
       textAlign: "center",
     },
     dialogActions: {
@@ -35,11 +36,15 @@ export default function ValuesInstructionModal({
 
   return (
     <Portal>
-      <Dialog style={styles.dialog} visible={isInstructionDialogVisible}>
+      <Dialog
+        style={styles.dialog}
+        visible={isTooManyDialogVisible}
+        onDismiss={() => setIsTooManyDialogVisible(false)}
+      >
         <Dialog.Content style={styles.dialogContent}>
           <Text style={styles.text}>
-            Select five values from the list below. The order in which you
-            select does not matter.
+            You cannot select more than five values, please remove one from your
+            list or finish your selection.
           </Text>
         </Dialog.Content>
         <Dialog.Actions style={styles.dialogActions}>
@@ -47,7 +52,7 @@ export default function ValuesInstructionModal({
             text="Ok"
             style={styles.button}
             contentStyle={styles.buttonContent}
-            onPress={() => setIsInstructionDialogVisible(false)}
+            onPress={() => setIsTooManyDialogVisible(false)}
           />
         </Dialog.Actions>
       </Dialog>

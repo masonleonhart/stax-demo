@@ -4,9 +4,10 @@ import { useIsFocused } from "@react-navigation/core";
 import { View, StyleSheet } from "react-native";
 import { Text } from "react-native-paper";
 
-import MyButton from "../reusedComponents/MyButton";
-import SharedStyles from "../reusedComponents/SharedStyles";
-import EmptyStateView from "../reusedComponents/EmptyStateView";
+import MyButton from "../../reusedComponents/MyButton";
+import SharedStyles from "../../reusedComponents/SharedStyles";
+import fonts from "../../reusedComponents/fonts";
+import EmptyStateView from "../../reusedComponents/EmptyStateView";
 
 export default function ValuesIntro({ navigation }) {
   const isFocused = useIsFocused();
@@ -17,11 +18,12 @@ export default function ValuesIntro({ navigation }) {
     },
     headerText: {
       marginVertical: "5%",
-      fontWeight: "bold",
+      fontFamily: fonts.bold,
       fontSize: 24,
     },
     subheaderText: {
       marginTop: "5%",
+      fontFamily: fonts.regular,
       fontSize: 20,
     },
     button: {
@@ -39,8 +41,8 @@ export default function ValuesIntro({ navigation }) {
     <View style={[SharedStyles.container, styles.container]}>
       <View>
         <Text style={styles.headerText}>
-          Next, let’s figure out what are some things you love about companies
-          you support
+          Let’s figure out what are some things you love about the companies
+          that you support
         </Text>
         <Text style={styles.subheaderText}>
           It takes just a couple minutes and allows us to help you discover new
@@ -49,7 +51,7 @@ export default function ValuesIntro({ navigation }) {
       </View>
       <MyButton
         text="Let's do it!"
-        onPress={() => navigation.navigate("Values")}
+        onPress={() => navigation.navigate("ValuesSelect")}
         style={styles.button}
       />
     </View>

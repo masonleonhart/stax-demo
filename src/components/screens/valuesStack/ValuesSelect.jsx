@@ -12,19 +12,17 @@ import {
 } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 
-import MyButton from "../reusedComponents/MyButton";
+import MyButton from "../../reusedComponents/MyButton";
 
-import SharedStyles from "../reusedComponents/SharedStyles";
-import ValuesInstructionModal from "./ValuesInstructionModal";
-import ValuesTooManyModal from "./ValuesTooManyModal";
-import EmptyStateView from "../reusedComponents/EmptyStateView";
-import image from "../../../assets/placeholder.png";
+import fonts from "../../reusedComponents/fonts";
+import SharedStyles from "../../reusedComponents/SharedStyles";
+import ValuesTooManyModal from "../../modals/ValuesTooManyModal";
+import EmptyStateView from "../../reusedComponents/EmptyStateView";
+import image from "../../../../assets/placeholder.png";
 
 export default function Values({ navigation }) {
   const isFocused = useIsFocused();
   const myTheme = useTheme();
-  const [isInstructionDialogVisible, setIsInstructionDialogVisible] =
-    useState(true);
   const [isTooManyDialogVisible, setIsTooManyDialogVisible] = useState(false);
   const [selectedValues, setSelectedValues] = useState([]);
   const [valuesList, setValuesList] = useState([
@@ -109,7 +107,7 @@ export default function Values({ navigation }) {
   // stores the selected values in redux store and navigates to the landing page
 
   const onSubmitPress = () => {
-    navigation.navigate("ValuesPairWiseMatching", selectedValues);
+    navigation.navigate("ValuesBreak", selectedValues);
   };
 
   const styles = StyleSheet.create({
@@ -118,7 +116,7 @@ export default function Values({ navigation }) {
     },
     headerText: {
       marginVertical: "5%",
-      fontWeight: "bold",
+      fontFamily: fonts.bold,
       fontSize: 24,
       marginHorizontal: "5%",
     },
@@ -126,6 +124,7 @@ export default function Values({ navigation }) {
       marginVertical: "5%",
       fontSize: 20,
       marginHorizontal: "5%",
+      fontFamily: fonts.regular,
     },
     valuesListWrapper: {
       flexDirection: "row",
@@ -151,17 +150,18 @@ export default function Values({ navigation }) {
       marginBottom: "10%",
     },
     valueCardName: {
-      fontSize: 20,
-      fontWeight: "bold",
+      fontSize: 18,
+      fontFamily: fonts.bold,
       color: "white",
       width: "75%",
     },
     valueCardDescription: {
-      fontSize: 18,
+      fontSize:16,
       color: "white",
+      fontFamily: fonts.regular,
     },
     continueButton: {
-      borderTopColor: myTheme.colors.gray,
+      borderTopColor: myTheme.colors.grey,
       borderTopWidth: 1,
       paddingTop: "10%",
       marginTop: "10%",
@@ -177,11 +177,6 @@ export default function Values({ navigation }) {
 
   return (
     <ScrollView style={styles.container}>
-      <ValuesInstructionModal
-        isInstructionDialogVisible={isInstructionDialogVisible}
-        setIsInstructionDialogVisible={setIsInstructionDialogVisible}
-      />
-
       <ValuesTooManyModal
         isTooManyDialogVisible={isTooManyDialogVisible}
         setIsTooManyDialogVisible={setIsTooManyDialogVisible}
@@ -224,7 +219,7 @@ export default function Values({ navigation }) {
 
       <MyButton
         style={styles.continueButton}
-        text={`${selectedValues.length} / 5 selected`}
+        text={`${selectedValues.length} / 5 Selected`}
         disabled={selectedValues.length !== 5}
         onPress={onSubmitPress}
       />

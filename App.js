@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
   configureFonts,
@@ -9,10 +9,11 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStore, applyMiddleware } from "redux";
 import { Provider as StoreProvider } from "react-redux";
 import createSagaMiddlware from "redux-saga";
-import logger from "redux-logger";
 import { enableScreens } from "react-native-screens";
+import AppLoading from "expo-app-loading";
+import * as Font from "expo-font";
 
-import TopStack from "./src/components/TopStack";
+import TopStack from "./src/components/navigation/TopStack";
 
 // Redux
 
@@ -31,53 +32,60 @@ const store = createStore(rootReducer, applyMiddleware(...middlewareList));
 sagaMiddleware.run(rootSaga);
 
 export default function App() {
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
   // Enables react-native-screens for better optimization
 
   enableScreens();
 
-  return (
-    // PaperProvider is our react-native-paper baseline styling
-    <PaperProvider theme={myTheme}>
-      {/* NavigationContainer and Stack.Navigator are our react navigation providers */}
-      <NavigationContainer>
-        {/* StoreProvider is what allows us to access Redux store throughout the app */}
-        <StoreProvider store={store}>
-          <StatusBar barStyle="dark-content" animated={true} />
-          <TopStack />
-        </StoreProvider>
-      </NavigationContainer>
-    </PaperProvider>
-  );
+  // font config
+
+  let customFonts = {
+    "DMSans-Regular": require("./assets/fonts/DMSans-Regular.ttf"),
+    "DMSans-Bold": require("./assets/fonts/DMSans-Bold.ttf"),
+    "DMSans-Medium": require("./assets/fonts/DMSans-Medium.ttf"),
+    "DMSans-Italic": require("./assets/fonts/DMSans-Italic.ttf"),
+  };
+
+  const loadFonstAsync = async () => {
+    await Font.loadAsync(customFonts);
+    setFontsLoaded(true);
+  };
+
+  useEffect(() => {
+    loadFonstAsync();
+  }, []);
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  } else {
+    return (
+      // PaperProvider is our react-native-paper baseline styling
+      <PaperProvider theme={myTheme}>
+        {/* NavigationContainer and Stack.Navigator are our react navigation providers */}
+        <NavigationContainer>
+          {/* StoreProvider is what allows us to access Redux store throughout the app */}
+          <StoreProvider store={store}>
+            <StatusBar barStyle="dark-content" animated={true} />
+            <TopStack />
+          </StoreProvider>
+        </NavigationContainer>
+      </PaperProvider>
+    );
+  }
 }
 
 // Shared theme to be used throughout the application
 
 const myTheme = {
   ...DefaultTheme,
-  fonts: configureFonts({
-    regular: {
-      fontFamily: "sans-serif",
-      fontWeight: "normal",
-    },
-    medium: {
-      fontFamily: "sans-serif-medium",
-      fontWeight: "normal",
-    },
-    light: {
-      fontFamily: "sans-serif-light",
-      fontWeight: "normal",
-    },
-    thin: {
-      fontFamily: "sans-serif-thin",
-      fontWeight: "normal",
-    },
-  }),
   colors: {
     ...DefaultTheme.colors,
-    blue: "#8DD0EF",
+    blue: "#001a72",
     red: "#FF3F12",
     cream: "#ede0cf",
     green: "#3c5b46",
-    grey: "#665e59",
+    grey: "#1c1939",
+    lightGrey: "#f9f9fb",
   },
 };

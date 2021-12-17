@@ -4,20 +4,20 @@ import { BarCodeScanner } from "expo-barcode-scanner";
 import { useDispatch, useSelector } from "react-redux";
 import { Dimensions } from "react-native";
 import axios from "axios";
-import config from "../../redux/sagas/server.config";
+import { SERVER_ADDRESS, AUTH_HEADER } from "@env";
 
 import { StyleSheet, Text, View } from "react-native";
 
-import SharedStyles from "../reusedComponents/SharedStyles";
-import EmptyStateView from "../reusedComponents/EmptyStateView";
-import BarcodeScannerModal from "./BarcodeScannerModal";
+import SharedStyles from "../../reusedComponents/SharedStyles";
+import EmptyStateView from "../../reusedComponents/EmptyStateView";
+import BarcodeScannerModal from "../../modals/BarcodeScannerModal";
 
 export default function BarcodeScanner({ navigation }) {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const windowHeight = Dimensions.get("window").height;
   const windowWidth = Dimensions.get("window").width;
-  const accessToken = useSelector((store) => store.user.userAccessToken);
+  const accessToken = useSelector((store) => store.user.userInfo.access_token);
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [isDialogVisible, setIsDialogVisible] = useState(false);
@@ -54,9 +54,9 @@ export default function BarcodeScanner({ navigation }) {
 
       try {
         const response = await axios.post(
-          `${config.serverAddress}/api/v1/upc`,
+          `${SERVER_ADDRESS}/api/v1/upc`,
           { data, type },
-          { headers: { "X-CSRF-Token": accessToken } }
+          { headers: { [AUTH_HEADER]: accessToken } }
         );
 
         await dispatch({
