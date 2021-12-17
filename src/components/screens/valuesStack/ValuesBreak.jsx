@@ -126,7 +126,7 @@ export default function ValuesBreak({ navigation, route }) {
 
       <MyButton
         text="Let's do it!"
-        onPress={() => navigation.navigate("ValuesSelect")}
+        onPress={() => navigation.navigate("ValuesPairWiseMatching", values)}
       />
     </ScrollView>
   );
