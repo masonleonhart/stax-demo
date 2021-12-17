@@ -59,8 +59,6 @@ export default function BarcodeScanner({ navigation }) {
           { headers: { [AUTH_HEADER]: accessToken } }
         );
 
-        console.log(response);
-
         await dispatch({
           type: "SET_BARCODE_DETAILS",
           payload: response.data.data,
