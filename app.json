@@ -2,7 +2,7 @@
   "expo": {
     "name": "stax-scan-prototype",
     "slug": "stax-scan-prototype",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -17,7 +17,9 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "co.getstax.scanprototype",
+      "build": "0.1.0"
     },
     "android": {
       "adaptiveIcon": {
