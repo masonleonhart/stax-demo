@@ -18,8 +18,7 @@
     ],
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "co.getstax.scanprototype",
-      "build": "0.1.0"
+      "bundleIdentifier": "co.getstax.scanprototype"
     },
     "android": {
       "adaptiveIcon": {
