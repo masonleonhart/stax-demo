@@ -14,6 +14,7 @@ import { Text, useTheme } from "react-native-paper";
 
 import MyButton from "../../reusedComponents/MyButton";
 
+import fonts from "../../reusedComponents/fonts";
 import SharedStyles from "../../reusedComponents/SharedStyles";
 import ValuesInstructionModal from "../../modals/ValuesInstructionModal";
 import ValuesTooManyModal from "../../modals/ValuesTooManyModal";
@@ -118,7 +119,7 @@ export default function Values({ navigation }) {
     },
     headerText: {
       marginVertical: "5%",
-      fontWeight: "bold",
+      fontFamily: fonts.bold,
       fontSize: 24,
       marginHorizontal: "5%",
     },
@@ -126,6 +127,7 @@ export default function Values({ navigation }) {
       marginVertical: "5%",
       fontSize: 20,
       marginHorizontal: "5%",
+      fontFamily: fonts.regular,
     },
     valuesListWrapper: {
       flexDirection: "row",
@@ -151,14 +153,15 @@ export default function Values({ navigation }) {
       marginBottom: "10%",
     },
     valueCardName: {
-      fontSize: 20,
-      fontWeight: "bold",
+      fontSize: 18,
+      fontFamily: fonts.bold,
       color: "white",
       width: "75%",
     },
     valueCardDescription: {
-      fontSize: 18,
+      fontSize:16,
       color: "white",
+      fontFamily: fonts.regular,
     },
     continueButton: {
       borderTopColor: myTheme.colors.gray,
@@ -224,7 +227,7 @@ export default function Values({ navigation }) {
 
       <MyButton
         style={styles.continueButton}
-        text={`${selectedValues.length} / 5 selected`}
+        text={`${selectedValues.length} / 5 Selected`}
         disabled={selectedValues.length !== 5}
         onPress={onSubmitPress}
       />

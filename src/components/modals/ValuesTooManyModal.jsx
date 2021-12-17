@@ -4,6 +4,7 @@ import { StyleSheet } from "react-native";
 import { Portal, Dialog, Text, useTheme } from "react-native-paper";
 
 import MyButton from "../reusedComponents/MyButton";
+import fonts from "../reusedComponents/fonts";
 
 export default function ValuesTooManyModal({
   isTooManyDialogVisible,
@@ -19,7 +20,7 @@ export default function ValuesTooManyModal({
     text: {
       fontSize: 18,
       lineHeight: 27,
-      fontWeight: "600",
+      fontFamily: fonts.medium,
       textAlign: "center",
     },
     dialogActions: {

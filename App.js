@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
+  configureFonts,
   DefaultTheme,
   Provider as PaperProvider,
 } from "react-native-paper";
@@ -37,6 +38,15 @@ export default function App() {
 
   enableScreens();
 
+  // font config
+
+  let customFonts = {
+    "DMSans-Regular": require("./assets/fonts/DMSans-Regular.ttf"),
+    "DMSans-Bold": require("./assets/fonts/DMSans-Bold.ttf"),
+    "DMSans-Medium": require("./assets/fonts/DMSans-Medium.ttf"),
+    "DMSans-Italic": require("./assets/fonts/DMSans-Italic.ttf"),
+  };
+
   const loadFonstAsync = async () => {
     await Font.loadAsync(customFonts);
     setFontsLoaded(true);
@@ -65,47 +75,10 @@ export default function App() {
   }
 }
 
-// FULL DISCLAIMER: I SPENT 2-3 HOURS TRYING TO LOAD A CUSTOM FONT AND THIS IS THE HACK N' SLASH
-// WAY THAT I GOT IT TO WORK FROM COMBINING MULTIPLE STREAMS OF INFO FROM MULTIPLE WEBSITES.
-// IT LOOKS AND FEELS TERRIBLE :(
-
-// font config
-
-const _fontConfig = {
-  regular: {
-    fontFamily: "DMSans-Regular",
-    fontWeight: "normal",
-  },
-  medium: {
-    fontFamily: "DMSans-Bold",
-    fontWeight: "bold",
-  },
-  light: {
-    fontFamily: "DMSans-Regular",
-    fontWeight: "normal",
-  },
-  thin: {
-    fontFamily: "DMSans-Italic",
-    fontWeight: "normal",
-  },
-};
-
-let customFonts = {
-  "DMSans-Regular": require("./assets/fonts/DMSans-Regular.ttf"),
-  "DMSans-Bold": require("./assets/fonts/DMSans-Bold.ttf"),
-  "DMSans-Medium": require("./assets/fonts/DMSans-Medium.ttf"),
-  "DMSans-Italic": require("./assets/fonts/DMSans-Italic.ttf"),
-};
-
-const fontConfig = {
-  ios: _fontConfig,
-};
-
 // Shared theme to be used throughout the application
 
 const myTheme = {
   ...DefaultTheme,
-  fonts: fontConfig,
   colors: {
     ...DefaultTheme.colors,
     blue: "#8DD0EF",

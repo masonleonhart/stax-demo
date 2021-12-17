@@ -4,7 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { useTheme, IconButton } from "react-native-paper";
 
 import ValuesIntro from "../screens/valuesStack/ValuesIntro";
-import Values from "../screens/valuesStack/Values";
+import ValuesSelect from "../screens/valuesStack/ValuesSelect";
 import ValuesPairWiseMatching from "../screens/valuesStack/ValuesPairWiseMatching";
 import ValuesComplete from "../screens/valuesStack/ValuesComplete";
 
@@ -27,14 +27,14 @@ export default function ValuesStack() {
           <IconButton
             icon="chevron-left"
             size={30}
-            color={myTheme.colors.green}
+            color={myTheme.colors.darkGrey}
             onPress={() => navigation.goBack()}
           />
         ),
       })}
     >
       <Stack.Screen name="ValuesIntro" component={ValuesIntro} />
-      <Stack.Screen name="Values" component={Values} />
+      <Stack.Screen name="ValuesSelect" component={ValuesSelect} />
       <Stack.Screen
         name="ValuesPairWiseMatching"
         component={ValuesPairWiseMatching}

@@ -2,7 +2,7 @@ import { combineReducers } from "redux";
 
 // holds details for submitted values
 
-const userAccessToken = (state = '', action) => {
+const userAccessToken = (state = "", action) => {
   switch (action.type) {
     case "SET_ACCESS_TOKEN":
       return action.payload;
@@ -15,6 +15,8 @@ const values = (state = [], action) => {
   switch (action.type) {
     case "SET_VALUES":
       return action.payload;
+    case "RESET_VALUES":
+      return [];
     default:
       return state;
   }

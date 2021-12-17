@@ -4,12 +4,13 @@ import { useSelector } from "react-redux";
 
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 
-import { Text, useTheme } from "react-native-paper";
+import { Text, useTheme, IconButton } from "react-native-paper";
 import { ScrollView, View, StyleSheet, Dimensions, Image } from "react-native";
 
 import MyButton from "../../reusedComponents/MyButton";
 import userImage from "../../../../assets/userImage.png";
 
+import fonts from "../../reusedComponents/fonts";
 import SharedStyles from "../../reusedComponents/SharedStyles";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
 
@@ -19,12 +20,22 @@ export default function Landing({ navigation }) {
   const deviceHeight = Dimensions.get("screen").height;
   const userValues = useSelector((store) => store.user.values);
 
+  const topValuesButtonPress = () => {
+    if (userValues.length === 0) {
+      return;
+    } else {
+      navigation.navigate("ValuesStack", {
+        screen: "ValuesComplete",
+      });
+    }
+  };
+
   const styles = StyleSheet.create({
     landingHeader: {
       backgroundColor: myTheme.colors.red,
       height: deviceHeight * 0.25,
       paddingHorizontal: "5%",
-      marginBottom: "5%",
+      marginBottom: "2.5%",
     },
     headerTextContainer: {
       marginTop: "5%",
@@ -33,11 +44,12 @@ export default function Landing({ navigation }) {
       color: "white",
       fontSize: 25,
       marginBottom: "5%",
-      fontWeight: "bold"
+      fontFamily: fonts.bold,
     },
     headerNameText: {
-      color: myTheme.colors.lightGrey,
+      color: "#e3e3e3",
       fontSize: 35,
+      fontFamily: fonts.regular,
     },
     userImage: {
       height: deviceHeight * 0.125,
@@ -51,25 +63,26 @@ export default function Landing({ navigation }) {
       paddingBottom: "10%",
     },
     valuesHeaderText: {
-      color: myTheme.colors.green,
-      fontSize: 24,
-      fontWeight: "bold",
-      marginBottom: "5%",
+      color: myTheme.colors.darkGrey,
+      fontSize: 20,
+      fontFamily: fonts.medium,
     },
     value: {
       flexDirection: "row",
       alignItems: "center",
       marginTop: "5%",
       flex: 1,
+      borderBottomColor: "#e3e3e3",
+      borderBottomWidth: 1,
+      paddingBottom: "5%",
     },
     valueText: {
-      color: myTheme.colors.green,
+      color: myTheme.colors.darkGrey,
       fontSize: 20,
-      fontWeight: "500",
+      fontFamily: "DMSans-Regular",
       marginLeft: "5%",
     },
     valuesButton: {
-      marginTop: "10%%",
       marginBottom: "0%",
     },
     getStartedButton: {
@@ -80,11 +93,7 @@ export default function Landing({ navigation }) {
   const RenderValue = ({ icon, name }) => {
     return (
       <View style={styles.value}>
-        <MaterialCommunityIcons
-          name={icon}
-          color={myTheme.colors.green}
-          size={30}
-        />
+        <MaterialCommunityIcons name={icon} color="#001a72" size={30} />
         <Text style={styles.valueText}>{name}</Text>
       </View>
     );
@@ -112,21 +121,32 @@ export default function Landing({ navigation }) {
 
       <View style={[SharedStyles.container]}>
         <View style={styles.valuesWrapper}>
-          <Text style={styles.valuesHeaderText}>Your Selected Values</Text>
+          <View style={SharedStyles.flexRow}>
+            <Text style={styles.valuesHeaderText}>My Top Values</Text>
+            <IconButton
+              icon="chevron-right"
+              size={30}
+              color={myTheme.colors.darkGrey}
+              onPress={topValuesButtonPress}
+            />
+          </View>
 
           {userValues.map((value) => (
             <RenderValue key={value.id} icon={value.icon} name={value.name} />
           ))}
 
-          <MyButton
-            style={styles.valuesButton}
-            text="Change your Values"
-            onPress={() => navigation.navigate("ValuesStack")}
-          />
+          {userValues.length === 0 && (
+            <MyButton
+              style={styles.valuesButton}
+              text="Take Our Values Quiz"
+              onPress={() => navigation.navigate("ValuesStack")}
+            />
+          )}
         </View>
 
         <MyButton
           style={styles.getStartedButton}
+          disabled={userValues.length === 0}
           text="Get Started"
           onPress={() => navigation.navigate("BarcodeScanner")}
         />
