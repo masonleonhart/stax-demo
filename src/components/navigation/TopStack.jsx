@@ -4,15 +4,12 @@ import { useSelector } from "react-redux";
 
 import { useTheme, IconButton } from "react-native-paper";
 
-import Login from "../screens/Login";
-import Landing from "../screens/Landing";
-import ValuesIntro from "../screens/ValuesIntro";
-import Values from "../screens/Values";
-import ValuesPairWiseMatching from "../screens/ValuesPairWiseMatching";
-import ValuesComplete from "../screens/ValuesComplete";
-import BarcodeScanner from "../screens/BarcodeScanner";
-import CompanyProfile from "../screens/CompanyProfile";
-import NewProductForm from "../screens/NewProductForm";
+import Login from "../screens/topStack/Login";
+import Landing from "../screens/topStack/Landing";
+import ValuesStack from "./ValuesStack";
+import BarcodeScanner from "../screens/topStack/BarcodeScanner";
+import CompanyProfile from "../screens/topStack/CompanyProfile";
+import NewProductForm from "../screens/topStack/NewProductForm";
 
 export default function TopStack() {
   const Stack = createStackNavigator();
@@ -26,6 +23,7 @@ export default function TopStack() {
       screenOptions={({ route, navigation }) => ({
         headerMode: "screen",
         gestureEnabled: true,
+        headerTitle: "",
         cardStyle: {
           backgroundColor: "#f9f9fb",
         },
@@ -43,26 +41,11 @@ export default function TopStack() {
         },
       })}
     >
-      <Stack.Screen
+      {/* <Stack.Screen
         name="Login"
         component={Login}
         options={{ headerShown: false }}
-      />
-      <Stack.Screen name="ValuesIntro" component={ValuesIntro} />
-      <Stack.Screen
-        name="Values"
-        component={Values}
-        options={{ title: "Select Values to Compare" }}
-      />
-      <Stack.Screen
-        name="ValuesPairWiseMatching"
-        component={ValuesPairWiseMatching}
-        options={{
-          title: "Questionnaire",
-          headerTitleStyle: { fontWeight: "bold", fontSize: 22 },
-        }}
-      />
-      <Stack.Screen name="ValuesComplete" component={ValuesComplete} />
+      /> */}
       <Stack.Screen
         name="Landing"
         component={Landing}
@@ -74,10 +57,11 @@ export default function TopStack() {
         }}
       />
       <Stack.Screen
-        name="BarcodeScanner"
-        component={BarcodeScanner}
-        options={{ title: "Scan A Barcode" }}
+        name="ValuesStack"
+        component={ValuesStack}
+        options={{ headerShown: false }}
       />
+      <Stack.Screen name="BarcodeScanner" component={BarcodeScanner} />
       <Stack.Screen
         name="CompanyProfile"
         component={CompanyProfile}
@@ -91,11 +75,7 @@ export default function TopStack() {
             : "Company Profile",
         }}
       />
-      <Stack.Screen
-        name="NewProductForm"
-        component={NewProductForm}
-        options={{ title: "New Product Form" }}
-      />
+      <Stack.Screen name="NewProductForm" component={NewProductForm} />
     </Stack.Navigator>
   );
 }

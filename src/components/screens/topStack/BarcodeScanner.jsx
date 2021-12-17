@@ -8,9 +8,9 @@ import { SERVER_ADDRESS, AUTH_HEADER } from "@env";
 
 import { StyleSheet, Text, View } from "react-native";
 
-import SharedStyles from "../reusedComponents/SharedStyles";
-import EmptyStateView from "../reusedComponents/EmptyStateView";
-import BarcodeScannerModal from "../modals/BarcodeScannerModal";
+import SharedStyles from "../../reusedComponents/SharedStyles";
+import EmptyStateView from "../../reusedComponents/EmptyStateView";
+import BarcodeScannerModal from "../../modals/BarcodeScannerModal";
 
 export default function BarcodeScanner({ navigation }) {
   const isFocused = useIsFocused();

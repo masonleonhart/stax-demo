@@ -5,12 +5,12 @@ import { useSelector } from "react-redux";
 import { View, ScrollView, StyleSheet, Dimensions } from "react-native";
 import { Text, IconButton, ProgressBar, useTheme } from "react-native-paper";
 
-import MyButton from "../reusedComponents/MyButton";
+import MyButton from "../../reusedComponents/MyButton";
 
 import Collapsible from "react-native-collapsible";
 
-import SharedStyles from "../reusedComponents/SharedStyles";
-import EmptyStateView from "../reusedComponents/EmptyStateView";
+import SharedStyles from "../../reusedComponents/SharedStyles";
+import EmptyStateView from "../../reusedComponents/EmptyStateView";
 
 export default function CompanyProfile({ navigation }) {
   const isFocused = useIsFocused();

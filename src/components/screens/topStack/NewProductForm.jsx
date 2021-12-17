@@ -7,10 +7,10 @@ import { SERVER_ADDRESS } from "@env";
 import { ScrollView, StyleSheet } from "react-native";
 import { Text, TextInput, useTheme } from "react-native-paper";
 
-import SharedStyles from "../reusedComponents/SharedStyles";
-import MyButton from "../reusedComponents/MyButton";
-import NewProductModal from "../modals/NewProductModal";
-import EmptyStateView from "../reusedComponents/EmptyStateView";
+import SharedStyles from "../../reusedComponents/SharedStyles";
+import MyButton from "../../reusedComponents/MyButton";
+import NewProductModal from "../../modals/NewProductModal";
+import EmptyStateView from "../../reusedComponents/EmptyStateView";
 
 export default function NoScanReturn() {
   const myTheme = useTheme();

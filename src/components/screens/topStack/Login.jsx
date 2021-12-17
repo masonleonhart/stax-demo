@@ -11,8 +11,8 @@ import { Image, StyleSheet } from "react-native";
 
 import { LinearGradient } from "expo-linear-gradient";
 
-import StaxLogo from "../../../assets/StaxLogoVerticleWhiteNew.png";
-import EmptyStateView from "../reusedComponents/EmptyStateView";
+import StaxLogo from "../../../../assets/StaxLogoVerticleWhiteNew.png";
+import EmptyStateView from "../../reusedComponents/EmptyStateView";
 
 // Renders the login page
 

@@ -6,9 +6,9 @@ import { View, StyleSheet, ScrollView } from "react-native";
 import { Text } from "react-native-paper";
 
 import DraggableFlatList from "react-native-draggable-flatlist";
-import MyButton from "../reusedComponents/MyButton";
-import SharedStyles from "../reusedComponents/SharedStyles";
-import EmptyStateView from "../reusedComponents/EmptyStateView";
+import MyButton from "../../reusedComponents/MyButton";
+import SharedStyles from "../../reusedComponents/SharedStyles";
+import EmptyStateView from "../../reusedComponents/EmptyStateView";
 
 export default function ValuesComplete({ route, navigation }) {
   const isFocused = useIsFocused();

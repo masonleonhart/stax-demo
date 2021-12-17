@@ -10,11 +10,11 @@ import {
 } from "react-native";
 import { Text, ProgressBar, useTheme } from "react-native-paper";
 
-import MyButton from "../reusedComponents/MyButton";
+import MyButton from "../../reusedComponents/MyButton";
 
-import SharedStyles from "../reusedComponents/SharedStyles";
-import EmptyStateView from "../reusedComponents/EmptyStateView";
-import image from "../../../assets/placeholder.png";
+import SharedStyles from "../../reusedComponents/SharedStyles";
+import EmptyStateView from "../../reusedComponents/EmptyStateView";
+import image from "../../../../assets/placeholder.png";
 
 export default function ValuesPairWiseMatching({ route, navigation }) {
   const isFocused = useIsFocused();

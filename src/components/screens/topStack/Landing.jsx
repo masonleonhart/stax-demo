@@ -7,10 +7,10 @@ import { MaterialCommunityIcons } from "react-native-vector-icons";
 import { Text, useTheme } from "react-native-paper";
 import { ScrollView, View, StyleSheet } from "react-native";
 
-import MyButton from "../reusedComponents/MyButton";
+import MyButton from "../../reusedComponents/MyButton";
 
-import SharedStyles from "../reusedComponents/SharedStyles";
-import EmptyStateView from "../reusedComponents/EmptyStateView";
+import SharedStyles from "../../reusedComponents/SharedStyles";
+import EmptyStateView from "../../reusedComponents/EmptyStateView";
 
 export default function Landing({ navigation }) {
   const isFocused = useIsFocused();
@@ -107,7 +107,7 @@ export default function Landing({ navigation }) {
         <MyButton
           style={styles.valuesButton}
           text="Change your Values"
-          onPress={() => navigation.navigate("ValuesIntro")}
+          onPress={() => navigation.navigate("ValuesStack")}
         />
       </View>
 

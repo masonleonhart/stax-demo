@@ -4,9 +4,9 @@ import { useIsFocused } from "@react-navigation/core";
 import { View, StyleSheet } from "react-native";
 import { Text } from "react-native-paper";
 
-import MyButton from "../reusedComponents/MyButton";
-import SharedStyles from "../reusedComponents/SharedStyles";
-import EmptyStateView from "../reusedComponents/EmptyStateView";
+import MyButton from "../../reusedComponents/MyButton";
+import SharedStyles from "../../reusedComponents/SharedStyles";
+import EmptyStateView from "../../reusedComponents/EmptyStateView";
 
 export default function ValuesIntro({ navigation }) {
   const isFocused = useIsFocused();
