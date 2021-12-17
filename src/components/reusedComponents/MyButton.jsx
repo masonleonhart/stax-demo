@@ -44,6 +44,7 @@ export default function MyButton({
         labelStyle={styles.buttonLabel}
         onPress={onPress}
         icon={icon}
+        uppercase={false}
         theme={{
           roundness: 10,
           colors: {

@@ -1,5 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
 import { useSelector } from "react-redux";
 
 import { useTheme, IconButton } from "react-native-paper";
@@ -12,7 +14,7 @@ import CompanyProfile from "../screens/topStack/CompanyProfile";
 import NewProductForm from "../screens/topStack/NewProductForm";
 
 export default function TopStack() {
-  const Stack = createStackNavigator();
+  const Stack = createNativeStackNavigator();
   const myTheme = useTheme();
   const companyDetails = useSelector((store) => store.barcode.barcodeDetails);
 
@@ -25,7 +27,7 @@ export default function TopStack() {
         gestureEnabled: true,
         headerTitle: "",
         cardStyle: {
-          backgroundColor: "#f9f9fb",
+          backgroundColor: myTheme.colors.lightGrey,
         },
         headerLeft: () => {
           if (route.name !== "Landing") {
@@ -50,10 +52,7 @@ export default function TopStack() {
         name="Landing"
         component={Landing}
         options={{
-          title: "",
-          headerStyle: {
-            backgroundColor: myTheme.colors.red,
-          },
+          headerTransparent: true,
         }}
       />
       <Stack.Screen

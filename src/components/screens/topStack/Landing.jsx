@@ -5,9 +5,10 @@ import { useSelector } from "react-redux";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 
 import { Text, useTheme } from "react-native-paper";
-import { ScrollView, View, StyleSheet } from "react-native";
+import { ScrollView, View, StyleSheet, Dimensions, Image } from "react-native";
 
 import MyButton from "../../reusedComponents/MyButton";
+import userImage from "../../../../assets/userImage.png";
 
 import SharedStyles from "../../reusedComponents/SharedStyles";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
@@ -15,23 +16,34 @@ import EmptyStateView from "../../reusedComponents/EmptyStateView";
 export default function Landing({ navigation }) {
   const isFocused = useIsFocused();
   const myTheme = useTheme();
+  const deviceHeight = Dimensions.get("screen").height;
   const userValues = useSelector((store) => store.user.values);
 
   const styles = StyleSheet.create({
     landingHeader: {
-      backgroundColor: myTheme.colors.red
+      backgroundColor: myTheme.colors.red,
+      height: deviceHeight * 0.25,
+      paddingHorizontal: "5%",
+      marginBottom: "5%",
     },
-    welcomeTextWrapper: {
-      borderBottomColor: myTheme.colors.gray,
-      borderBottomWidth: 1,
-      paddingBottom: "10%",
-      marginTop: "20%",
-      marginBottom: "10%",
+    headerTextContainer: {
+      marginTop: "5%",
     },
-    welcomeText: {
-      fontSize: 18,
-      lineHeight: 27,
-      textAlign: "center",
+    headerWelcomeText: {
+      color: "white",
+      fontSize: 25,
+      marginBottom: "5%",
+      fontWeight: "bold"
+    },
+    headerNameText: {
+      color: myTheme.colors.lightGrey,
+      fontSize: 35,
+    },
+    userImage: {
+      height: deviceHeight * 0.125,
+      width: deviceHeight * 0.125,
+      marginTop: "5%",
+      borderRadius: 100,
     },
     valuesWrapper: {
       borderBottomColor: myTheme.colors.gray,
@@ -41,7 +53,7 @@ export default function Landing({ navigation }) {
     valuesHeaderText: {
       color: myTheme.colors.green,
       fontSize: 24,
-      fontWeight: "500",
+      fontWeight: "bold",
       marginBottom: "5%",
     },
     value: {
@@ -87,35 +99,38 @@ export default function Landing({ navigation }) {
   return (
     <ScrollView>
       <View style={[SharedStyles.flexRow, styles.landingHeader]}>
-        <View><Text>Welcome Back</Text></View>
-        <View></View>
-      </View>
-      <View style={styles.welcomeTextWrapper}>
-        <Text style={styles.welcomeText}>
-          Welcome to the Stax Barcode Scanner! Use this application to scan any
-          product to see how it will align to your personal values
-        </Text>
-      </View>
-
-      <View style={styles.valuesWrapper}>
-        <Text style={styles.valuesHeaderText}>Your Selected Values</Text>
-
-        {userValues.map((value) => (
-          <RenderValue key={value.id} icon={value.icon} name={value.name} />
-        ))}
-
-        <MyButton
-          style={styles.valuesButton}
-          text="Change your Values"
-          onPress={() => navigation.navigate("ValuesStack")}
+        <View style={styles.headerTextContainer}>
+          <Text style={styles.headerWelcomeText}>Welcome back</Text>
+          <Text style={styles.headerNameText}>UserName</Text>
+        </View>
+        <Image
+          source={userImage}
+          style={styles.userImage}
+          resizeMode="contain"
         />
       </View>
 
-      <MyButton
-        style={styles.getStartedButton}
-        text="Get Started"
-        onPress={() => navigation.navigate("BarcodeScanner")}
-      />
+      <View style={[SharedStyles.container]}>
+        <View style={styles.valuesWrapper}>
+          <Text style={styles.valuesHeaderText}>Your Selected Values</Text>
+
+          {userValues.map((value) => (
+            <RenderValue key={value.id} icon={value.icon} name={value.name} />
+          ))}
+
+          <MyButton
+            style={styles.valuesButton}
+            text="Change your Values"
+            onPress={() => navigation.navigate("ValuesStack")}
+          />
+        </View>
+
+        <MyButton
+          style={styles.getStartedButton}
+          text="Get Started"
+          onPress={() => navigation.navigate("BarcodeScanner")}
+        />
+      </View>
     </ScrollView>
   );
 }
