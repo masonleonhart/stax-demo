@@ -10,7 +10,6 @@ import { SERVER_ADDRESS, AUTH_0_DOMAIN, AUTH_0_CLIENT_ID } from "@env";
 import { View, ImageBackground } from "react-native";
 
 import SplashImage from "../../../../assets/stax-splash.png";
-import StaxLogo from "../../../../assets/StaxLogoVerticleWhiteNew.png";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
 
 // Renders the login page
