@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "stax-scan-prototype",
+    "name": "Stax",
     "slug": "stax-scan-prototype",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
