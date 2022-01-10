@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";
 import * as AuthSession from "expo-auth-session";
 import jwtDecode from "jwt-decode";
@@ -19,7 +19,14 @@ import EmptyStateView from "../../reusedComponents/EmptyStateView";
 function Login({ navigation }) {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
-  const userStore = useSelector((store) => store.user);
+
+  // When the page finished rendering, call the server to retrieve values
+
+  useEffect(() => {
+    axios
+      .get(`${SERVER_ADDRESS}/api/v1/base-values`)
+      .then((res) => dispatch({ type: "SET_VALUES_LIST", payload: res.data }));
+  }, []);
 
   // When the page finishes rendering, open the webview to run login
 
@@ -108,9 +115,14 @@ function Login({ navigation }) {
 
           await dispatch({ type: "SET_USER_INFO", payload: userData });
 
-          await axios
-            .post(`${SERVER_ADDRESS}/api/v1/authenticate-user`, userData)
-            .then(() => navigation.navigate("Landing"));
+          // if using await, don't do .then
+
+          await axios.post(
+            `${SERVER_ADDRESS}/api/v1/authenticate-user`,
+            userData
+          );
+
+          navigation.navigate("Landing");
         } catch (error) {
           console.log("error in sending userInfo to data service", error);
         }

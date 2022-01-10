@@ -22,7 +22,7 @@ export default function CompanyProfile({ navigation }) {
   const windowWidth = Dimensions.get("window").width;
   const deviceHeight = Dimensions.get("window").height;
   const companyDetails = useSelector((store) => store.barcode.barcodeDetails);
-  const userValues = useSelector((store) => store.user.values);
+  const userValues = useSelector((store) => store.user.userValues);
   const [isCollapsed1, setIsCollapsed1] = useState(true);
   const [isCollapsed2, setIsCollapsed2] = useState(true);
   const [isCollapsed3, setIsCollapsed3] = useState(true);
@@ -152,7 +152,7 @@ export default function CompanyProfile({ navigation }) {
           <View style={SharedStyles.flexRow}>
             <View style={SharedStyles.flexRow}>
               <MaterialCommunityIcons
-                name={userValues[0].icon}
+                name={userValues[0].icon_name}
                 color={myTheme.colors.blue}
                 size={30}
               />
@@ -184,7 +184,7 @@ export default function CompanyProfile({ navigation }) {
           <View style={SharedStyles.flexRow}>
             <View style={SharedStyles.flexRow}>
               <MaterialCommunityIcons
-                name={userValues[1].icon}
+                name={userValues[1].icon_name}
                 color={myTheme.colors.blue}
                 size={30}
               />
@@ -216,7 +216,7 @@ export default function CompanyProfile({ navigation }) {
           <View style={SharedStyles.flexRow}>
             <View style={SharedStyles.flexRow}>
               <MaterialCommunityIcons
-                name={userValues[2].icon}
+                name={userValues[2].icon_name}
                 color={myTheme.colors.blue}
                 size={30}
               />
@@ -248,7 +248,7 @@ export default function CompanyProfile({ navigation }) {
           <View style={SharedStyles.flexRow}>
             <View style={SharedStyles.flexRow}>
               <MaterialCommunityIcons
-                name={userValues[3].icon}
+                name={userValues[3].icon_name}
                 color={myTheme.colors.blue}
                 size={30}
               />
@@ -280,7 +280,7 @@ export default function CompanyProfile({ navigation }) {
           <View style={SharedStyles.flexRow}>
             <View style={SharedStyles.flexRow}>
               <MaterialCommunityIcons
-                name={userValues[4].icon}
+                name={userValues[4].icon_name}
                 color={myTheme.colors.blue}
                 size={30}
               />

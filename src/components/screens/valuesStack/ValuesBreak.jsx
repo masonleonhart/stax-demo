@@ -14,7 +14,6 @@ import MyButton from "../../reusedComponents/MyButton";
 import SharedStyles from "../../reusedComponents/SharedStyles";
 import fonts from "../../reusedComponents/fonts";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
-import image from "../../../../assets/placeholder.png";
 
 export default function ValuesBreak({ navigation, route }) {
   const isFocused = useIsFocused();
@@ -37,15 +36,15 @@ export default function ValuesBreak({ navigation, route }) {
       fontSize: 20,
       fontFamily: fonts.bold,
     },
-    exampleWrapper: { flex: 1, marginBottom: "5%" },
-    pressable: {
-      height: "35%",
-      marginVertical: "5%",
-      borderRadius: 10,
-      overflow: "hidden",
+    exampleWrapper: {
+      flex: 1,
+      marginBottom: "5%",
     },
     imageBackground: {
       flex: 1,
+      marginVertical: "5%",
+      borderRadius: 10,
+      overflow: "hidden",
     },
     scrim: {
       flex: 1,
@@ -56,19 +55,22 @@ export default function ValuesBreak({ navigation, route }) {
     valueNameText: {
       fontFamily: fonts.bold,
       color: "white",
-      fontSize: 28,
+      fontSize: 30,
       marginBottom: "5%",
     },
     valueDescriptionText: {
-      fontSize: 26,
+      fontSize: 24,
       color: "white",
-      fontFamily: fonts.regular,
+      fontFamily: fonts.bold,
     },
-    skipButton: {
-      marginBottom: "0%",
+    skipPressable: {
+      marginBottom: "10%",
     },
-    skipLabel: {
-      color: myTheme.colors.grey,
+    skipText: {
+      textAlign: "center",
+      textDecorationLine: "underline",
+      fontFamily: fonts.bold,
+      color: myTheme.colors.blue,
     },
   });
 
@@ -93,41 +95,46 @@ export default function ValuesBreak({ navigation, route }) {
 
       <View style={styles.exampleWrapper}>
         <Text style={styles.exampleText}>Example</Text>
-        <Pressable style={styles.pressable}>
-          <ImageBackground source={image} style={styles.imageBackground}>
-            <View style={styles.scrim}>
-              <Text style={styles.valueNameText}>Low Carbon Footprint</Text>
-              <Text style={styles.valueDescriptionText}>
-                This is a description. Such a good description.
-              </Text>
-            </View>
-          </ImageBackground>
-        </Pressable>
+        <ImageBackground
+          source={{
+            uri: "https://images.pond5.com/cartoon-animation-trees-field-footage-055967007_iconl.jpeg",
+          }}
+          style={styles.imageBackground}
+        >
+          <View style={styles.scrim}>
+            <Text style={styles.valueNameText}>Low Carbon Footprint</Text>
+            <Text style={styles.valueDescriptionText}>
+              Effectively limit the amount of greenhouse gasses produced
+            </Text>
+          </View>
+        </ImageBackground>
 
-        <Pressable style={styles.pressable}>
-          <ImageBackground source={image} style={styles.imageBackground}>
-            <View style={styles.scrim}>
-              <Text style={styles.valueNameText}>Diverse Leadership</Text>
-              <Text style={styles.valueDescriptionText}>
-                This is a description. Such a good description.
-              </Text>
-            </View>
-          </ImageBackground>
-        </Pressable>
+        <ImageBackground
+          source={{
+            uri: "https://media.istockphoto.com/vectors/crowd-of-young-and-elderly-men-and-women-in-trendy-hipster-clothes-vector-id1202344480?k=20&m=1202344480&s=612x612&w=0&h=PCU3ePuJWydABubaWLzEMKILX1iFvDR7dQBgm5IyMIs=",
+          }}
+          style={styles.imageBackground}
+        >
+          <View style={styles.scrim}>
+            <Text style={styles.valueNameText}>Diverse Leadership</Text>
+            <Text style={styles.valueDescriptionText}>
+              Strive for leadership by women, veterans, or minoritized people
+            </Text>
+          </View>
+        </ImageBackground>
       </View>
-
-      <MyButton
-        text="Skip to End"
-        onPress={() => navigation.navigate("ValuesComplete", values)}
-        style={styles.skipButton}
-        labelStyle={styles.skipLabel}
-        buttonColor="#e3e3e3"
-      />
 
       <MyButton
         text="Let's do it!"
         onPress={() => navigation.navigate("ValuesPairWiseMatching", values)}
       />
+
+      <Pressable
+        style={styles.skipPressable}
+        onPress={() => navigation.navigate("ValuesComplete", values)}
+      >
+        <Text style={styles.skipText}>Skip to End</Text>
+      </Pressable>
     </ScrollView>
   );
 }

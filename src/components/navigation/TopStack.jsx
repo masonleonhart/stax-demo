@@ -1,5 +1,4 @@
 import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { useSelector } from "react-redux";
@@ -30,6 +29,8 @@ export default function TopStack() {
           backgroundColor: myTheme.colors.lightGrey,
         },
         headerLeft: () => {
+          // constantly render the back button but go into landing page and specifically not render it from there
+
           if (route.name !== "Landing") {
             return (
               <IconButton

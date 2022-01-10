@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useIsFocused } from "@react-navigation/core";
+import { useSelector } from "react-redux";
 
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 
@@ -18,65 +19,13 @@ import fonts from "../../reusedComponents/fonts";
 import SharedStyles from "../../reusedComponents/SharedStyles";
 import ValuesTooManyModal from "../../modals/ValuesTooManyModal";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
-import image from "../../../../assets/placeholder.png";
 
 export default function Values({ navigation }) {
   const isFocused = useIsFocused();
   const myTheme = useTheme();
   const [isTooManyDialogVisible, setIsTooManyDialogVisible] = useState(false);
   const [selectedValues, setSelectedValues] = useState([]);
-  const [valuesList, setValuesList] = useState([
-    {
-      id: 1,
-      name: "Low Carbon Footprint",
-      icon: "leaf",
-    },
-    {
-      id: 2,
-      name: "Efficient Water Use",
-      icon: "leaf",
-    },
-    {
-      id: 3,
-      name: "Reduced Waste",
-      icon: "leaf",
-    },
-    {
-      id: 4,
-      name: "Parental Leave Benefits",
-      icon: "briefcase",
-    },
-    {
-      id: 5,
-      name: "Living Wages",
-      icon: "briefcase",
-    },
-    {
-      id: 6,
-      name: "Care for Workers",
-      icon: "briefcase",
-    },
-    {
-      id: 7,
-      name: "Charitable Giving",
-      icon: "account-group",
-    },
-    {
-      id: 8,
-      name: "Respect to Human Rights",
-      icon: "account-group",
-    },
-    {
-      id: 9,
-      name: "Diverse Leadership",
-      icon: "bank",
-    },
-    {
-      id: 10,
-      name: "Pay Equality",
-      icon: "bank",
-    },
-  ]);
+  const valuesList = useSelector((store) => store.valuesList);
 
   // chekcs if the clicked value appears in the selected list, if it does then remove the value, else checks if the selected list is full,
   // if it is, set the too many modal to true so no more can be added and alert the user, else, takes the selected value and
@@ -142,23 +91,20 @@ export default function Values({ navigation }) {
     scrim: {
       flex: 1,
       padding: "5%",
-      backgroundColor: "rgba(0, 0, 0, .2)",
       justifyContent: "space-between",
     },
     valueNameWrapper: {
       flexWrap: "wrap",
-      marginBottom: "10%",
+      marginBottom: "5%",
     },
     valueCardName: {
-      fontSize: 18,
+      fontSize: 20,
       fontFamily: fonts.bold,
-      color: "white",
-      width: "75%",
+      width: "80%",
     },
     valueCardDescription: {
-      fontSize:16,
-      color: "white",
-      fontFamily: fonts.regular,
+      fontSize: 16,
+      fontFamily: fonts.bold,
     },
     continueButton: {
       borderTopColor: myTheme.colors.grey,
@@ -196,20 +142,32 @@ export default function Values({ navigation }) {
             key={value.id}
             onPress={() => onValuePress(value)}
           >
-            <ImageBackground source={image} style={styles.imageBackground}>
-              <View style={styles.scrim}>
+            <ImageBackground
+              source={{ uri: value.image_url }}
+              style={styles.imageBackground}
+            >
+              <View style={[styles.scrim, { backgroundColor: value.scrim }]}>
                 <View style={[SharedStyles.flexRow, styles.valueNameWrapper]}>
-                  <Text style={styles.valueCardName}>{value.name}</Text>
+                  <Text
+                    style={[styles.valueCardName, { color: value.text_color }]}
+                  >
+                    {value.name}
+                  </Text>
                   {checkIfSelectd(value.name) && (
                     <MaterialCommunityIcons
                       name="check-circle-outline"
-                      color="white"
+                      color={value.text_color}
                       size={25}
                     />
                   )}
                 </View>
-                <Text style={styles.valueCardDescription}>
-                  This is a description. Such a good description.
+                <Text
+                  style={[
+                    styles.valueCardDescription,
+                    { color: value.text_color },
+                  ]}
+                >
+                  {value.description}
                 </Text>
               </View>
             </ImageBackground>

@@ -1,5 +1,10 @@
 import { combineReducers } from "redux";
 
+// defer to hooks for holding state rather than making reducers
+// react useContext https://reactjs.org/docs/context.html
+// https://stackoverflow.com/questions/58060118/usecontext-in-react-native
+// https://kentcdodds.com/blog/how-to-use-react-context-effectively
+
 // holds details for submitted values
 
 const userInfo = (state = {}, action) => {
@@ -11,11 +16,11 @@ const userInfo = (state = {}, action) => {
   }
 };
 
-const values = (state = [], action) => {
+const userValues = (state = [], action) => {
   switch (action.type) {
-    case "SET_VALUES":
+    case "SET_USER_VALUES":
       return action.payload;
-    case "RESET_VALUES":
+    case "RESET_USER_VALUES":
       return [];
     default:
       return state;
@@ -26,5 +31,5 @@ const values = (state = [], action) => {
 
 export default combineReducers({
   userInfo,
-  values,
+  userValues,
 });

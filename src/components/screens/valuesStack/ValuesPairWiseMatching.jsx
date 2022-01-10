@@ -15,7 +15,6 @@ import MyButton from "../../reusedComponents/MyButton";
 import fonts from "../../reusedComponents/fonts";
 import SharedStyles from "../../reusedComponents/SharedStyles";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
-import image from "../../../../assets/placeholder.png";
 
 export default function ValuesPairWiseMatching({ route, navigation }) {
   const isFocused = useIsFocused();
@@ -113,18 +112,15 @@ export default function ValuesPairWiseMatching({ route, navigation }) {
       flex: 1,
       padding: "5%",
       justifyContent: "center",
-      backgroundColor: "rgba(0, 0, 0, .2)",
     },
     valueNameText: {
       fontFamily: fonts.bold,
-      color: "white",
-      fontSize: 28,
+      fontSize: 30,
       marginBottom: "5%",
     },
     valueDescriptionText: {
-      fontSize: 26,
-      color: "white",
-      fontFamily: fonts.regular,
+      fontSize: 24,
+      fontFamily: fonts.bold,
     },
   });
 
@@ -140,13 +136,26 @@ export default function ValuesPairWiseMatching({ route, navigation }) {
         <>
           <Text style={styles.appreciateText}>I appreciate companies with</Text>
           <Pressable style={styles.pressable} onPress={moveToNextArrayIndex}>
-            <ImageBackground source={image} style={styles.imageBackground}>
-              <View style={styles.scrim}>
-                <Text style={styles.valueNameText}>
+            <ImageBackground
+              source={{ uri: values[valuesIndex].iamge_url }}
+              style={styles.imageBackground}
+            >
+              <View style={[styles.scrim, values[valuesIndex].scrim]}>
+                <Text
+                  style={[
+                    styles.valueNameText,
+                    { color: values[valuesIndex].text_color },
+                  ]}
+                >
                   {values[valuesIndex].name}
                 </Text>
-                <Text style={styles.valueDescriptionText}>
-                  This is a description. Such a good description.
+                <Text
+                  style={[
+                    styles.valueDescriptionText,
+                    { color: values[valuesIndex].text_color },
+                  ]}
+                >
+                  {values[valuesIndex].description}
                 </Text>
               </View>
             </ImageBackground>
@@ -158,12 +167,30 @@ export default function ValuesPairWiseMatching({ route, navigation }) {
           />
 
           <Pressable style={styles.pressable} onPress={onBottomButtonClick}>
-            <ImageBackground source={image} style={styles.imageBackground}>
-              <View style={styles.scrim}>
-                <Text style={styles.valueNameText}>
+            <ImageBackground
+              source={{ uri: values[valuesIndex + 1].image_url }}
+              style={styles.imageBackground}
+            >
+              <View
+                style={[
+                  styles.scrim,
+                  { backgroundColor: values[valuesIndex + 1].scrim },
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.valueNameText,
+                    { color: values[valuesIndex + 1].text_color },
+                  ]}
+                >
                   {values[valuesIndex + 1].name}
                 </Text>
-                <Text style={styles.valueDescriptionText}>
+                <Text
+                  style={[
+                    styles.valueDescriptionText,
+                    { color: values[valuesIndex + 1].text_color },
+                  ]}
+                >
                   This is a description. Such a good description.
                 </Text>
               </View>

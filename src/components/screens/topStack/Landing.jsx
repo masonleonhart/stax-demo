@@ -18,7 +18,7 @@ export default function Landing({ navigation }) {
   const isFocused = useIsFocused();
   const myTheme = useTheme();
   const deviceHeight = Dimensions.get("screen").height;
-  const userValues = useSelector((store) => store.user.values);
+  const userValues = useSelector((store) => store.user.userValues);
   const userInfo = useSelector((store) => store.user.userInfo);
 
   const topValuesButtonPress = () => {
@@ -29,9 +29,13 @@ export default function Landing({ navigation }) {
     } else {
       navigation.navigate("ValuesStack", {
         screen: "ValuesComplete",
+        params: { params: userValues },
       });
     }
   };
+
+  // surround with useMemo
+  // https://reactjs.org/docs/hooks-reference.html#usememo
 
   const styles = StyleSheet.create({
     landingHeader: {
@@ -82,7 +86,7 @@ export default function Landing({ navigation }) {
     valueText: {
       color: myTheme.colors.grey,
       fontSize: 20,
-      fontFamily: "DMSans-Regular",
+      fontFamily: fonts.regular,
       marginLeft: "5%",
     },
     valuesButton: {
@@ -92,6 +96,8 @@ export default function Landing({ navigation }) {
       marginTop: "10%",
     },
   });
+
+  // move component outside of top component and pass theme down into the component as a prop
 
   const RenderValue = ({ icon, name }) => {
     return (
@@ -139,7 +145,7 @@ export default function Landing({ navigation }) {
           </View>
 
           {userValues.map((value) => (
-            <RenderValue key={value.id} icon={value.icon} name={value.name} />
+            <RenderValue key={value.id} icon={value.icon_name} name={value.name} />
           ))}
 
           {userValues.length === 0 && (

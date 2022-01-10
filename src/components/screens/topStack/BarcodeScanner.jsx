@@ -59,19 +59,19 @@ export default function BarcodeScanner({ navigation }) {
           { headers: { [AUTH_HEADER]: accessToken } }
         );
 
-        await dispatch({
+        dispatch({
           type: "SET_BARCODE_DETAILS",
           payload: response.data.data,
         });
 
-        await navigation.navigate("CompanyProfile");
+        navigation.navigate("CompanyProfile");
       } catch (error) {
         console.log("Error in fetching barcode details");
         console.log(error);
 
-        await dispatch({ type: "RESET_BARCODE_DETAILS" });
+        dispatch({ type: "RESET_BARCODE_DETAILS" });
 
-        await navigation.navigate("NewProductForm");
+        navigation.navigate("NewProductForm");
       }
     }
   };

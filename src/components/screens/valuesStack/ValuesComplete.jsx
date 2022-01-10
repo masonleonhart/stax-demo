@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/core";
 import { useDispatch, useSelector } from "react-redux";
 
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, Pressable } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import DraggableFlatList from "react-native-draggable-flatlist";
 
@@ -15,16 +15,22 @@ import fonts from "../../reusedComponents/fonts";
 export default function ValuesComplete({ route, navigation }) {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
-  const userValues = useSelector((store) => store.user.values);
+  const userValues = useSelector((store) => store.user.userValues);
   const myTheme = useTheme();
-  const [values, setValues] = useState(
-    userValues.length !== 0 ? userValues : route.params
-  );
+  const [values, setValues] = useState([]);
+
+  // Checks if route.params has a a key "params" holding the values coming from the front end (probably will be obsolete when values are hosted in state)
+  // (navigation.navigate(screen, { (params object with nested screen and params) } cannot hold array in base params key)
+  // and sets values to key if .params is there or not
+
+  useEffect(() => {
+    setValues(route.params.params ? route.params.params : route.params);
+  });
 
   // Resets values stored in state and returns user to values select
 
   const onRetakePress = () => {
-    dispatch({ type: "RESET_VALUES" });
+    dispatch({ type: "RESET_USER_VALUES" });
 
     navigation.navigate("ValuesSelect");
   };
@@ -32,7 +38,7 @@ export default function ValuesComplete({ route, navigation }) {
   // Sends the values to be stored into state and navigates to landing
 
   const onContinuePress = () => {
-    dispatch({ type: "SET_VALUES", payload: values });
+    dispatch({ type: "SET_USER_VALUES", payload: values });
 
     navigation.navigate("Landing");
   };
@@ -54,10 +60,11 @@ export default function ValuesComplete({ route, navigation }) {
       color: myTheme.colors.grey,
     },
     valueContainer: {
-      backgroundColor: "#e3e3e3",
       marginBottom: "5%",
       padding: "2.5%",
       borderRadius: 10,
+      borderColor: myTheme.colors.grey,
+      borderWidth: 1,
     },
     valueText: {
       textAlign: "center",
@@ -65,16 +72,31 @@ export default function ValuesComplete({ route, navigation }) {
       fontFamily: fonts.regular,
       color: myTheme.colors.grey,
     },
-    retakeButton: {
-      borderTopColor: myTheme.colors.grey,
-      borderTopWidth: 1,
-      paddingTop: "10%",
-      marginBottom: "0%",
-    },
-    RetakeLabel: {
-      color: myTheme.colors.grey,
+    retakeText: {
+      textAlign: "center",
+      textDecorationLine: "underline",
+      fontFamily: fonts.bold,
+      color: myTheme.colors.blue,
     },
   });
+  const renderItem = ({ item, drag, isActive, index }) => (
+    <Pressable
+      onLongPress={drag}
+      disabled={isActive}
+      style={[
+        styles.valueContainer,
+        {
+          backgroundColor: isActive ? "#f0f0f0" : "#e3e3e3",
+          borderColor: isActive ? myTheme.colors.grey : "#e3e3e3",
+        },
+      ]}
+    >
+      <Text style={styles.valueText}>
+        {`${index + 1}.  `}
+        {item.name}
+      </Text>
+    </Pressable>
+  );
 
   // If the screen isn't in focus yet, render a placeholder screen
 
@@ -83,30 +105,38 @@ export default function ValuesComplete({ route, navigation }) {
   }
 
   return (
-    <ScrollView style={SharedStyles.container}>
+    <View
+      style={SharedStyles.container}
+      onScrollEndDrag={({ nativeEvent }) =>
+        setScrollOffest({ scrollOffset: nativeEvent.contentOffset["y"] })
+      }
+      onMomentumScrollEnd={({ nativeEvent }) =>
+        setScrollOffest({ scrollOffset: nativeEvent.contentOffset["y"] })
+      }
+    >
       <Text style={styles.headerText}>
         {userValues.length !== 0 ? "Your Values" : "Congratulations!"}
       </Text>
       <Text style={styles.subheaderText}>
-        Here are your values ranked. You can drag each item up or down if you
-        are not satisfied with your ranking.
+        Here are your values ranked. You can press and hold each item to "grab"
+        it and drag each item up or down if you are not satisfied with your
+        ranking.
       </Text>
 
-      {values.map((value) => (
-        <View key={value.id} style={styles.valueContainer}>
-          <Text style={styles.valueText}>{value.name}</Text>
-        </View>
-      ))}
-
-      <MyButton
-        text="Retake Quiz"
-        style={styles.retakeButton}
-        buttonColor="#e3e3e3"
-        labelStyle={styles.RetakeLabel}
-        onPress={onRetakePress}
+      <DraggableFlatList
+        scrollEnabled={false}
+        extraData={values}
+        data={values}
+        onDragEnd={({ data }) => setValues(data)}
+        keyExtractor={(item) => `${item.id}`}
+        renderItem={renderItem}
       />
 
       <MyButton onPress={onContinuePress} text="Return to my Dashboard" />
-    </ScrollView>
+
+      <Pressable onPress={onRetakePress}>
+        <Text style={styles.retakeText}>Retake Quiz</Text>
+      </Pressable>
+    </View>
   );
 }

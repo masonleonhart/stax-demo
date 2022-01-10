@@ -5,7 +5,17 @@ import user from "./user.reducer";
 // Combines all of our redcuers into one root reducer that makes for easier access
 // In the middleware
 
+const valuesList = (state = [], action) => {
+  switch (action.type) {
+    case "SET_VALUES_LIST":
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
+  valuesList,
   barcode,
   user,
 });
