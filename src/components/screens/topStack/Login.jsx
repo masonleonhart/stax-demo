@@ -7,10 +7,9 @@ import axios from "axios";
 
 import { SERVER_ADDRESS, AUTH_0_DOMAIN, AUTH_0_CLIENT_ID } from "@env";
 
-import { Image, StyleSheet } from "react-native";
+import { View, ImageBackground } from "react-native";
 
-import { LinearGradient } from "expo-linear-gradient";
-
+import SplashImage from "../../../../assets/stax-splash.png";
 import StaxLogo from "../../../../assets/StaxLogoVerticleWhiteNew.png";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
 
@@ -132,26 +131,6 @@ function Login({ navigation }) {
     loginWithAuth0();
   }, []);
 
-  const styles = StyleSheet.create({
-    linearGradient: {
-      height: "100%",
-      width: "100%",
-      flex: 1,
-      justifyContent: "center",
-    },
-    staxLogo: {
-      height: "25%",
-      width: "40%",
-      marginLeft: "auto",
-      marginRight: "auto",
-      marginBottom: "5%",
-    },
-    myButton: {
-      marginTop: "10%",
-      marginBottom: "0%",
-    },
-  });
-
   // if the screen isn't in focus yet, render a placeholder screen
 
   if (!isFocused) {
@@ -159,12 +138,13 @@ function Login({ navigation }) {
   }
 
   return (
-    <LinearGradient
-      colors={["#FEBFB0", "#FE7452", "#FE3F12"]}
-      style={styles.linearGradient}
-    >
-      <Image source={StaxLogo} resizeMode="contain" style={styles.staxLogo} />
-    </LinearGradient>
+    <View style={{ flex: 1 }}>
+      <ImageBackground
+        style={{ width: "100%", height: "100%" }}
+        resizeMode="contain"
+        source={SplashImage}
+      />
+    </View>
   );
 }
 

@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import {
-  configureFonts,
-  DefaultTheme,
-  Provider as PaperProvider,
-} from "react-native-paper";
+import { DefaultTheme, Provider as PaperProvider } from "react-native-paper";
+import { ImageBackground, View } from "react-native";
+import SplashImage from "./assets/stax-splash.png";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStore, applyMiddleware } from "redux";
 import { Provider as StoreProvider } from "react-redux";
 import createSagaMiddlware from "redux-saga";
 import { enableScreens } from "react-native-screens";
-import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
 
 import TopStack from "./src/components/navigation/TopStack";
@@ -57,7 +54,15 @@ export default function App() {
   }, []);
 
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return (
+      <View style={{ flex: 1 }}>
+        <ImageBackground
+          style={{ width: "100%", height: "100%" }}
+          resizeMode="contain"
+          source={SplashImage}
+        />
+      </View>
+    );
   } else {
     return (
       // PaperProvider is our react-native-paper baseline styling
