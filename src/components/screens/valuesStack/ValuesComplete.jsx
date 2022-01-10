@@ -105,27 +105,18 @@ export default function ValuesComplete({ route, navigation }) {
   }
 
   return (
-    <View
-      style={SharedStyles.container}
-      onScrollEndDrag={({ nativeEvent }) =>
-        setScrollOffest({ scrollOffset: nativeEvent.contentOffset["y"] })
-      }
-      onMomentumScrollEnd={({ nativeEvent }) =>
-        setScrollOffest({ scrollOffset: nativeEvent.contentOffset["y"] })
-      }
-    >
+    <View style={SharedStyles.container}>
       <Text style={styles.headerText}>
         {userValues.length !== 0 ? "Your Values" : "Congratulations!"}
       </Text>
       <Text style={styles.subheaderText}>
-        Here are your values ranked. You can press and hold each item to "grab"
-        it and drag each item up or down if you are not satisfied with your
+        Here are your values ranked. You can press and hold each item to grab it
+        and drag each item up or down if you are not satisfied with your
         ranking.
       </Text>
 
       <DraggableFlatList
         scrollEnabled={false}
-        extraData={values}
         data={values}
         onDragEnd={({ data }) => setValues(data)}
         keyExtractor={(item) => `${item.id}`}

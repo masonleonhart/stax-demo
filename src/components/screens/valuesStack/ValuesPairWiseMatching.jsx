@@ -137,7 +137,7 @@ export default function ValuesPairWiseMatching({ route, navigation }) {
           <Text style={styles.appreciateText}>I appreciate companies with</Text>
           <Pressable style={styles.pressable} onPress={moveToNextArrayIndex}>
             <ImageBackground
-              source={{ uri: values[valuesIndex].iamge_url }}
+              source={{ uri: values[valuesIndex].image_url }}
               style={styles.imageBackground}
             >
               <View style={[styles.scrim, values[valuesIndex].scrim]}>
