@@ -5,7 +5,8 @@ import { useSelector } from "react-redux";
 
 import { useTheme, IconButton } from "react-native-paper";
 
-import Login from "../screens/topStack/Login";
+import Splash from "../screens/topStack/Splash";
+import AuthStack from "./AuthStack";
 import Landing from "../screens/topStack/Landing";
 import ValuesStack from "./ValuesStack";
 import BarcodeScanner from "../screens/topStack/BarcodeScanner";
@@ -51,8 +52,13 @@ export default function TopStack() {
       })}
     >
       <Stack.Screen
-        name="Login"
-        component={Login}
+        name="Splash"
+        component={Splash}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="AuthStack"
+        component={AuthStack}
         options={{ headerShown: false }}
       />
       <Stack.Screen

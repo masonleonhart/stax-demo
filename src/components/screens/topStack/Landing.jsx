@@ -14,12 +14,16 @@ import fonts from "../../reusedComponents/fonts";
 import SharedStyles from "../../reusedComponents/SharedStyles";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
 
+import Firebase from "../../../../config/firebase";
+
 export default function Landing({ navigation }) {
   const isFocused = useIsFocused();
   const myTheme = useTheme();
   const deviceHeight = Dimensions.get("screen").height;
   const userValues = useSelector((store) => store.user.userValues);
   const userInfo = useSelector((store) => store.user.userInfo);
+
+  const auth = Firebase.auth();
 
   const topValuesButtonPress = () => {
     if (userValues.length === 0) {
@@ -31,6 +35,14 @@ export default function Landing({ navigation }) {
         screen: "ValuesComplete",
         params: { params: userValues },
       });
+    }
+  };
+
+  const onSignOut = async () => {
+    try {
+      await auth.signOut();
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -166,6 +178,11 @@ export default function Landing({ navigation }) {
               : "Scan a Products Barcode"
           }
           onPress={() => navigation.navigate("BarcodeScanner")}
+        />
+
+<MyButton
+          onPress={() => onSignOut()}
+          text="Sign Out"
         />
       </View>
     </ScrollView>
