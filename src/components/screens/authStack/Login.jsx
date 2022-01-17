@@ -3,12 +3,19 @@ import { useIsFocused } from "@react-navigation/native";
 
 import { Image, StyleSheet, View, ScrollView, Pressable } from "react-native";
 
-import { TextInput, Text, Appbar, useTheme } from "react-native-paper";
+import {
+  TextInput,
+  Text,
+  Appbar,
+  useTheme,
+  configureFonts,
+} from "react-native-paper";
 
 import { LinearGradient } from "expo-linear-gradient";
 
 import MyButton from "../../reusedComponents/MyButton";
 
+import fonts from "../../reusedComponents/fonts";
 import StaxLogo from "../../../../assets/StaxLogoVerticleWhiteNew.png";
 
 import SharedStyles from "../../reusedComponents/SharedStyles";
@@ -49,6 +56,13 @@ export default function Login({ navigation }) {
       text: "white",
       placeholder: "white",
     },
+    fonts: configureFonts({
+      ios: {
+        regular: {
+          fontFamily: fonts.bold,
+        },
+      },
+    }),
   };
 
   const styles = StyleSheet.create({
@@ -82,6 +96,7 @@ export default function Login({ navigation }) {
       color: myTheme.colors.cream,
       marginLeft: "auto",
       marginRight: "auto",
+      fontFamily: fonts.regular,
     },
     registerWrapper: {
       marginTop: "15%",
@@ -91,11 +106,13 @@ export default function Login({ navigation }) {
     },
     registerTextCream: {
       color: myTheme.colors.cream,
+      fontFamily: fonts.regular,
     },
     registerTextWhite: {
       marginLeft: "5%",
       color: "white",
       fontWeight: "bold",
+      fontFamily: fonts.bold,
     },
   });
 
@@ -119,7 +136,7 @@ export default function Login({ navigation }) {
           value={loginForm.email}
           onChangeText={(text) => setLoginForm({ ...loginForm, email: text })}
           underlineColor="white"
-          label="Email"
+          label="Gg"
           autoCapitalize="none"
           left={<TextInput.Icon name="email" color="white" />}
           style={styles.textInput}
