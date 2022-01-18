@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
 
 import { Image, StyleSheet, View, ScrollView, Pressable } from "react-native";
 
@@ -28,6 +29,7 @@ import Firebase from "../../../../config/firebase";
 export default function Login({ navigation }) {
   const isFocused = useIsFocused();
   const myTheme = useTheme();
+  const dispatch = useDispatch();
   const [loginForm, setLoginForm] = useState({
     email: "",
     password: "",
@@ -46,6 +48,12 @@ export default function Login({ navigation }) {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleRegisterNavPress = () => {
+    dispatch({ type: "SET_REGISTER_COMPLETED_FALSE" });
+
+    navigation.navigate("Register");
   };
 
   // Shared theme for text inputs
@@ -136,7 +144,7 @@ export default function Login({ navigation }) {
           value={loginForm.email}
           onChangeText={(text) => setLoginForm({ ...loginForm, email: text })}
           underlineColor="white"
-          label="Gg"
+          label="Email"
           autoCapitalize="none"
           left={<TextInput.Icon name="email" color="white" />}
           style={styles.textInput}
@@ -170,7 +178,7 @@ export default function Login({ navigation }) {
           style={styles.registerWrapper}
           underlayColor="rgba(0, 0, 0, .1)"
           rippleColor="rgba(0, 0, 0, .1)"
-          onPress={() => navigation.navigate("Register")}
+          onPress={handleRegisterNavPress}
         >
           <View style={SharedStyles.flexRow}>
             <Text style={styles.registerTextCream}>Don't have an account?</Text>

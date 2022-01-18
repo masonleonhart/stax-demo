@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";
 import Firebase from "../../../../config/firebase";
 import axios from "axios";
@@ -16,6 +16,11 @@ import EmptyStateView from "../../reusedComponents/EmptyStateView";
 export default function Splash({ navigation }) {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
+  const registerCompleted = useSelector(
+    (store) => store.user.registerCompleted
+  );
+  const first_name = useSelector((store) => store.user.personalName.first_name);
+  const last_name = useSelector((store) => store.user.personalName.last_name);
 
   const auth = Firebase.auth();
 
@@ -37,12 +42,12 @@ export default function Splash({ navigation }) {
     const unsubscribeAuth = auth.onAuthStateChanged(
       async (authenticatedUser) => {
         try {
-          if (authenticatedUser) {
+          if (authenticatedUser && registerCompleted) {
             const authenticateData = {
               access_token:
                 authenticatedUser.toJSON().stsTokenManager.accessToken,
-              first_name: "",
-              last_name: "",
+              first_name,
+              last_name,
               email: authenticatedUser.email,
             };
 
@@ -59,9 +64,9 @@ export default function Splash({ navigation }) {
 
             await dispatch({ type: "SET_USER_INFO", payload: userData });
 
-            navigation.navigate("Landing")
+            navigation.navigate("Landing");
           } else {
-            navigation.navigate("AuthStack")
+            navigation.navigate("AuthStack");
           }
         } catch (error) {
           console.log(error);
@@ -71,7 +76,7 @@ export default function Splash({ navigation }) {
 
     // unsubscribe auth listener on unmount
     return unsubscribeAuth;
-  }, []);
+  }, [registerCompleted, first_name, last_name]);
 
   // if the screen isn't in focus yet, render a placeholder screen
 

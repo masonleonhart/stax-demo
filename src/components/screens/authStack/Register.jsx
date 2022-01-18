@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";
 
 import { StyleSheet, Image, View, ScrollView, Pressable } from "react-native";
@@ -19,11 +20,14 @@ import StaxLogo from "../../../../assets/StaxLogoVerticleCreamWithGreen.png";
 
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
 
+import Firebase from "../../../../config/firebase";
+
 // Renders the Register view
 
 export default function RegisterAccount({ navigation }) {
   const myTheme = useTheme();
   const isFocused = useIsFocused();
+  const dispatch = useDispatch();
   const [registerForm, setRegisterForm] = useState({
     email: "",
     password: "",
@@ -36,16 +40,33 @@ export default function RegisterAccount({ navigation }) {
   const [passwordError, setPasswordError] = useState(false);
   const [continueClicks, setContinueClicks] = useState(0);
 
+  const auth = Firebase.auth();
+
   // If there is a form error or any of the fields are empty, you are not allowed to continue
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     setContinueClicks(continueClicks + 1);
 
     if (passwordError || !canContinue) {
       return;
     } else {
-      navigation.navigate("RegisterName");
+      try {
+        await auth.createUserWithEmailAndPassword(
+          registerForm.email,
+          registerForm.password
+        );
+
+        navigation.navigate("RegisterName", registerForm);
+      } catch (error) {
+        console.log(error);
+      }
     }
+  };
+
+  const handleLoginNavPress = () => {
+    dispatch({ type: "SET_REGISTER_COMPLETED_TRUE" });
+
+    navigation.navigate("Login");
   };
 
   useEffect(() => {
@@ -118,18 +139,13 @@ export default function RegisterAccount({ navigation }) {
       backgroundColor: "transparent",
       marginTop: "5%",
     },
-    buttonSurface: {
-      backgroundColor: "transparent",
-      marginTop: "10%",
-    },
     buttonLabel: {
       color: myTheme.colors.green,
     },
     termsOfUseOne: {
       marginTop: "10%",
       color: myTheme.colors.grey,
-      marginLeft: "auto",
-      marginRight: "auto",
+      textAlign: "center",
       fontFamily: fonts.regular,
     },
     termsOfUseTwo: {
@@ -262,7 +278,7 @@ export default function RegisterAccount({ navigation }) {
           style={styles.signInWrapper}
           underlayColor="rgba(0, 0, 0, .1)"
           rippleColor="rgba(0, 0, 0, .1)"
-          onPress={() => navigation.navigate("Login")}
+          onPress={handleLoginNavPress}
         >
           <View style={styles.signInText}>
             <Text style={styles.signInTextGrey}>Already have an account?</Text>

@@ -40,6 +40,8 @@ export default function Landing({ navigation }) {
 
   const onSignOut = async () => {
     try {
+      navigation.navigate("AuthStack", { screen: "Login" });
+
       await auth.signOut();
     } catch (error) {
       console.log(error);
@@ -157,7 +159,11 @@ export default function Landing({ navigation }) {
           </View>
 
           {userValues.map((value) => (
-            <RenderValue key={value.id} icon={value.icon_name} name={value.name} />
+            <RenderValue
+              key={value.id}
+              icon={value.icon_name}
+              name={value.name}
+            />
           ))}
 
           {userValues.length === 0 && (
@@ -180,10 +186,7 @@ export default function Landing({ navigation }) {
           onPress={() => navigation.navigate("BarcodeScanner")}
         />
 
-<MyButton
-          onPress={() => onSignOut()}
-          text="Sign Out"
-        />
+        <MyButton onPress={() => onSignOut()} text="Sign Out" />
       </View>
     </ScrollView>
   );

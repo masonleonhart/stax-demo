@@ -5,6 +5,7 @@ import { useTheme } from "react-native-paper";
 
 import Login from "../screens/authStack/Login";
 import Register from "../screens/authStack/Register";
+import RegisterName from "../screens/authStack/RegisterName";
 
 export default function AuthStack() {
   const Stack = createStackNavigator();
@@ -22,14 +23,9 @@ export default function AuthStack() {
         },
       })}
     >
-      <Stack.Screen
-        name="Login"
-        component={Login}
-      />
-      <Stack.Screen
-        name="Register"
-        component={Register}
-      />
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Register" component={Register} />
+      <Stack.Screen name="RegisterName" component={RegisterName} />
     </Stack.Navigator>
   );
 }
