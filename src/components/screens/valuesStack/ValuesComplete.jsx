@@ -20,10 +20,9 @@ export default function ValuesComplete({ route, navigation }) {
   const userValues = useSelector((store) => store.user.userInfo.values);
   const accessToken = useSelector((store) => store.user.userInfo.accessToken);
   const userId = useSelector((store) => store.user.userInfo.id);
+  const userInfo = useSelector((store) => store.user.userInfo.id);
   const myTheme = useTheme();
   const [values, setValues] = useState([]);
-
-  console.log(userValues);
 
   // Checks if route.params has a a key "params" holding the values coming from the front end (probably will be obsolete when values are hosted in state)
   // (navigation.navigate(screen, { (params object with nested screen and params) } cannot hold array in base params key)
@@ -50,7 +49,10 @@ export default function ValuesComplete({ route, navigation }) {
         { headers: { [AUTH_HEADER]: accessToken } }
       );
 
-      await dispatch({ type: "SET_USER_INFO", payload: response.data });
+      await dispatch({
+        type: "SET_USER_INFO",
+        payload: { ...response.data.user, accessToken },
+      });
 
       navigation.navigate("ValuesSelect");
     } catch (error) {
@@ -81,7 +83,12 @@ export default function ValuesComplete({ route, navigation }) {
         { headers: { [AUTH_HEADER]: accessToken } }
       );
 
-      await dispatch({ type: "SET_USER_INFO", payload: response.data });
+      await dispatch({
+        type: "SET_USER_INFO",
+        payload: { ...response.data.user, accessToken },
+      });
+
+      navigation.navigate("Landing");
     } catch (error) {
       console.log(error);
     }
@@ -151,7 +158,7 @@ export default function ValuesComplete({ route, navigation }) {
   return (
     <View style={SharedStyles.container}>
       <Text style={styles.headerText}>
-        {/* {userValues.length !== 0 ? "Your Values" : "Congratulations!"} */}
+        {userValues.length !== 0 ? "Your Values" : "Congratulations!"}
       </Text>
       <Text style={styles.subheaderText}>
         Here are your values ranked. You can press and hold each item to grab it
