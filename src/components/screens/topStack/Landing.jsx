@@ -20,7 +20,7 @@ export default function Landing({ navigation }) {
   const isFocused = useIsFocused();
   const myTheme = useTheme();
   const deviceHeight = Dimensions.get("screen").height;
-  const userValues = useSelector((store) => store.user.userValues);
+  const userValues = useSelector((store) => store.user.userInfo.values);
   const userInfo = useSelector((store) => store.user.userInfo);
 
   const auth = Firebase.auth();

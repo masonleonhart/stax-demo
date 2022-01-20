@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/core";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { SERVER_ADDRESS, AUTH_HEADER } from "@env";
 
 import { View, StyleSheet, Pressable } from "react-native";
 import { Text, useTheme } from "react-native-paper";
@@ -15,7 +17,10 @@ import fonts from "../../reusedComponents/fonts";
 export default function ValuesComplete({ route, navigation }) {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
-  const userValues = useSelector((store) => store.user.userValues);
+  const userValues = useSelector((store) => store.user.userInfo.values);
+  const accessToken = useSelector((store) => store.user.userInfo.accessToken);
+  const userId = useSelector((store) => store.user.userInfo.id);
+  const userInfo = useSelector((store) => store.user.userInfo.id);
   const myTheme = useTheme();
   const [values, setValues] = useState([]);
 
@@ -29,18 +34,64 @@ export default function ValuesComplete({ route, navigation }) {
 
   // Resets values stored in state and returns user to values select
 
-  const onRetakePress = () => {
-    dispatch({ type: "RESET_USER_VALUES" });
+  const onRetakePress = async () => {
+    // dispatch({ type: "RESET_USER_VALUES" });
 
-    navigation.navigate("ValuesSelect");
+    // navigation.navigate("ValuesSelect");
+
+    try {
+      const response = await axios.post(
+        `${SERVER_ADDRESS}/api/v1/update_values`,
+        {
+          user_id: userId,
+          values: [],
+        },
+        { headers: { [AUTH_HEADER]: accessToken } }
+      );
+
+      await dispatch({
+        type: "SET_USER_INFO",
+        payload: { ...response.data.user, accessToken },
+      });
+
+      navigation.navigate("ValuesSelect");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // Sends the values to be stored into state and navigates to landing
 
-  const onContinuePress = () => {
-    dispatch({ type: "SET_USER_VALUES", payload: values });
+  const onContinuePress = async () => {
+    const getArrayOfId = () => {
+      let array = [];
 
-    navigation.navigate("Landing");
+      for (const value of values) {
+        array.push(value.id);
+      }
+
+      return array;
+    };
+
+    try {
+      const response = await axios.post(
+        `${SERVER_ADDRESS}/api/v1/update_values`,
+        {
+          user_id: userId,
+          values: getArrayOfId(),
+        },
+        { headers: { [AUTH_HEADER]: accessToken } }
+      );
+
+      await dispatch({
+        type: "SET_USER_INFO",
+        payload: { ...response.data.user, accessToken },
+      });
+
+      navigation.navigate("Landing");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const styles = StyleSheet.create({
