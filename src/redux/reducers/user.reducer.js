@@ -36,6 +36,15 @@ const personalName = (state = { first_name: "", last_name: "" }, action) => {
   }
 };
 
+const email = (state = "", action) => {
+  switch (action.type) {
+    case "SET_EMAIL":
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 const userValues = (state = [], action) => {
   switch (action.type) {
     case "SET_USER_VALUES":
@@ -53,5 +62,6 @@ export default combineReducers({
   userInfo,
   registerCompleted,
   personalName,
+  email,
   userValues,
 });

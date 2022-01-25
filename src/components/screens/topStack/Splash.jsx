@@ -21,8 +21,11 @@ export default function Splash({ navigation }) {
   );
   const first_name = useSelector((store) => store.user.personalName.first_name);
   const last_name = useSelector((store) => store.user.personalName.last_name);
+  const email = useSelector((store) => store.user.email);
 
   const auth = Firebase.auth();
+
+  auth.signOut();
 
   // When the page finished rendering, call the server to retrieve values
 
@@ -48,7 +51,7 @@ export default function Splash({ navigation }) {
                 authenticatedUser.toJSON().stsTokenManager.accessToken,
               first_name,
               last_name,
-              email: authenticatedUser.email,
+              email: !email ? authenticatedUser.email : email,
             };
 
             const response = await axios.post(
@@ -64,7 +67,7 @@ export default function Splash({ navigation }) {
 
             await dispatch({ type: "SET_USER_INFO", payload: userData });
 
-            navigation.navigate("Landing");
+            navigation.navigate("TabStack");
           } else {
             navigation.navigate("AuthStack");
           }

@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
+import * as AppAuth from "expo-app-auth";
+import jwt_decode from "jwt-decode";
+import { FB_GOOGLE_IOS_CLIENT_ID } from "@env";
 
 import { Image, StyleSheet, View, ScrollView, Pressable } from "react-native";
 
@@ -14,6 +17,8 @@ import {
 
 import { LinearGradient } from "expo-linear-gradient";
 
+import { SocialIcon } from "react-native-elements";
+
 import MyButton from "../../reusedComponents/MyButton";
 
 import fonts from "../../reusedComponents/fonts";
@@ -23,6 +28,7 @@ import SharedStyles from "../../reusedComponents/SharedStyles";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
 
 import Firebase from "../../../../config/firebase";
+import firebase from "firebase";
 
 // Renders the login page
 
@@ -45,6 +51,41 @@ export default function Login({ navigation }) {
           loginForm.password
         );
       }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const signInWithGoogle = async () => {
+    let config = {
+      issuer: "https://accounts.google.com",
+      scopes: ["openid", "profile", "email"],
+      /* This is the CLIENT_ID generated from a Firebase project */
+      clientId: FB_GOOGLE_IOS_CLIENT_ID,
+    };
+
+    try {
+      let authState = await AppAuth.authAsync(config);
+      const { idToken, accessToken } = authState;
+
+      const credential = firebase.auth.GoogleAuthProvider.credential(
+        idToken,
+        accessToken
+      );
+
+      const decodedIdToken = jwt_decode(idToken);
+
+      await dispatch({
+        type: "SET_PERSONAL_NAME",
+        payload: {
+          first_name: decodedIdToken.given_name,
+          last_name: decodedIdToken.family_name,
+        },
+      });
+
+      await dispatch({ type: "SET_EMAIL", payload: decodedIdToken.email });
+
+      await auth.signInWithCredential(credential);
     } catch (error) {
       console.log(error);
     }
@@ -94,7 +135,7 @@ export default function Login({ navigation }) {
     },
     myButton: {
       marginTop: "10%",
-      marginBottom: "0%",
+      marginBottom: "10%",
     },
     buttonLabel: {
       color: myTheme.colors.grey,
@@ -170,6 +211,14 @@ export default function Login({ navigation }) {
           style={styles.myButton}
           labelStyle={styles.buttonLabel}
           buttonColor={myTheme.colors.cream}
+        />
+
+        <SocialIcon
+          title={"Sign In With Google"}
+          button={true}
+          type={"google"}
+          onPress={signInWithGoogle}
+          light
         />
 
         <Text style={styles.forgotPassword}>Forgot your password?</Text>

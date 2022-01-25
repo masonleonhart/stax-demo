@@ -7,9 +7,9 @@ import { useTheme, IconButton } from "react-native-paper";
 
 import Splash from "../screens/topStack/Splash";
 import AuthStack from "./AuthStack";
-import Landing from "../screens/topStack/Landing";
+import TermsOfUse from "../screens/topStack/TermsOfUse";
+import TabStack from "./TabsNav";
 import ValuesStack from "./ValuesStack";
-import BarcodeScanner from "../screens/topStack/BarcodeScanner";
 import CompanyProfile from "../screens/topStack/CompanyProfile";
 import NewProductForm from "../screens/topStack/NewProductForm";
 
@@ -62,21 +62,18 @@ export default function TopStack() {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Landing"
-        component={Landing}
-        options={{
-          headerTransparent: true,
-        }}
+        name="TermsOfUse"
+        component={TermsOfUse}
+      />
+      <Stack.Screen
+        name="TabStack"
+        component={TabStack}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="ValuesStack"
         component={ValuesStack}
         options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="BarcodeScanner"
-        component={BarcodeScanner}
-        options={{ headerTransparent: true }}
       />
       <Stack.Screen
         name="CompanyProfile"

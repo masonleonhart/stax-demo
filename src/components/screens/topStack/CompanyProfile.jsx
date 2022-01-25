@@ -22,7 +22,7 @@ export default function CompanyProfile({ navigation }) {
   const windowWidth = Dimensions.get("window").width;
   const deviceHeight = Dimensions.get("window").height;
   const companyDetails = useSelector((store) => store.barcode.barcodeDetails);
-  const userValues = useSelector((store) => store.user.userinfo.values);
+  const userValues = useSelector((store) => store.user.userInfo.values);
   const [isCollapsed1, setIsCollapsed1] = useState(true);
   const [isCollapsed2, setIsCollapsed2] = useState(true);
   const [isCollapsed3, setIsCollapsed3] = useState(true);
