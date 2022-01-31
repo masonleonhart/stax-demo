@@ -32,32 +32,10 @@ export default function ValuesComplete({ route, navigation }) {
 
   // Resets values stored in state and returns user to values select
 
-  const onRetakePress = async () => {
-    // dispatch({ type: "RESET_USER_VALUES" });
+  const onRetakePress = () => {
+    dispatch({ type: "RESET_QUIZ_SELECTION" });
 
-    // navigation.navigate("ValuesSelect");
-
-    try {
-      // const response = await axios.post(
-      //   `${SERVER_ADDRESS}/api/v1/update_values`,
-      //   {
-      //     user_id: userId,
-      //     values: [],
-      //   },
-      //   { headers: { [AUTH_HEADER]: accessToken } }
-      // );
-
-      // await dispatch({
-      //   type: "SET_USER_INFO",
-      //   payload: { ...response.data.user, accessToken },
-      // });
-
-      dispatch({ type: "RESET_QUIZ_SELECTION" });
-
-      navigation.navigate("ValuesSelect");
-    } catch (error) {
-      console.log(error);
-    }
+    navigation.navigate("ValuesSelect");
   };
 
   // Sends the values to be stored into state and navigates to landing
