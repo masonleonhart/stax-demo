@@ -19,7 +19,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "co.getstax.scanprototype",
-      "buildNumber": "4"
+      "buildNumber": "5"
     },
     "android": {
       "adaptiveIcon": {

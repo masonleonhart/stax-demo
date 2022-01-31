@@ -17,20 +17,18 @@ import fonts from "../../reusedComponents/fonts";
 export default function ValuesComplete({ route, navigation }) {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
-  const userValues = useSelector((store) => store.user.userInfo.values);
+  const quizSelection = useSelector((store) => store.user.valuesQuizSelection);
   const accessToken = useSelector((store) => store.user.userInfo.accessToken);
   const userId = useSelector((store) => store.user.userInfo.id);
-  const userInfo = useSelector((store) => store.user.userInfo.id);
   const myTheme = useTheme();
-  const [values, setValues] = useState([]);
 
   // Checks if route.params has a a key "params" holding the values coming from the front end (probably will be obsolete when values are hosted in state)
   // (navigation.navigate(screen, { (params object with nested screen and params) } cannot hold array in base params key)
   // and sets values to key if .params is there or not
 
-  useEffect(() => {
-    setValues(route.params.params ? route.params.params : route.params);
-  });
+  // useEffect(() => {
+  //   setValues(route.params.params ? route.params.params : route.params);
+  // });
 
   // Resets values stored in state and returns user to values select
 
@@ -40,19 +38,21 @@ export default function ValuesComplete({ route, navigation }) {
     // navigation.navigate("ValuesSelect");
 
     try {
-      const response = await axios.post(
-        `${SERVER_ADDRESS}/api/v1/update_values`,
-        {
-          user_id: userId,
-          values: [],
-        },
-        { headers: { [AUTH_HEADER]: accessToken } }
-      );
+      // const response = await axios.post(
+      //   `${SERVER_ADDRESS}/api/v1/update_values`,
+      //   {
+      //     user_id: userId,
+      //     values: [],
+      //   },
+      //   { headers: { [AUTH_HEADER]: accessToken } }
+      // );
 
-      await dispatch({
-        type: "SET_USER_INFO",
-        payload: { ...response.data.user, accessToken },
-      });
+      // await dispatch({
+      //   type: "SET_USER_INFO",
+      //   payload: { ...response.data.user, accessToken },
+      // });
+
+      dispatch({ type: "RESET_QUIZ_SELECTION" });
 
       navigation.navigate("ValuesSelect");
     } catch (error) {
@@ -66,7 +66,7 @@ export default function ValuesComplete({ route, navigation }) {
     const getArrayOfId = () => {
       let array = [];
 
-      for (const value of values) {
+      for (const value of quizSelection) {
         array.push(value.id);
       }
 
@@ -157,9 +157,7 @@ export default function ValuesComplete({ route, navigation }) {
 
   return (
     <View style={SharedStyles.container}>
-      <Text style={styles.headerText}>
-        {userValues.length !== 0 ? "Your Values" : "Congratulations!"}
-      </Text>
+      <Text style={styles.headerText}>Your Values</Text>
       <Text style={styles.subheaderText}>
         Here are your values ranked. You can press and hold each item to grab it
         and drag each item up or down if you are not satisfied with your
@@ -168,8 +166,10 @@ export default function ValuesComplete({ route, navigation }) {
 
       <DraggableFlatList
         scrollEnabled={false}
-        data={values}
-        onDragEnd={({ data }) => setValues(data)}
+        data={quizSelection}
+        onDragEnd={({ data }) =>
+          dispatch({ type: "SET_QUIZ_SELECTION", payload: data })
+        }
         keyExtractor={(item) => `${item.id}`}
         renderItem={renderItem}
       />

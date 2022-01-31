@@ -1,6 +1,6 @@
 import React from "react";
 import { useIsFocused } from "@react-navigation/native";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 
@@ -17,6 +17,7 @@ import EmptyStateView from "../../reusedComponents/EmptyStateView";
 export default function Landing({ navigation }) {
   const isFocused = useIsFocused();
   const myTheme = useTheme();
+  const dispatch = useDispatch();
   const deviceHeight = Dimensions.get("screen").height;
   const userValues = useSelector((store) => store.user.userInfo.values);
   const userInfo = useSelector((store) => store.user.userInfo);
@@ -27,9 +28,10 @@ export default function Landing({ navigation }) {
         screen: "ValuesIntro",
       });
     } else {
+      dispatch({ type: "SET_QUIZ_SELECTION", payload: userValues });
+
       navigation.navigate("ValuesStack", {
         screen: "ValuesComplete",
-        params: { params: userValues },
       });
     }
   };

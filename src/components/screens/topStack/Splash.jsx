@@ -25,8 +25,6 @@ export default function Splash({ navigation }) {
 
   const auth = Firebase.auth();
 
-  auth.signOut();
-
   // When the page finished rendering, call the server to retrieve values
 
   useEffect(() => {

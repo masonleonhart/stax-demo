@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useIsFocused } from "@react-navigation/core";
+import { useDispatch } from "react-redux";
 
 import {
   View,
@@ -19,6 +20,7 @@ import EmptyStateView from "../../reusedComponents/EmptyStateView";
 export default function ValuesPairWiseMatching({ route, navigation }) {
   const isFocused = useIsFocused();
   const myTheme = useTheme();
+  const dispatch = useDispatch();
   const [values, setValues] = useState(route.params);
   const [valuesIndex, setValuesIndex] = useState(0);
   const [savedIndex, setSavedIndex] = useState(0);
@@ -33,7 +35,9 @@ export default function ValuesPairWiseMatching({ route, navigation }) {
       currentValuesIndex++;
 
       if (currentValuesIndex === 4) {
-        navigation.navigate("ValuesComplete", values);
+        dispatch({ type: "SET_QUIZ_SELECTION", payload: values });
+
+        navigation.navigate("ValuesComplete");
       } else {
         setValuesIndex(currentValuesIndex);
         setSavedIndex(currentValuesIndex);

@@ -45,11 +45,11 @@ const email = (state = "", action) => {
   }
 };
 
-const userValues = (state = [], action) => {
+const valuesQuizSelection = (state = [], action) => {
   switch (action.type) {
-    case "SET_USER_VALUES":
+    case "SET_QUIZ_SELECTION":
       return action.payload;
-    case "RESET_USER_VALUES":
+    case "RESET_QUIZ_SELECTION":
       return [];
     default:
       return state;
@@ -63,5 +63,5 @@ export default combineReducers({
   registerCompleted,
   personalName,
   email,
-  userValues,
+  valuesQuizSelection,
 });

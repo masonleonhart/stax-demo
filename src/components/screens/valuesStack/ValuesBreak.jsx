@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useIsFocused } from "@react-navigation/core";
+import { useDispatch } from "react-redux";
 
 import {
   View,
@@ -18,7 +19,14 @@ import EmptyStateView from "../../reusedComponents/EmptyStateView";
 export default function ValuesBreak({ navigation, route }) {
   const isFocused = useIsFocused();
   const myTheme = useTheme();
+  const dispatch = useDispatch();
   const [values, setValues] = useState(route.params);
+
+  const onSkipPress = () => {
+    dispatch({ type: "SET_QUIZ_SELECTION", payload: values });
+
+    navigation.navigate("ValuesComplete");
+  };
 
   const styles = StyleSheet.create({
     headerText: {
@@ -131,7 +139,7 @@ export default function ValuesBreak({ navigation, route }) {
 
       <Pressable
         style={styles.skipPressable}
-        onPress={() => navigation.navigate("ValuesComplete", values)}
+        onPress={onSkipPress}
       >
         <Text style={styles.skipText}>Skip to End</Text>
       </Pressable>
