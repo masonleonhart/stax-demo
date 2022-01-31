@@ -22,14 +22,6 @@ export default function ValuesComplete({ route, navigation }) {
   const userId = useSelector((store) => store.user.userInfo.id);
   const myTheme = useTheme();
 
-  // Checks if route.params has a a key "params" holding the values coming from the front end (probably will be obsolete when values are hosted in state)
-  // (navigation.navigate(screen, { (params object with nested screen and params) } cannot hold array in base params key)
-  // and sets values to key if .params is there or not
-
-  // useEffect(() => {
-  //   setValues(route.params.params ? route.params.params : route.params);
-  // });
-
   // Resets values stored in state and returns user to values select
 
   const onRetakePress = () => {

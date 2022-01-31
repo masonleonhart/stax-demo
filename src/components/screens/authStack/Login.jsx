@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import * as AppAuth from "expo-app-auth";
+import { ResponseType } from "expo-auth-session";
+import * as Google from "expo-auth-session/providers/google";
 import jwt_decode from "jwt-decode";
 import { FB_GOOGLE_IOS_CLIENT_ID } from "@env";
 
@@ -56,40 +58,56 @@ export default function Login({ navigation }) {
     }
   };
 
-  const signInWithGoogle = async () => {
-    let config = {
-      issuer: "https://accounts.google.com",
-      scopes: ["openid", "profile", "email"],
-      /* This is the CLIENT_ID generated from a Firebase project */
-      clientId: FB_GOOGLE_IOS_CLIENT_ID,
-    };
+  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+    clientId: FB_GOOGLE_IOS_CLIENT_ID,
+  });
 
+  const signinWithGoogle = async () => {
     try {
-      let authState = await AppAuth.authAsync(config);
-      const { idToken, accessToken } = authState;
+      await promptAsync();
 
-      const credential = firebase.auth.GoogleAuthProvider.credential(
-        idToken,
-        accessToken
-      );
-
-      const decodedIdToken = jwt_decode(idToken);
-
-      await dispatch({
-        type: "SET_PERSONAL_NAME",
-        payload: {
-          first_name: decodedIdToken.given_name,
-          last_name: decodedIdToken.family_name,
-        },
-      });
-
-      await dispatch({ type: "SET_EMAIL", payload: decodedIdToken.email });
-
-      await auth.signInWithCredential(credential);
+      console.log(response);
     } catch (error) {
       console.log(error);
     }
   };
+
+  console.log(response.id_token)
+
+  // const signInWithGoogle = async () => {
+  //   let config = {
+  //     issuer: "https://accounts.google.com",
+  //     scopes: ["openid", "profile", "email"],
+  //     /* This is the CLIENT_ID generated from a Firebase project */
+  //     clientId: FB_GOOGLE_IOS_CLIENT_ID,
+  //   };
+
+  //   try {
+  //     let authState = await AppAuth.authAsync(config);
+  //     const { idToken, accessToken } = authState;
+
+  //     const credential = firebase.auth.GoogleAuthProvider.credential(
+  //       idToken,
+  //       accessToken
+  //     );
+
+  //     const decodedIdToken = jwt_decode(idToken);
+
+  //     await dispatch({
+  //       type: "SET_PERSONAL_NAME",
+  //       payload: {
+  //         first_name: decodedIdToken.given_name,
+  //         last_name: decodedIdToken.family_name,
+  //       },
+  //     });
+
+  //     await dispatch({ type: "SET_EMAIL", payload: decodedIdToken.email });
+
+  //     await auth.signInWithCredential(credential);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const handleRegisterNavPress = () => {
     dispatch({ type: "SET_REGISTER_COMPLETED_FALSE" });
@@ -217,7 +235,7 @@ export default function Login({ navigation }) {
           title={"Sign In With Google"}
           button={true}
           type={"google"}
-          onPress={signInWithGoogle}
+          onPress={signinWithGoogle}
           light
         />
 
