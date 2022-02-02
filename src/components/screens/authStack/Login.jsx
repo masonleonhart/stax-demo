@@ -1,19 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as Google from "expo-auth-session/providers/google";
 import jwt_decode from "jwt-decode";
 import { GOOGLE_IOS_CLIENT_ID, GOOGLE_IOS_STANDALONE_CLIENT_ID } from "@env";
 import Constants from "expo-constants";
 
-import {
-  Image,
-  StyleSheet,
-  View,
-  ScrollView,
-  Pressable,
-  Alert,
-} from "react-native";
+import { Image, StyleSheet, View, ScrollView, Pressable } from "react-native";
 
 import {
   TextInput,
@@ -44,6 +37,7 @@ export default function Login({ navigation }) {
   const isFocused = useIsFocused();
   const myTheme = useTheme();
   const dispatch = useDispatch();
+  const userInfo = useSelector((store) => store.user.userInfo);
   const [loginForm, setLoginForm] = useState({
     email: "",
     password: "",
@@ -99,7 +93,7 @@ export default function Login({ navigation }) {
     if (response?.type === "success") {
       googleSignIn();
     }
-  });
+  }, [response]);
 
   const handleRegisterNavPress = () => {
     dispatch({ type: "SET_REGISTER_COMPLETED_FALSE" });
