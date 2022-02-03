@@ -102,8 +102,12 @@ export default function Login({ navigation }) {
       await dispatch({ type: "SET_EMAIL", payload: decodedIdToken.email });
 
       await auth.signInWithCredential(credential);
+
+      setIsDialogVisible(false);
     } catch (error) {
       Alert.alert("Error", error);
+
+      setIsDialogVisible(false);
     }
   };
 
