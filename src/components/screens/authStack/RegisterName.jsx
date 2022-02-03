@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 
-import { View, StyleSheet, Image, ScrollView } from "react-native";
+import { View, StyleSheet, Image, ScrollView, Alert } from "react-native";
 import {
   useTheme,
   TextInput,
@@ -13,6 +13,7 @@ import {
 } from "react-native-paper";
 
 import MyButton from "../../reusedComponents/MyButton";
+import ActivityModal from "../../modals/ActivityModal";
 
 import fonts from "../../reusedComponents/fonts";
 import StaxLogo from "../../../../assets/StaxLogoVerticleCreamWithGreen.png";
@@ -27,6 +28,7 @@ export default function RegisterName({ navigation, route }) {
   const dispatch = useDispatch();
   const [registerForm, setRegisterForm] = useState(route.params);
   const [canContinue, setCanContinue] = useState(false);
+  const [isDialogVisible, setIsDialogVisible] = useState(false);
 
   const auth = Firebase.auth();
 
@@ -40,12 +42,18 @@ export default function RegisterName({ navigation, route }) {
 
   const handleSignUp = async () => {
     if (!canContinue) {
-      return;
+      Alert.alert("Error", "Missing field, please complete the form.");
     } else {
-      dispatch({ type: "SET_REGISTER_COMPLETED_TRUE" });
       try {
+        setIsDialogVisible(true);
+
+        await dispatch({ type: "SET_REGISTER_COMPLETED_TRUE" });
+
+        setIsDialogVisible(false);
       } catch (error) {
-        console.log("error in registering user", error);
+        setIsDialogVisible(false);
+
+        Alert.alert("Error", error);
       }
     }
   };
@@ -148,6 +156,8 @@ export default function RegisterName({ navigation, route }) {
   return (
     <View>
       <Appbar style={styles.appbar} />
+
+      <ActivityModal isDialogVisible={isDialogVisible} />
 
       <Surface style={styles.logoSurface}>
         <Image source={StaxLogo} resizeMode="contain" style={styles.staxLogo} />

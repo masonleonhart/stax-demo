@@ -2,7 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";
 
-import { StyleSheet, Image, View, ScrollView, Pressable } from "react-native";
+import {
+  StyleSheet,
+  Image,
+  View,
+  ScrollView,
+  Pressable,
+  Alert,
+} from "react-native";
 import {
   TextInput,
   Text,
@@ -14,6 +21,7 @@ import {
 } from "react-native-paper";
 
 import MyButton from "../../reusedComponents/MyButton";
+import ActivityModal from "../../modals/ActivityModal";
 
 import fonts from "../../reusedComponents/fonts";
 import StaxLogo from "../../../../assets/StaxLogoVerticleCreamWithGreen.png";
@@ -39,6 +47,7 @@ export default function RegisterAccount({ navigation }) {
   const [canContinue, setCanContinue] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [continueClicks, setContinueClicks] = useState(0);
+  const [isDialogVisible, setIsDialogVisible] = useState(false);
 
   const auth = Firebase.auth();
 
@@ -48,17 +57,23 @@ export default function RegisterAccount({ navigation }) {
     setContinueClicks(continueClicks + 1);
 
     if (passwordError || !canContinue) {
-      return;
+      Alert.alert("Error", "Missing field, please complete the form.");
     } else {
       try {
+        setIsDialogVisible(true);
+
         await auth.createUserWithEmailAndPassword(
           registerForm.email,
           registerForm.password
         );
 
+        setIsDialogVisible(false);
+
         navigation.navigate("RegisterName", registerForm);
       } catch (error) {
-        console.log(error);
+        setIsDialogVisible(false);
+
+        Alert.alert("Error", error.message);
       }
     }
   };
@@ -188,6 +203,8 @@ export default function RegisterAccount({ navigation }) {
   return (
     <View>
       <Appbar style={styles.appbar} />
+
+      <ActivityModal isDialogVisible={isDialogVisible} />
 
       <Surface style={styles.logoSurface}>
         <Image source={StaxLogo} resizeMode="contain" style={styles.staxLogo} />

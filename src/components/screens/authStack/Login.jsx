@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import * as Google from "expo-auth-session/providers/google";
 import jwt_decode from "jwt-decode";
 import { GOOGLE_IOS_CLIENT_ID, GOOGLE_IOS_STANDALONE_CLIENT_ID } from "@env";
 import Constants from "expo-constants";
 
-import { Image, StyleSheet, View, ScrollView, Pressable } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  View,
+  ScrollView,
+  Pressable,
+  Alert,
+} from "react-native";
 
 import {
   TextInput,
@@ -21,6 +28,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { SocialIcon } from "react-native-elements";
 
 import MyButton from "../../reusedComponents/MyButton";
+import ActivityModal from "../../modals/ActivityModal";
 
 import fonts from "../../reusedComponents/fonts";
 import StaxLogo from "../../../../assets/StaxLogoVerticleWhiteNew.png";
@@ -37,7 +45,7 @@ export default function Login({ navigation }) {
   const isFocused = useIsFocused();
   const myTheme = useTheme();
   const dispatch = useDispatch();
-  const userInfo = useSelector((store) => store.user.userInfo);
+  const [isDialogVisible, setIsDialogVisible] = useState(false);
   const [loginForm, setLoginForm] = useState({
     email: "",
     password: "",
@@ -48,13 +56,21 @@ export default function Login({ navigation }) {
   const onLogin = async () => {
     try {
       if (loginForm.email !== "" && loginForm.password !== "") {
+        setIsDialogVisible(true);
+
         await auth.signInWithEmailAndPassword(
           loginForm.email,
           loginForm.password
         );
+
+        setIsDialogVisible(false);
+      } else {
+        Alert.alert("Error", "Missing email or password, please try again.");
       }
     } catch (error) {
-      console.log(error);
+      Alert.alert("Error", error.message);
+
+      setIsDialogVisible(false);
     }
   };
 
@@ -66,6 +82,8 @@ export default function Login({ navigation }) {
   });
 
   const googleSignIn = async () => {
+    setIsDialogVisible(true);
+
     try {
       const credential = await firebase.auth.GoogleAuthProvider.credential(
         response.params.id_token
@@ -85,7 +103,7 @@ export default function Login({ navigation }) {
 
       await auth.signInWithCredential(credential);
     } catch (error) {
-      console.log(error);
+      Alert.alert("Error", error);
     }
   };
 
@@ -181,6 +199,8 @@ export default function Login({ navigation }) {
       style={styles.linearGradient}
     >
       <Appbar style={styles.appbar} />
+
+      <ActivityModal isDialogVisible={isDialogVisible} />
 
       <Image source={StaxLogo} resizeMode="contain" style={styles.staxLogo} />
 

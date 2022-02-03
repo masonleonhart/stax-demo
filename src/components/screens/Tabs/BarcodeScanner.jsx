@@ -10,7 +10,7 @@ import { StyleSheet, Text, View } from "react-native";
 
 import SharedStyles from "../../reusedComponents/SharedStyles";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
-import BarcodeScannerModal from "../../modals/BarcodeScannerModal";
+import ActivityModal from "../../modals/ActivityModal";
 
 export default function BarcodeScanner({ navigation }) {
   const isFocused = useIsFocused();
@@ -141,10 +141,7 @@ export default function BarcodeScanner({ navigation }) {
         onBarCodeScanned={!scanned && handleBarCodeScanned}
         style={styles.barcodeScanner}
       >
-        <BarcodeScannerModal
-          isDialogVisible={isDialogVisible}
-          setIsDialogVisible={setIsDialogVisible}
-        />
+        <ActivityModal isDialogVisible={isDialogVisible} />
 
         <View style={styles.scanBorder}>
           <View style={SharedStyles.flexRow}>
