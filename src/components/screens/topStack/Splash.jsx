@@ -61,6 +61,7 @@ export default function Splash({ navigation }) {
               ...response.data,
               accessToken:
                 authenticatedUser.toJSON().stsTokenManager.accessToken,
+              providerId: authenticatedUser.providerData[0].providerId,
             };
 
             await dispatch({ type: "SET_USER_INFO", payload: userData });

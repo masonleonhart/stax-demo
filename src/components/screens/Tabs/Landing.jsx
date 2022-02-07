@@ -5,10 +5,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 
 import { Text, useTheme, IconButton } from "react-native-paper";
-import { ScrollView, View, StyleSheet, Dimensions, Image } from "react-native";
+import { ScrollView, View, StyleSheet, Dimensions } from "react-native";
 
 import MyButton from "../../reusedComponents/MyButton";
-import userImage from "../../../../assets/userImage.png";
 
 import fonts from "../../reusedComponents/fonts";
 import SharedStyles from "../../reusedComponents/SharedStyles";
@@ -51,20 +50,14 @@ export default function Landing({ navigation }) {
     },
     headerWelcomeText: {
       color: "white",
-      fontSize: 25,
+      fontSize: 30,
       marginBottom: "5%",
       fontFamily: fonts.bold,
     },
     headerNameText: {
       color: "#e3e3e3",
-      fontSize: 35,
+      fontSize: 40,
       fontFamily: fonts.regular,
-    },
-    userImage: {
-      height: deviceHeight * 0.125,
-      width: deviceHeight * 0.125,
-      marginTop: "5%",
-      borderRadius: 100,
     },
     valuesWrapper: {
       borderBottomColor: myTheme.colors.grey,
@@ -127,11 +120,6 @@ export default function Landing({ navigation }) {
           <Text style={styles.headerWelcomeText}>Welcome back</Text>
           <Text style={styles.headerNameText}>{userInfo.first_name}</Text>
         </View>
-        <Image
-          source={userImage}
-          style={styles.userImage}
-          resizeMode="contain"
-        />
       </View>
 
       <View style={[SharedStyles.container]}>

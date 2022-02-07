@@ -50,8 +50,11 @@ export default function CompanyProfile({ navigation }) {
     userImage: {
       height: deviceHeight * 0.125,
       width: deviceHeight * 0.125,
+      marginTop: "5%",
       borderRadius: 100,
-      right: 20,
+      backgroundColor: "#e5e5e5",
+      justifyContent: "center",
+      alignItems: "center",
     },
     comapnyName: {
       color: "white",
@@ -124,11 +127,12 @@ export default function CompanyProfile({ navigation }) {
             style={styles.companyImage}
             resizeMode="contain"
           />
-          <Image
-            source={userImage}
-            style={styles.userImage}
-            resizeMode="contain"
-          />
+          <View style={styles.userImage}>
+            <Text style={styles.userInitials}>
+              {userInfo.first_name[0]}
+              {userInfo.last_name[0]}
+            </Text>
+          </View>
         </View>
         <Text style={styles.comapnyName}>
           {companyDetails.manufacturer
