@@ -59,6 +59,20 @@ export default function Landing({ navigation }) {
       fontSize: 40,
       fontFamily: fonts.regular,
     },
+    userImage: {
+      height: deviceHeight * 0.125,
+      width: deviceHeight * 0.125,
+      marginTop: "5%",
+      borderRadius: 100,
+      backgroundColor: "#e5e5e5",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    userInitials: {
+      fontFamily: fonts.bold,
+      fontSize: 40,
+      color: "#404040",
+    },
     valuesWrapper: {
       borderBottomColor: myTheme.colors.grey,
       borderBottomWidth: 1,
@@ -119,6 +133,12 @@ export default function Landing({ navigation }) {
         <View style={styles.headerTextContainer}>
           <Text style={styles.headerWelcomeText}>Welcome back</Text>
           <Text style={styles.headerNameText}>{userInfo.first_name}</Text>
+        </View>
+        <View style={styles.userImage}>
+          <Text style={styles.userInitials}>
+            {userInfo.first_name[0]}
+            {userInfo.last_name[0]}
+          </Text>
         </View>
       </View>
 

@@ -66,9 +66,12 @@ export default function Splash({ navigation }) {
 
             await dispatch({ type: "SET_USER_INFO", payload: userData });
 
-            navigation.navigate("TabStack");
+            setTimeout(
+              () => navigation.navigate("TabStack", { screen: "Landing" }),
+              1000
+            );
           } else {
-            navigation.navigate("AuthStack");
+            setTimeout(() => navigation.navigate("AuthStack"), 1000);
           }
         } catch (error) {
           console.log(error);

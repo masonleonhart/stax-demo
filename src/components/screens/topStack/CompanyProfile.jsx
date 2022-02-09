@@ -23,6 +23,7 @@ export default function CompanyProfile({ navigation }) {
   const deviceHeight = Dimensions.get("window").height;
   const companyDetails = useSelector((store) => store.barcode.barcodeDetails);
   const userValues = useSelector((store) => store.user.userInfo.values);
+  const userInfo = useSelector((store) => store.user.userInfo);
   const [isCollapsed1, setIsCollapsed1] = useState(true);
   const [isCollapsed2, setIsCollapsed2] = useState(true);
   const [isCollapsed3, setIsCollapsed3] = useState(true);
@@ -50,11 +51,15 @@ export default function CompanyProfile({ navigation }) {
     userImage: {
       height: deviceHeight * 0.125,
       width: deviceHeight * 0.125,
-      marginTop: "5%",
       borderRadius: 100,
       backgroundColor: "#e5e5e5",
       justifyContent: "center",
       alignItems: "center",
+    },
+    userInitials: {
+      fontFamily: fonts.bold,
+      fontSize: 40,
+      color: "#404040",
     },
     comapnyName: {
       color: "white",

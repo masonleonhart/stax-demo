@@ -60,7 +60,7 @@ export default function Account({ navigation }) {
 
   const styles = StyleSheet.create({
     header: {
-      backgroundColor: "#e57e39",
+      backgroundColor: myTheme.colors.red,
       height: deviceHeight * 0.25,
       paddingHorizontal: "5%",
       marginBottom: "2.5%",
@@ -110,7 +110,6 @@ export default function Account({ navigation }) {
       <View style={[SharedStyles.flexRow, styles.header]}>
         <View style={styles.headerTextContainer}>
           <Text style={styles.name}>{userInfo.first_name}</Text>
-          <Text style={styles.name}>{userInfo.last_name}</Text>
         </View>
         <View style={styles.userImage}>
           <Text style={styles.userInitials}>

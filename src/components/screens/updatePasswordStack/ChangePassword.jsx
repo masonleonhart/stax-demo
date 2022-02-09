@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/core";
-import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
-
-import { SERVER_ADDRESS } from "@env";
 
 import { View, StyleSheet, Alert } from "react-native";
 import {
@@ -25,7 +21,6 @@ import firebase from "firebase";
 export default function ChangePassword({ navigation }) {
   const isFocused = useIsFocused();
   const myTheme = useTheme();
-  const dispatch = useDispatch();
   const [newPassword, setNewPassword] = useState({
     newPassword: "",
     confirmNewPassword: "",
