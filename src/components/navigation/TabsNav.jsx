@@ -69,7 +69,6 @@ export default function TabNavigation() {
         name="Account"
         component={Account}
         options={{
-          headerTransparent: false,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
               name="account-outline"

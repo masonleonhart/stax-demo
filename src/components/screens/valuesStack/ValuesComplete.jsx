@@ -20,6 +20,8 @@ export default function ValuesComplete({ route, navigation }) {
   const quizSelection = useSelector((store) => store.user.valuesQuizSelection);
   const accessToken = useSelector((store) => store.user.userInfo.accessToken);
   const userId = useSelector((store) => store.user.userInfo.id);
+  const providerId = useSelector((store) => store.user.userInfo.providerId);
+  const userInfo = useSelector((store) => store.user.userInfo);
   const myTheme = useTheme();
 
   // Resets values stored in state and returns user to values select
@@ -55,7 +57,7 @@ export default function ValuesComplete({ route, navigation }) {
 
       await dispatch({
         type: "SET_USER_INFO",
-        payload: { ...response.data.user, accessToken },
+        payload: { ...response.data.user, accessToken, providerId },
       });
 
       navigation.navigate("Landing");

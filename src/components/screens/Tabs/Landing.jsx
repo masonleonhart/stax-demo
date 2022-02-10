@@ -5,10 +5,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 
 import { Text, useTheme, IconButton } from "react-native-paper";
-import { ScrollView, View, StyleSheet, Dimensions, Image } from "react-native";
+import { ScrollView, View, StyleSheet, Dimensions } from "react-native";
 
 import MyButton from "../../reusedComponents/MyButton";
-import userImage from "../../../../assets/userImage.png";
 
 import fonts from "../../reusedComponents/fonts";
 import SharedStyles from "../../reusedComponents/SharedStyles";
@@ -51,13 +50,13 @@ export default function Landing({ navigation }) {
     },
     headerWelcomeText: {
       color: "white",
-      fontSize: 25,
+      fontSize: 30,
       marginBottom: "5%",
       fontFamily: fonts.bold,
     },
     headerNameText: {
       color: "#e3e3e3",
-      fontSize: 35,
+      fontSize: 40,
       fontFamily: fonts.regular,
     },
     userImage: {
@@ -65,6 +64,14 @@ export default function Landing({ navigation }) {
       width: deviceHeight * 0.125,
       marginTop: "5%",
       borderRadius: 100,
+      backgroundColor: "#e5e5e5",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    userInitials: {
+      fontFamily: fonts.bold,
+      fontSize: 40,
+      color: "#404040",
     },
     valuesWrapper: {
       borderBottomColor: myTheme.colors.grey,
@@ -127,11 +134,12 @@ export default function Landing({ navigation }) {
           <Text style={styles.headerWelcomeText}>Welcome back</Text>
           <Text style={styles.headerNameText}>{userInfo.first_name}</Text>
         </View>
-        <Image
-          source={userImage}
-          style={styles.userImage}
-          resizeMode="contain"
-        />
+        <View style={styles.userImage}>
+          <Text style={styles.userInitials}>
+            {userInfo.first_name[0]}
+            {userInfo.last_name[0]}
+          </Text>
+        </View>
       </View>
 
       <View style={[SharedStyles.container]}>

@@ -10,6 +10,7 @@ import AuthStack from "./AuthStack";
 import TermsOfUse from "../screens/topStack/TermsOfUse";
 import TabStack from "./TabsNav";
 import ValuesStack from "./ValuesStack";
+import UpdatePasswordStack from "./UpdatePasswordStack";
 import CompanyProfile from "../screens/topStack/CompanyProfile";
 import NewProductForm from "../screens/topStack/NewProductForm";
 
@@ -24,6 +25,7 @@ export default function TopStack() {
     <Stack.Navigator
       screenOptions={({ route, navigation }) => ({
         headerMode: "screen",
+        headerShown: false,
         gestureEnabled: true,
         headerTitle: "",
         cardStyle: {
@@ -51,36 +53,26 @@ export default function TopStack() {
         },
       })}
     >
-      <Stack.Screen
-        name="Splash"
-        component={Splash}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="AuthStack"
-        component={AuthStack}
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name="Splash" component={Splash} />
+      <Stack.Screen name="AuthStack" component={AuthStack} />
       <Stack.Screen
         name="TermsOfUse"
         component={TermsOfUse}
+        options={{ headerShown: true }}
       />
-      <Stack.Screen
-        name="TabStack"
-        component={TabStack}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="ValuesStack"
-        component={ValuesStack}
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name="TabStack" component={TabStack} />
+      <Stack.Screen name="ValuesStack" component={ValuesStack} />
+      <Stack.Screen name="UpdatePasswordStack" component={UpdatePasswordStack} />
       <Stack.Screen
         name="CompanyProfile"
         component={CompanyProfile}
         options={{ headerTransparent: true }}
       />
-      <Stack.Screen name="NewProductForm" component={NewProductForm} />
+      <Stack.Screen
+        name="NewProductForm"
+        component={NewProductForm}
+        options={{ headerShown: true }}
+      />
     </Stack.Navigator>
   );
 }
