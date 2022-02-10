@@ -52,7 +52,7 @@ export default function CompanyProfile({ navigation }) {
       height: deviceHeight * 0.125,
       width: deviceHeight * 0.125,
       borderRadius: 100,
-      backgroundColor: "#e5e5e5",
+      backgroundColor: "white",
       justifyContent: "center",
       alignItems: "center",
     },

@@ -18,12 +18,15 @@ export default function TabNavigation() {
 
   return (
     <Tab.Navigator
+      sceneContainerStyle={{
+        backgroundColor: "white",
+      }}
       screenOptions={{
         headerTransparent: true,
         headerTitle: "",
         tabBarShowLabel: false,
         tabBarActiveTintColor: myTheme.colors.blue,
-        tabBarInactiveTintColor: myTheme.colors.lightgrey
+        tabBarInactiveTintColor: myTheme.colors.lightgrey,
       }}
     >
       <Tab.Screen
@@ -57,11 +60,7 @@ export default function TabNavigation() {
         component={Discover}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons
-              name="magnify"
-              color={color}
-              size={size}
-            />
+            <MaterialCommunityIcons name="magnify" color={color} size={size} />
           ),
         }}
       />

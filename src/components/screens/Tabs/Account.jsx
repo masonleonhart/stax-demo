@@ -65,18 +65,26 @@ export default function Account({ navigation }) {
       paddingHorizontal: "5%",
       marginBottom: "2.5%",
     },
-    name: {
+    headerTextContainer: {
+      marginTop: "5%",
+    },
+    headerSettingsText: {
+      color: "white",
+      fontSize: 30,
+      marginBottom: "5%",
       fontFamily: fonts.bold,
-      color: myTheme.colors.lightGrey,
-      fontSize: 35,
-      marginVertical: "2.5%",
+    },
+    headerNameText: {
+      color: "white",
+      fontSize: 40,
+      fontFamily: fonts.regular,
     },
     userImage: {
       height: deviceHeight * 0.125,
       width: deviceHeight * 0.125,
       marginTop: "5%",
       borderRadius: 100,
-      backgroundColor: "#e5e5e5",
+      backgroundColor: "white",
       justifyContent: "center",
       alignItems: "center",
     },
@@ -109,7 +117,8 @@ export default function Account({ navigation }) {
     <ScrollView>
       <View style={[SharedStyles.flexRow, styles.header]}>
         <View style={styles.headerTextContainer}>
-          <Text style={styles.name}>{userInfo.first_name}</Text>
+          <Text style={styles.headerSettingsText}>User Settings</Text>
+          <Text style={styles.headerNameText}>{userInfo.first_name}</Text>
         </View>
         <View style={styles.userImage}>
           <Text style={styles.userInitials}>

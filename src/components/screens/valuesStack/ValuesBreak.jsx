@@ -30,17 +30,12 @@ export default function ValuesBreak({ navigation, route }) {
 
   const styles = StyleSheet.create({
     headerText: {
-      marginVertical: "5%",
+      marginTop: "5%",
       fontFamily: fonts.bold,
       fontSize: 24,
     },
-    subheaderText: {
-      marginTop: "5%",
-      fontFamily: fonts.regular,
-      fontSize: 20,
-    },
     exampleText: {
-      marginTop: "10%",
+      marginTop: "5%",
       fontSize: 20,
       fontFamily: fonts.bold,
     },
@@ -95,9 +90,6 @@ export default function ValuesBreak({ navigation, route }) {
         <Text style={styles.headerText}>
           On the next screen, we'll ask you a few questions to help rank your 5
           selections
-        </Text>
-        <Text style={styles.subheaderText}>
-          Or skip to the end if you're sure on the ranking of your values
         </Text>
       </View>
 

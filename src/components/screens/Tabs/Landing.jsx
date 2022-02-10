@@ -55,7 +55,7 @@ export default function Landing({ navigation }) {
       fontFamily: fonts.bold,
     },
     headerNameText: {
-      color: "#e3e3e3",
+      color: "white",
       fontSize: 40,
       fontFamily: fonts.regular,
     },
@@ -64,7 +64,7 @@ export default function Landing({ navigation }) {
       width: deviceHeight * 0.125,
       marginTop: "5%",
       borderRadius: 100,
-      backgroundColor: "#e5e5e5",
+      backgroundColor: "white",
       justifyContent: "center",
       alignItems: "center",
     },
@@ -169,6 +169,66 @@ export default function Landing({ navigation }) {
               onPress={() => navigation.navigate("ValuesStack")}
             />
           )}
+        </View>
+
+        <View style={styles.valuesWrapper}>
+          <View style={SharedStyles.flexRow}>
+            <Text style={styles.valuesHeaderText}>Discover New Brands</Text>
+            <IconButton
+              icon="chevron-right"
+              size={30}
+              color={myTheme.colors.grey}
+              onPress={() => {}}
+            />
+          </View>
+        </View>
+
+        <View style={styles.valuesWrapper}>
+          <View style={SharedStyles.flexRow}>
+            <Text style={styles.valuesHeaderText}>News Feed</Text>
+            <IconButton
+              icon="chevron-right"
+              size={30}
+              color={myTheme.colors.grey}
+              onPress={() => {}}
+            />
+          </View>
+        </View>
+
+        <View style={styles.valuesWrapper}>
+          <View style={SharedStyles.flexRow}>
+            <Text style={styles.valuesHeaderText}>My Accounts</Text>
+            <IconButton
+              icon="chevron-right"
+              size={30}
+              color={myTheme.colors.grey}
+              onPress={() => {}}
+            />
+          </View>
+        </View>
+
+        <View style={styles.valuesWrapper}>
+          <View style={SharedStyles.flexRow}>
+            <Text style={styles.valuesHeaderText}>Latest Transactions</Text>
+            <IconButton
+              icon="chevron-right"
+              size={30}
+              color={myTheme.colors.grey}
+              onPress={() => {}}
+            />
+          </View>
+        </View>
+
+        <View style={styles.valuesWrapper}>
+          <View style={SharedStyles.flexRow}>
+            <Text style={styles.valuesHeaderText}>My Job Board</Text>
+            <IconButton
+              icon="chevron-right"
+              size={30}
+              color={myTheme.colors.grey}
+              onPress={() => {}}
+            />
+          </View>
         </View>
       </View>
     </ScrollView>

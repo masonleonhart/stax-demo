@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { SERVER_ADDRESS, AUTH_HEADER } from "@env";
 
+import { MaterialCommunityIcons } from "react-native-vector-icons";
+
 import { View, StyleSheet, Pressable } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import DraggableFlatList from "react-native-draggable-flatlist";
@@ -21,14 +23,11 @@ export default function ValuesComplete({ route, navigation }) {
   const accessToken = useSelector((store) => store.user.userInfo.accessToken);
   const userId = useSelector((store) => store.user.userInfo.id);
   const providerId = useSelector((store) => store.user.userInfo.providerId);
-  const userInfo = useSelector((store) => store.user.userInfo);
   const myTheme = useTheme();
 
-  // Resets values stored in state and returns user to values select
+  // returns user to values select
 
   const onRetakePress = () => {
-    dispatch({ type: "RESET_QUIZ_SELECTION" });
-
     navigation.navigate("ValuesSelect");
   };
 
@@ -85,15 +84,17 @@ export default function ValuesComplete({ route, navigation }) {
     valueContainer: {
       marginBottom: "5%",
       padding: "2.5%",
+      paddingHorizontal: "5%",
       borderRadius: 10,
       borderColor: myTheme.colors.grey,
       borderWidth: 1,
+      flexDirection: "row"
     },
     valueText: {
-      textAlign: "center",
-      fontSize: 22,
+      fontSize: 20,
       fontFamily: fonts.regular,
       color: myTheme.colors.grey,
+      marginLeft: "5%",
     },
     retakeText: {
       textAlign: "center",
@@ -102,7 +103,7 @@ export default function ValuesComplete({ route, navigation }) {
       color: myTheme.colors.blue,
     },
   });
-  const renderItem = ({ item, drag, isActive, index }) => (
+  const renderItem = ({ item, drag, isActive, }) => (
     <Pressable
       onLongPress={drag}
       disabled={isActive}
@@ -114,10 +115,12 @@ export default function ValuesComplete({ route, navigation }) {
         },
       ]}
     >
-      <Text style={styles.valueText}>
-        {`${index + 1}.  `}
-        {item.name}
-      </Text>
+      <MaterialCommunityIcons
+        name={item.icon_name}
+        color={myTheme.colors.blue}
+        size={30}
+      />
+      <Text style={styles.valueText}>{item.name}</Text>
     </Pressable>
   );
 
@@ -129,11 +132,10 @@ export default function ValuesComplete({ route, navigation }) {
 
   return (
     <View style={SharedStyles.container}>
-      <Text style={styles.headerText}>Your Values</Text>
+      <Text style={styles.headerText}>Your Results</Text>
       <Text style={styles.subheaderText}>
-        Here are your values ranked. You can press and hold each item to grab it
-        and drag each item up or down if you are not satisfied with your
-        ranking.
+        Here are your values, starting with your highest result! Feel free to
+        reorder them anytime by simply holding and dragging the item up or down.
       </Text>
 
       <DraggableFlatList
@@ -146,7 +148,7 @@ export default function ValuesComplete({ route, navigation }) {
         renderItem={renderItem}
       />
 
-      <MyButton onPress={onContinuePress} text="Return to my Dashboard" />
+      <MyButton onPress={onContinuePress} text="Go to my Dashboard" />
 
       <Pressable onPress={onRetakePress}>
         <Text style={styles.retakeText}>Retake Quiz</Text>

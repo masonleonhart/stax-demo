@@ -22,7 +22,7 @@ export default function ValuesStack() {
         gestureEnabled: true,
         headerTitle: "",
         cardStyle: {
-          backgroundColor: "#f9f9fb",
+          backgroundColor: "white",
         },
         headerLeft: () => (
           <IconButton

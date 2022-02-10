@@ -20,23 +20,13 @@ import StaxLogo from "../../../../assets/StaxLogoVerticleCreamWithGreen.png";
 
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
 
-import Firebase from "../../../../config/firebase";
-
-export default function RegisterName({ navigation, route }) {
+export default function RegisterName({ route }) {
   const isFocused = useIsFocused();
   const myTheme = useTheme();
   const dispatch = useDispatch();
   const [registerForm, setRegisterForm] = useState(route.params);
   const [canContinue, setCanContinue] = useState(false);
   const [isDialogVisible, setIsDialogVisible] = useState(false);
-
-  const auth = Firebase.auth();
-
-  const completedRegisterForm = {
-    email: registerForm.email,
-    first_name: registerForm.first_name,
-    last_name: registerForm.last_name,
-  };
 
   // If there is a form error or any of the fields are empty, you are not allowed to continue
 

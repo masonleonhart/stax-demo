@@ -29,7 +29,7 @@ export default function TopStack() {
         gestureEnabled: true,
         headerTitle: "",
         cardStyle: {
-          backgroundColor: myTheme.colors.lightGrey,
+          backgroundColor: "white",
         },
         headerLeft: () => {
           // constantly render the back button but go into landing page and specifically not render it from there
