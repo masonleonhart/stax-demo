@@ -88,7 +88,8 @@ export default function ValuesComplete({ route, navigation }) {
       borderRadius: 10,
       borderColor: myTheme.colors.grey,
       borderWidth: 1,
-      flexDirection: "row"
+      flexDirection: "row",
+      alignItems: "center"
     },
     valueText: {
       fontSize: 20,
