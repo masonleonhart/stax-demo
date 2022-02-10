@@ -42,6 +42,12 @@ export default function ValuesPairWiseMatching({ route, navigation }) {
         setValuesIndex(currentValuesIndex);
         setSavedIndex(currentValuesIndex);
       }
+    } else if (valuesIndex !== savedIndex && savedIndex === 4) {
+      dispatch({ type: "SET_QUIZ_SELECTION", payload: values });
+
+      navigation.navigate("ValuesComplete");
+
+      return;
     } else {
       setValuesIndex(savedIndex);
     }
@@ -72,7 +78,7 @@ export default function ValuesPairWiseMatching({ route, navigation }) {
 
     arrayToChange.splice(valuesIndex, 0, valueToMove);
 
-    setValues(arrayToChange);
+    return arrayToChange;
   };
 
   // Calls the function to change order of array index with the item 1 past that we are checking so it can be moved
@@ -82,13 +88,19 @@ export default function ValuesPairWiseMatching({ route, navigation }) {
   // moved to the item that is now in front of it in ranking or at a lower index
 
   const onBottomButtonClick = () => {
-    moveArrayIndexLeft(values[valuesIndex + 1]);
+    const newValues = moveArrayIndexLeft(values[valuesIndex + 1]);
 
     if (valuesIndex === 0 && savedIndex === 4) {
-      navigation.navigate("Login");
+      dispatch({ type: "SET_QUIZ_SELECTION", payload: newValues });
+
+      navigation.navigate("ValuesComplete");
     } else if (valuesIndex === 0) {
+      setValues(newValues);
+
       moveToNextArrayIndex();
     } else {
+      setValues(newValues);
+
       moveToPreviousArrayIndex();
     }
   };
@@ -195,7 +207,7 @@ export default function ValuesPairWiseMatching({ route, navigation }) {
                     { color: values[valuesIndex + 1].text_color },
                   ]}
                 >
-                  This is a description. Such a good description.
+                  {values[valuesIndex + 1].description}
                 </Text>
               </View>
             </ImageBackground>
