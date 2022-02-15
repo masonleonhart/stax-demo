@@ -13,7 +13,6 @@ import { MaterialCommunityIcons } from "react-native-vector-icons";
 import fonts from "../../reusedComponents/fonts";
 import SharedStyles from "../../reusedComponents/SharedStyles";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
-import userImage from "../../../../assets/userImage.png";
 import companyImage from "../../../../assets/companyImage.jpeg";
 
 export default function CompanyProfile({ navigation }) {
@@ -110,7 +109,7 @@ export default function CompanyProfile({ navigation }) {
       fontFamily: fonts.regular,
     },
     myButton: {
-      marginBottom: "10%",
+      marginBottom: "0.2%",
     },
     myButtonLabel: {
       color: myTheme.colors.grey,
@@ -319,11 +318,17 @@ export default function CompanyProfile({ navigation }) {
           </Collapsible>
 
           <MyButton
-            onPress={() => navigation.navigate("Landing")}
+            onPress={() => navigation.navigate("Discover")}
             text="Discover Better Aligned Companies"
             style={styles.myButton}
             labelStyle={styles.myButtonLabel}
             buttonColor={"#e3e3e3"}
+          />
+          <MyButton
+            onPress={() => navigation.navigate("ReportProductForm", { name: "report" })}
+            text="Report This Product"
+            labelStyle={styles.myButtonLabel}
+            buttonColor={myTheme.colors.red}
           />
         </View>
       </View>

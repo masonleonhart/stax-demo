@@ -13,6 +13,8 @@ import ValuesStack from "./ValuesStack";
 import UpdatePasswordStack from "./UpdatePasswordStack";
 import CompanyProfile from "../screens/topStack/CompanyProfile";
 import NewProductForm from "../screens/topStack/NewProductForm";
+import ReportProductForm from "../screens/topStack/ReportProductForm";
+import Filter from "../screens/topStack/Filter";
 
 export default function TopStack() {
   const Stack = createNativeStackNavigator();
@@ -71,6 +73,16 @@ export default function TopStack() {
       <Stack.Screen
         name="NewProductForm"
         component={NewProductForm}
+        options={{ headerShown: true }}
+      />
+      <Stack.Screen
+        name="ReportProductForm"
+        component={ReportProductForm}
+        options={{ headerShown: true }}
+      />
+      <Stack.Screen
+        name="Filter"
+        component={Filter}
         options={{ headerShown: true }}
       />
     </Stack.Navigator>

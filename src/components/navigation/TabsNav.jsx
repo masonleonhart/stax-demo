@@ -7,14 +7,11 @@ import { useTheme } from "react-native-paper";
 import Landing from "../screens/Tabs/Landing";
 import BarcodeScanner from "../screens/Tabs/BarcodeScanner";
 import Account from "../screens/Tabs/Account";
+import Discover from "../screens/Tabs/Discover";
 
 export default function TabNavigation() {
   const Tab = createBottomTabNavigator();
   const myTheme = useTheme();
-
-  const Discover = () => {
-    return <></>;
-  };
 
   return (
     <Tab.Navigator

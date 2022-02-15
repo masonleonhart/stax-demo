@@ -46,31 +46,46 @@ export default function BarcodeScanner({ navigation }) {
 
   const handleBarCodeScanned = async ({ type, data }) => {
     setScanned(true);
-
     setIsDialogVisible(true);
 
     if (type.includes("UPC-E") || type.includes("EAN-13")) {
       dispatch({ type: "SET_MOST_RECENT_SCAN", payload: { type, data } });
 
       try {
-        const response = await axios.post(
+        console.log(accessToken);
+        console.log({ type, data });
+        await axios.post(
           `${SERVER_ADDRESS}/api/v1/upc`,
           { data, type },
           { headers: { [AUTH_HEADER]: accessToken } }
-        );
+        ).then((response) => {
+          console.log(response.data)
+          if (response.data.status_code == 200) {
+            dispatch({
+              type: "SET_BARCODE_DETAILS",
+              payload: response.data.data,
+            });
+            navigation.navigate("CompanyProfile");
+          }
+          else if (response.data.status_code == 400) {
+            dispatch({ type: "RESET_BARCODE_DETAILS" });
+            navigation.navigate("NewProductForm");
+          }
+          else {
+            dispatch({ type: "RESET_BARCODE_DETAILS" });
+            navigation.navigate("Scanner");
+          }
 
-        dispatch({
-          type: "SET_BARCODE_DETAILS",
-          payload: response.data.data,
+        }).catch((err) => {
+          console.log(err);
+          dispatch({ type: "RESET_BARCODE_DETAILS" });
+          navigation.navigate("NewProductForm");
+
         });
 
-        navigation.navigate("CompanyProfile");
       } catch (error) {
-        console.log("Error in fetching barcode details");
         console.log(error);
-
         dispatch({ type: "RESET_BARCODE_DETAILS" });
-
         navigation.navigate("NewProductForm");
       }
     }

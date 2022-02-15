@@ -12,7 +12,7 @@ import MyButton from "../../reusedComponents/MyButton";
 import NewProductModal from "../../modals/NewProductModal";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
 
-export default function NoScanReturn(props) {
+export default function ReportProductForm(props) {
   const myTheme = useTheme();
   const isFocused = useIsFocused();
   const recentScan = useSelector(
@@ -27,11 +27,12 @@ export default function NoScanReturn(props) {
     id: recentScan.data,
     barcode_formats: `${recentScan?.type?.split(".")[2]} ${recentScan?.data}`,
     barcode_number: recentScan?.data,
-    manufacturer: "",
+    suggestion: "",
+    decription: "",
     title: "",
     price: "",
     store: "",
-    flag: "Created"
+    flag: "reported"
   });
 
   const [formStore, setFormStore] = useState({
@@ -69,6 +70,8 @@ export default function NoScanReturn(props) {
     if (
       formDetails.store &&
       formDetails.title &&
+      formDetails.suggestion &&
+      formDetails.decription &&
       formStore.price &&
       formStore.price.includes(".") &&
       formStore.price.indexOf(".") + 3 === formStore.price.length
@@ -84,19 +87,24 @@ export default function NoScanReturn(props) {
   const submitButtonPress = async () => {
     setIsDialogVisible(true);
     try {
-      await axios.post(`${SERVER_ADDRESS}/api/v1/new_upc`, {
+
+      console.log({
+        ...formDetails,
+        ...formStore
+      });
+      await axios.post(`${SERVER_ADDRESS}/api/v1/report_upc`, {
         ...formDetails,
         ...formStore
       }, { headers: { [AUTH_HEADER]: accessToken } }
       ).then((res) => {
-        console.log(res);
+        console.log(res.data);
       }).catch((err) => {
         console.log(err);
       });
 
       await setUpcPostStatus(true);
     } catch (error) {
-      console.log("Error in posting new upc");
+      console.log("Error in reporting new upc");
       console.log(error);
 
       await setUpcPostStatus(false);
@@ -147,7 +155,7 @@ export default function NoScanReturn(props) {
       />
 
       <Text style={styles.text}>
-        Congratulations, you found a product that we have not yet indexed!
+        If you want to report this product details as wrong.
         Please fill out this quick form to help us store off this product
         information.
       </Text>
@@ -156,7 +164,7 @@ export default function NoScanReturn(props) {
         onChangeText={(text) => setFormDetails({ ...formDetails, store: text })}
         value={formDetails.store}
         autoCapitalize="words"
-        label="What store are you in?"
+        label="What the new store name?"
         left={<TextInput.Icon name="cart" color={myTheme.colors.green} />}
         theme={inputTheme}
         style={styles.textInput}
@@ -166,7 +174,7 @@ export default function NoScanReturn(props) {
         onChangeText={(text) => setFormDetails({ ...formDetails, title: text })}
         value={formDetails.title}
         autoCapitalize="words"
-        label="What is the product name?"
+        label="What is the new name of product?"
         left={<TextInput.Icon name="new-box" color={myTheme.colors.green} />}
         theme={inputTheme}
         style={styles.textInput}
@@ -174,11 +182,23 @@ export default function NoScanReturn(props) {
 
       <TextInput
         onChangeText={(text) =>
-          setFormDetails({ ...formDetails, manufacturer: text })
+          setFormDetails({ ...formDetails, suggestion: text })
         }
-        value={formDetails.manufacturer}
+        value={formDetails.suggestion}
         autoCapitalize="words"
-        label="Who makes the product?"
+        label="What is your Suggestion About Product?"
+        left={<TextInput.Icon name="domain" color={myTheme.colors.green} />}
+        theme={inputTheme}
+        style={styles.textInput}
+      />
+
+      <TextInput
+        onChangeText={(text) =>
+          setFormDetails({ ...formDetails, decription: text })
+        }
+        value={formDetails.decription}
+        autoCapitalize="words"
+        label="Details Decription About Product?"
         left={<TextInput.Icon name="domain" color={myTheme.colors.green} />}
         theme={inputTheme}
         style={styles.textInput}
@@ -189,7 +209,7 @@ export default function NoScanReturn(props) {
         onFocus={onPriceFocus}
         onBlur={onPriceBlur}
         value={formStore.price}
-        label="What is the product price?"
+        label="What is Expected price?"
         keyboardType="numeric"
         left={
           <TextInput.Icon name="currency-usd" color={myTheme.colors.green} />
