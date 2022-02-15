@@ -71,7 +71,6 @@ export default function NoScanReturn() {
       formStore.name &&
       formDetails.title &&
       formDetails.brand &&
-      formStore.price &&
       formStore.price.includes(".") &&
       formStore.price.indexOf(".") + 3 === formStore.price.length
     ) {

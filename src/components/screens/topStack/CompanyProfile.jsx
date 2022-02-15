@@ -319,8 +319,8 @@ export default function CompanyProfile({ navigation }) {
           </Collapsible>
 
           <MyButton
-            onPress={() => navigation.navigate("Landing")}
-            text="Discover Better Aligned Companies"
+            disabled={true}
+            text="Discover Better Aligned Companies (WIP)"
             style={styles.myButton}
             labelStyle={styles.myButtonLabel}
             buttonColor={"#e3e3e3"}

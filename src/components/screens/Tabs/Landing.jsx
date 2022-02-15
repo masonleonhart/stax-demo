@@ -78,11 +78,12 @@ export default function Landing({ navigation }) {
       borderBottomWidth: 1,
       paddingBottom: "10%",
     },
-    valuesHeaderText: {
+    headerText: {
       color: myTheme.colors.grey,
       fontSize: 20,
       fontFamily: fonts.medium,
     },
+    headerWorkInProgress: { color: myTheme.colors.gray, fontSize: 14 },
     value: {
       flexDirection: "row",
       alignItems: "center",
@@ -145,7 +146,7 @@ export default function Landing({ navigation }) {
       <View style={[SharedStyles.container]}>
         <View style={styles.valuesWrapper}>
           <View style={SharedStyles.flexRow}>
-            <Text style={styles.valuesHeaderText}>My Top Values</Text>
+            <Text style={styles.headerText}>My Top Values</Text>
             <IconButton
               icon="chevron-right"
               size={30}
@@ -173,7 +174,10 @@ export default function Landing({ navigation }) {
 
         <View style={styles.valuesWrapper}>
           <View style={SharedStyles.flexRow}>
-            <Text style={styles.valuesHeaderText}>Discover New Brands</Text>
+            <Text style={styles.headerText}>
+              Discover New Brands{" "}
+              <Text style={styles.headerWorkInProgress}>(WIP)</Text>
+            </Text>
             <IconButton
               icon="chevron-right"
               size={30}
@@ -185,7 +189,9 @@ export default function Landing({ navigation }) {
 
         <View style={styles.valuesWrapper}>
           <View style={SharedStyles.flexRow}>
-            <Text style={styles.valuesHeaderText}>News Feed</Text>
+            <Text style={styles.headerText}>
+              News Feed <Text style={styles.headerWorkInProgress}>(WIP)</Text>
+            </Text>
             <IconButton
               icon="chevron-right"
               size={30}
@@ -197,7 +203,9 @@ export default function Landing({ navigation }) {
 
         <View style={styles.valuesWrapper}>
           <View style={SharedStyles.flexRow}>
-            <Text style={styles.valuesHeaderText}>My Accounts</Text>
+            <Text style={styles.headerText}>
+              My Accounts <Text style={styles.headerWorkInProgress}>(WIP)</Text>
+            </Text>
             <IconButton
               icon="chevron-right"
               size={30}
@@ -209,7 +217,10 @@ export default function Landing({ navigation }) {
 
         <View style={styles.valuesWrapper}>
           <View style={SharedStyles.flexRow}>
-            <Text style={styles.valuesHeaderText}>Latest Transactions</Text>
+            <Text style={styles.headerText}>
+              Latest Transactions{" "}
+              <Text style={styles.headerWorkInProgress}>(WIP)</Text>
+            </Text>
             <IconButton
               icon="chevron-right"
               size={30}
@@ -221,7 +232,10 @@ export default function Landing({ navigation }) {
 
         <View style={styles.valuesWrapper}>
           <View style={SharedStyles.flexRow}>
-            <Text style={styles.valuesHeaderText}>My Job Board</Text>
+            <Text style={styles.headerText}>
+              My Job Board{" "}
+              <Text style={styles.headerWorkInProgress}>(WIP)</Text>
+            </Text>
             <IconButton
               icon="chevron-right"
               size={30}

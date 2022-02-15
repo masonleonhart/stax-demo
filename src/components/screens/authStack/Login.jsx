@@ -155,6 +155,9 @@ export default function Login({ navigation }) {
       marginRight: "auto",
       marginBottom: "5%",
     },
+    formContainer: {
+      paddingHorizontal: "5%",
+    },
     textInput: {
       backgroundColor: "transparent",
       marginTop: "5%",
@@ -208,7 +211,7 @@ export default function Login({ navigation }) {
 
       <Image source={StaxLogo} resizeMode="contain" style={styles.staxLogo} />
 
-      <ScrollView contentContainerStyle={SharedStyles.container}>
+      <ScrollView contentContainerStyle={styles.formContainer}>
         <TextInput
           value={loginForm.email}
           onChangeText={(text) => setLoginForm({ ...loginForm, email: text })}
