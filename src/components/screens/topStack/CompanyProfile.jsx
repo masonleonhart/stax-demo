@@ -1,8 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 
-import { View, ScrollView, StyleSheet, Dimensions, Image } from "react-native";
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  Dimensions,
+  Image,
+  Alert,
+} from "react-native";
 import { Text, IconButton, ProgressBar, useTheme } from "react-native-paper";
 
 import MyButton from "../../reusedComponents/MyButton";
@@ -13,7 +20,6 @@ import { MaterialCommunityIcons } from "react-native-vector-icons";
 import fonts from "../../reusedComponents/fonts";
 import SharedStyles from "../../reusedComponents/SharedStyles";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
-import userImage from "../../../../assets/userImage.png";
 import companyImage from "../../../../assets/companyImage.jpeg";
 
 export default function CompanyProfile({ navigation }) {
@@ -22,6 +28,9 @@ export default function CompanyProfile({ navigation }) {
   const windowWidth = Dimensions.get("window").width;
   const deviceHeight = Dimensions.get("window").height;
   const companyDetails = useSelector((store) => store.barcode.barcodeDetails);
+  const companyRanking = useSelector(
+    (store) => store.barcode.scannedCompanyRanking
+  );
   const userValues = useSelector((store) => store.user.userInfo.values);
   const userInfo = useSelector((store) => store.user.userInfo);
   const [isCollapsed1, setIsCollapsed1] = useState(true);
@@ -29,6 +38,35 @@ export default function CompanyProfile({ navigation }) {
   const [isCollapsed3, setIsCollapsed3] = useState(true);
   const [isCollapsed4, setIsCollapsed4] = useState(true);
   const [isCollapsed5, setIsCollapsed5] = useState(true);
+
+  const [overallMatch, setOverallMatch] = useState("Poor");
+
+  const determineMatchType = (zscore) => {
+    if (zscore <= -2) {
+      return "Terrible";
+    } else if (zscore > -2 && zscore <= -1) {
+      return "Poor";
+    } else if (zscore > -1 && zscore < 1) {
+      return "Average";
+    } else if (zscore >= 1 && zscore < 2) {
+      return "Good";
+    } else if (zscore >= 2) {
+      return "Excelent";
+    }
+  };
+
+  useEffect(() => {
+    if ("values_match_score" in companyRanking) {
+      setOverallMatch(determineMatchType(companyRanking.values_match_score));
+    } else {
+      setOverallMatch("Poor");
+
+      Alert.alert(
+        "Error",
+        "Unable to match company to parent, no parent data available."
+      );
+    }
+  }, [isFocused]);
 
   const styles = StyleSheet.create({
     companyHeader: {
@@ -104,6 +142,11 @@ export default function CompanyProfile({ navigation }) {
       fontFamily: fonts.bold,
       color: myTheme.colors.blue,
     },
+    wipText: {
+      textAlign: "center",
+      fontFamily: fonts.regular,
+      color: myTheme.colors.grey
+    },
     collapsedText: {
       fontSize: 16,
       flexWrap: "wrap",
@@ -155,8 +198,10 @@ export default function CompanyProfile({ navigation }) {
           <Text style={styles.sectionHeaderText}>Match to My Values</Text>
           <View style={[SharedStyles.flexRow, styles.overallMatchWrapper]}>
             <Text style={styles.overallMatch}>Overall Match:</Text>
-            <Text style={styles.matchValue}>Poor</Text>
+            <Text style={styles.matchValue}>{overallMatch}</Text>
           </View>
+
+          <Text style={styles.wipText}>(More defined match score is WIP)</Text>
 
           <View style={SharedStyles.flexRow}>
             <View style={SharedStyles.flexRow}>

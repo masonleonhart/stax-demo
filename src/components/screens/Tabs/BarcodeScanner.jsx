@@ -59,9 +59,22 @@ export default function BarcodeScanner({ navigation }) {
           { headers: { [AUTH_HEADER]: accessToken } }
         );
 
+        if ("error" in response.data.company_obj) {
+          console.log(response.data.company_obj.error);
+          dispatch({
+            type: "SET_SCANNED_COMPANY_RANKING",
+            payload: {},
+          });
+        } else {
+          dispatch({
+            type: "SET_SCANNED_COMPANY_RANKING",
+            payload: response.data.company_obj.scanned_company_ranking,
+          });
+        }
+
         dispatch({
           type: "SET_BARCODE_DETAILS",
-          payload: response.data.data,
+          payload: response.data.barcode_result.data,
         });
 
         navigation.navigate("CompanyProfile");
