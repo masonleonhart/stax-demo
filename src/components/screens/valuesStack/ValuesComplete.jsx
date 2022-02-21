@@ -6,7 +6,7 @@ import { SERVER_ADDRESS, AUTH_HEADER } from "@env";
 
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 
-import { View, StyleSheet, Pressable } from "react-native";
+import { View, ScrollView, StyleSheet, Pressable } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import DraggableFlatList from "react-native-draggable-flatlist";
 
@@ -81,6 +81,9 @@ export default function ValuesComplete({ route, navigation }) {
       fontFamily: fonts.regular,
       color: myTheme.colors.grey,
     },
+    scrollView: {
+      marginHorizontal: "5%",
+    },
     valueContainer: {
       marginBottom: "5%",
       padding: "2.5%",
@@ -89,7 +92,7 @@ export default function ValuesComplete({ route, navigation }) {
       borderColor: myTheme.colors.grey,
       borderWidth: 1,
       flexDirection: "row",
-      alignItems: "center"
+      alignItems: "center",
     },
     valueText: {
       fontSize: 20,
@@ -104,7 +107,7 @@ export default function ValuesComplete({ route, navigation }) {
       color: myTheme.colors.blue,
     },
   });
-  const renderItem = ({ item, drag, isActive, }) => (
+  const renderItem = ({ item, drag, isActive }) => (
     <Pressable
       onLongPress={drag}
       disabled={isActive}
@@ -132,7 +135,7 @@ export default function ValuesComplete({ route, navigation }) {
   }
 
   return (
-    <View style={SharedStyles.container}>
+    <ScrollView contentContainerStyle={styles.scrollView}>
       <Text style={styles.headerText}>Your Results</Text>
       <Text style={styles.subheaderText}>
         Here are your values, starting with your highest result! Feel free to
@@ -154,6 +157,6 @@ export default function ValuesComplete({ route, navigation }) {
       <Pressable onPress={onRetakePress}>
         <Text style={styles.retakeText}>Retake Quiz</Text>
       </Pressable>
-    </View>
+    </ScrollView>
   );
 }

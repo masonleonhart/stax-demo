@@ -93,7 +93,7 @@ export default function Splash({ navigation }) {
     <View style={{ flex: 1 }}>
       <ImageBackground
         style={{ width: "100%", height: "100%" }}
-        resizeMode="contain"
+        resizeMode="cover"
         source={SplashImage}
       />
     </View>

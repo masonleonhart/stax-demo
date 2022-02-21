@@ -142,10 +142,10 @@ export default function CompanyProfile({ navigation }) {
           {companyDetails.manufacturer
             ? companyDetails.manufacturer
             : companyDetails.brand
-            ? companyDetails.brand
-            : companyDetails.title
-            ? companyDetails.title
-            : "Company Profile"}
+              ? companyDetails.brand
+              : companyDetails.title
+                ? companyDetails.title
+                : "Company Profile"}
         </Text>
       </View>
 
@@ -318,8 +318,8 @@ export default function CompanyProfile({ navigation }) {
           </Collapsible>
 
           <MyButton
-            onPress={() => navigation.navigate("Discover")}
-            text="Discover Better Aligned Companies"
+            disabled={true}
+            text="Discover Better Aligned Companies (WIP)"
             style={styles.myButton}
             labelStyle={styles.myButtonLabel}
             buttonColor={"#e3e3e3"}

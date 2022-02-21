@@ -67,7 +67,7 @@ export default function TopStack() {
       <Stack.Screen
         name="CompanyProfile"
         component={CompanyProfile}
-        options={{ headerTransparent: true }}
+        options={{ headerShown: true, headerTransparent: true }}
       />
       <Stack.Screen
         name="NewProductForm"
