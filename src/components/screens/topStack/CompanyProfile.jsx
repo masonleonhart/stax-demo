@@ -133,8 +133,8 @@ export default function CompanyProfile({ navigation }) {
           />
           <View style={styles.userImage}>
             <Text style={styles.userInitials}>
-              {userInfo.first_name[0]}
-              {userInfo.last_name[0]}
+              {userInfo?.first_name[0]}
+              {userInfo?.last_name[0]}
             </Text>
           </View>
         </View>
@@ -160,11 +160,11 @@ export default function CompanyProfile({ navigation }) {
           <View style={SharedStyles.flexRow}>
             <View style={SharedStyles.flexRow}>
               <MaterialCommunityIcons
-                name={userValues[0].icon_name}
+                name={userValues[0]?.icon_name}
                 color={myTheme.colors.blue}
                 size={30}
               />
-              <Text style={styles.sectionText}>{userValues[0].name}</Text>
+              <Text style={styles.sectionText}>{userValues[0]?.name}</Text>
             </View>
             <IconButton
               icon={isCollapsed1 ? "chevron-down" : "chevron-up"}

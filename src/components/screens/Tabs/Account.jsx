@@ -17,6 +17,8 @@ import fonts from "../../reusedComponents/fonts";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
 
 import Firebase from "../../../../config/firebase";
+import HeaderComponent from "../../reusedComponents/HeaderComponent";
+import { COLORS } from "../../../constants/theme";
 
 export default function Account({ navigation }) {
   const isFocused = useIsFocused();
@@ -115,19 +117,13 @@ export default function Account({ navigation }) {
 
   return (
     <ScrollView>
-      <View style={[SharedStyles.flexRow, styles.header]}>
-        <View style={styles.headerTextContainer}>
-          <Text style={styles.headerSettingsText}>User Settings</Text>
-          <Text style={styles.headerNameText}>{userInfo.first_name}</Text>
-        </View>
-        <View style={styles.userImage}>
-          <Text style={styles.userInitials}>
-            {userInfo.first_name[0]}
-            {userInfo.last_name[0]}
-          </Text>
-        </View>
-      </View>
-
+      <HeaderComponent
+        mainTitle="User Settings"
+        subTitle={userInfo?.first_name}
+        mainTitleStyle={styles.headerSettingsText}
+        subTitleStyle={styles.headerNameText}
+        backgroundColor={COLORS.red}
+      />
       <View style={SharedStyles.container}>
         <AccountPressable text="My Values" onPress={valuesNavButton} />
         {userInfo.providerId === "password" && (

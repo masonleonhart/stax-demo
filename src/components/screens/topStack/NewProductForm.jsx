@@ -104,7 +104,6 @@ export default function NoScanReturn(props) {
   };
 
   // Shared theme for text inputs
-
   const inputTheme = {
     colors: {
       primary: myTheme.colors.green,
@@ -141,6 +140,7 @@ export default function NoScanReturn(props) {
       keyboardShouldPersistTaps="handled"
     >
       <NewProductModal
+        isReportOrAdd={false}
         isDialogVisible={isDialogVisible}
         setIsDialogVisible={setIsDialogVisible}
         upcPostStatus={upcPostStatus}

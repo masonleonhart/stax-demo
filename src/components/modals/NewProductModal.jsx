@@ -17,6 +17,7 @@ export default function NewProductModal({
   isDialogVisible,
   setIsDialogVisible,
   upcPostStatus,
+  isReportOrAdd
 }) {
   const myTheme = useTheme();
   const dispatch = useDispatch();
@@ -90,11 +91,11 @@ export default function NewProductModal({
         <Dialog.Content style={styles.dialogContent}>
           {upcPostStatus === true ? (
             <Text style={styles.successText}>
-              Added new product successfully!
+              {isReportOrAdd ? 'Product Reported successfully!' : 'Added new product successfully!'}
             </Text>
           ) : upcPostStatus === false ? (
-            <Text style={styles.successText}>
-              Error in adding new product, please try again.
+              <Text style={styles.successText}>
+                {isReportOrAdd ? 'Error in adding reporting product, please try again.' : 'Error in adding new product, please try again.'}
             </Text>
           ) : (
             <ActivityIndicator size={100} color={myTheme.colors.red} />

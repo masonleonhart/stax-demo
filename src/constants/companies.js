@@ -1,6 +1,6 @@
     const companys=[
   {
-    "name": "VGP NV",
+        "name": "Adidas",
     "employee_count": 230,
     "mission_statement": "VGP VN is a real estate company. The company through its subsidiaries designs, constructs, and leases out logistics complexes and semi-industrial parks. Its business line includes Investment business, Property Development, and Property and asset management. The company derives the maximum rental income from the investment business. Geographically, it has a presence in Germany, Spain, Austria, Czech Republic, Slovakia, Hungary, Latvia, and Romania.",
     "logo_url": "",
@@ -12,7 +12,7 @@
     "created_at": "2022-01-04T22:33:23.407210"
   },
   {
-    "name": "CTEK AB",
+    "name": "Adidas",
     "employee_count": null,
     "mission_statement": "CTEK AB engages in the manufacture and sale of battery chargers for vehicles. It also suppliers electric vehicle service equipment. The company was founded in 1997 and is headquartered in Vikmanshyttan, Sweden.",
     "logo_url": "",
@@ -24,7 +24,7 @@
     "created_at": "2022-01-04T22:33:23.407210"
   },
   {
-    "name": "Azelis Group NV",
+    "name": "Adidas",
     "employee_count": null,
     "mission_statement": "Azelis Group NV functions as an investment holding company. It operates as a global innovation service provider for the specialty chemicals and food ingredients industry. The company was founded in 2001 and is headquartered in Antwerp, Belgium.",
     "logo_url": "",
@@ -36,7 +36,7 @@
     "created_at": "2022-01-04T22:33:23.407210"
   },
   {
-    "name": "Anora Group Oyj",
+    "name": "Adidas",
     "employee_count": null,
     "mission_statement": "Anora Group Oyj produces, distributes, markets, and sells alcoholic beverages. It offers wines, spirits, beers, and other alcoholic beverages, as well as provides distilling and bottling services. The company was founded on September 1, 2021 and is headquartered in Helsinki, Finland.",
     "logo_url": "",
@@ -48,7 +48,7 @@
     "created_at": "2022-01-04T22:33:23.407210"
   },
   {
-    "name": "Sylvamo Corp.",
+    "name": "Adidas",
     "employee_count": null,
     "mission_statement": "Sylvamo Corp., operates as a papers company. It produces uncoated freesheet for paper products such as cut size and offset paper. The company markets pulp, aseptic & liquid packaging board and coated unbleached kraft papers. Sylvamo was founded in 1898 and is headquartered in Memphis, TN.",
     "logo_url": "",
@@ -72,7 +72,7 @@
     "created_at": "2022-01-04T22:33:23.407210"
   },
   {
-    "name": "Olaplex Holdings, Inc.",
+    "name": "Adidas.",
     "employee_count": null,
     "mission_statement": "Olaplex Holdings, Inc., is a science-enabled, technology-driven beauty company, focused on delivering its patent-protected hair care products to professional hair salons, retailers, and everyday consumers. The brand OLAPLEX is a patent-protected, proven, and potent haircare technology system that restores all hair types to its healthiest state possible. OLAPLEX created the Bond Building category which protects, strengthens, and rebuilds broken bonds in the hair during and after hair services. The company was founded in 2014 and is headquartered in Santa Barbara, CA.",
     "logo_url": "",
@@ -84,7 +84,7 @@
     "created_at": "2022-01-04T22:33:23.407210"
   },
   {
-    "name": "CapitaLand Investment Ltd.",
+    "name": "Adidas",
     "employee_count": null,
     "mission_statement": "CapitaLand Investment Ltd., is a real estate investment manager. It holds real estate assets and funds under its management. It carries out its operations in the Fee Income-related Business and Real Estate Investments segments. The Fee Income-related Business segment involves fund management and lodging management. The Real Estate Investments segment deals with stakes in both listed and unlisted funds, and investment properties. The company was founded on August 29, 2003 and is headquartered in Singapore.",
     "logo_url": "",
@@ -96,7 +96,7 @@
     "created_at": "2022-01-04T22:33:23.407210"
   },
   {
-    "name": "Castellum Helsinki Finance Holding Abp",
+    "name": "Adidas",
     "employee_count": null,
     "mission_statement": "Castellum Helsinki Finance Holding Abp is a Finnish private company located in Helsinki. The firm provides financial services.",
     "logo_url": "",
@@ -108,7 +108,7 @@
     "created_at": "2022-01-04T22:33:23.407210"
   },
   {
-    "name": "Swiss Life Finance I Ltd.",
+    "name": "Adidas",
     "employee_count": null,
     "mission_statement": "Swiss Life Finance I Ltd., is a private company headquartered in Liechtenstein that provides financial services.",
     "logo_url": "",
@@ -120,7 +120,7 @@
     "created_at": "2022-01-04T22:33:23.407210"
   },
   {
-    "name": "Universal Music Group BV",
+    "name": "Adidas",
     "employee_count": null,
     "mission_statement": "Universal Music Group NV engages in the music entertainment business. Its three main operating businesses are: recorded music; music publishing; and merchandising. The recorded music business discovers and develops artists, supports the creation of audio and audiovisual content by artists, and markets, distributes, sells and licenses such content to consumers across a wide array of formats and platforms. The music publishing business discovers and develops composers and songwriters and owns and administers the copyright to the musical and lyrical compositions created by such composers and songwriters, which is licensed for use in recordings, public performances and for related uses, such as in films and advertisements. The merchandising business produces and sells artist-branded products as well as other branded products. The firm's s recorded music business has offices in more than 60 territories and is present across approximately 200 markets, where markets may be defined by a number of factors, including language and dialects. Its major music markets including the United States, the United Kingdom, France and Germany. Universal Music Group was founded in 1924 and is headquartered in Hilversum, The Netherlands.",
     "logo_url": "",

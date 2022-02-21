@@ -149,6 +149,7 @@ export default function ReportProductForm(props) {
       keyboardShouldPersistTaps="handled"
     >
       <NewProductModal
+        isReportOrAdd={true}
         isDialogVisible={isDialogVisible}
         setIsDialogVisible={setIsDialogVisible}
         upcPostStatus={upcPostStatus}

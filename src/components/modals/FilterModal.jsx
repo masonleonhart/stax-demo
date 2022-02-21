@@ -1,36 +1,50 @@
 import React from "react";
-import { useIsFocused } from "@react-navigation/core";
+import { Portal } from "react-native-paper";
+import Modal from "react-native-modal";
+
+import MyButton from "../reusedComponents/MyButton";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Dimensions, Platform } from "react-native";
 import { Text } from "react-native-paper";
 
-import SharedStyles from "../../reusedComponents/SharedStyles";
-import EmptyStateView from "../../reusedComponents/EmptyStateView";
+import SharedStyles from "../reusedComponents/SharedStyles";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import { getAllCategory, getCategoryByName } from "../../../constants/category";
-import MyButton from "../../reusedComponents/MyButton";
-import { COLORS, FONTS, SIZES } from "../../../constants/theme";
-import Separator from "../../reusedComponents/Separator";
+import { getAllCategory, getCategoryByName } from "../../constants/category";
+import { COLORS, FONTS, SIZES } from "../../constants/theme";
+import { useDispatch, useSelector } from "react-redux";
 
+const deviceWidth = Dimensions.get("window").width;
+const deviceHeight =
+  Platform.OS === "ios"
+    ? Dimensions.get("window").height
+    : 100;
+export default function FilterModal({
+  isDialogVisible,
+  setIsDialogVisible,
+}) {
 
-export default function Filter() {
-  const isFocused = useIsFocused();
+  const dispatch = useDispatch();
 
-  const [data, setdata] = React.useState([]);
-  const [allcategories, setAllcategories] = React.useState([]);
-  const [mainCategory, setmainCategory] = React.useState('Retail');
-  const [selectedCategoriesList, setSelectedCategoriesList] = React.useState([]);
+  const [childrenOfSelectedMainCategory, setChildrenOfSelectedMainCategory] = React.useState([]);
+  const [allCategories, setAllCategories] = React.useState([]);
+  const [selectedMainCategory, setselectedMainCategory] = React.useState('Retail');
+  const reduxSelectedCategoriesList = useSelector((store) => store.filter.filterListvaluesList);
+  const [selectedCategoriesList, setSelectedCategoriesList] = React.useState(reduxSelectedCategoriesList);
+
+  React.useEffect(() => {
+    setSelectedCategoriesList(reduxSelectedCategoriesList)
+  }, [reduxSelectedCategoriesList])
 
   React.useEffect(() => {
     const category = getAllCategory();
-    setAllcategories(category);
+    setAllCategories(category);
   }, [])
 
   React.useEffect(() => {
-    const category = getCategoryByName(mainCategory)
-    setdata(category);
-  }, [data, mainCategory])
+    const category = getCategoryByName(selectedMainCategory)
+    setChildrenOfSelectedMainCategory(category);
+  }, [childrenOfSelectedMainCategory, selectedMainCategory])
 
   function addintoSelectedCategoryList(cat) {
     if (selectedCategoriesList.filter((u) => u.id === cat.id).length == 0) {
@@ -42,11 +56,15 @@ export default function Filter() {
   }
 
   const onClosefilter = () => {
+    setIsDialogVisible(false)
+  }
+  const onCleareAllfilter = () => {
     setSelectedCategoriesList([])
-    // navigation.navigate("Discover");
+    dispatch({ type: "SET_FILTER_LIST", payload: [] });
   }
   const onApplyfilter = () => {
-    // navigation.navigate("Discover");
+    setIsDialogVisible(false)
+    dispatch({ type: "SET_FILTER_LIST", payload: selectedCategoriesList });
     setSelectedCategoriesList([])
   }
 
@@ -65,10 +83,6 @@ export default function Filter() {
     }
   }
 
-
-  if (!isFocused) {
-    return <EmptyStateView />;
-  }
   const SelectedCategoryList = () => {
     return (
       <View style={styles.selectedCategoryContainer}>
@@ -90,25 +104,25 @@ export default function Filter() {
       </View>
     )
   }
-  const RendorCategory = ({ textStyle, data }) => {
+  const RendorCategory = ({ textStyle, category }) => {
     return (
       <TouchableOpacity style={[
-        data?.depth == 1 ? {
+        category?.depth == 1 ? {
           backgroundColor: COLORS.blue,
         } : {}, styles.categoryStyle
       ]}
-        onPress={() => getSelectedCategory(data?.name, getAllCategory())}
+        onPress={() => getSelectedCategory(category?.name, getAllCategory())}
       >
         <Text style={[FONTS.h4, textStyle,
-        data?.depth == 1 ?
+        category?.depth == 1 ?
           { color: COLORS.white }
           : { color: COLORS.black }
-        ]}> {data?.name}
+        ]}> {category?.name}
         </Text>
       </TouchableOpacity>
     )
   }
-  const RenderGroupComponent = ({ data }) => {
+  const MainCategoryChildrens = ({ data }) => {
     return (
       <View>
         {data.depth != 0 ? <RendorCategory
@@ -117,82 +131,89 @@ export default function Filter() {
             marginTop: SIZES.base,
             marginBottom: SIZES.base
           }}
-          data={data}
+          category={data}
         /> : null}
 
         {data?.children?.map((item, key) => {
           {
             if (item?.children) {
-              return (<RenderGroupComponent key={item.id} data={item}></RenderGroupComponent>)
+              return (<MainCategoryChildrens key={item.id} data={item}></MainCategoryChildrens>)
             }
           }
         })}
       </View>
     )
   }
-  const RenderMainCategory = ({ title }) => {
+  const MainCategory = ({ title }) => {
     return (
       <View style={[styles.mainNonHightlightColor, styles.mainLevelView,
-      title == mainCategory ? { backgroundColor: COLORS.blue, } : {}]
+      title == selectedMainCategory ? { backgroundColor: COLORS.blue, } : {}]
       }>
-        <TouchableOpacity onPress={() => setmainCategory(title)}>
+        <TouchableOpacity onPress={() => setselectedMainCategory(title)}>
           <Text style={[FONTS.h4,
-          title == mainCategory ? { color: COLORS.white, } : {}
+          title == selectedMainCategory ? { color: COLORS.white, } : {}
           ]}>{title}
           </Text>
         </TouchableOpacity>
       </View>
     )
   }
+
   return (
-    <View style={SharedStyles.container}>
-      <View style={styles.mainheader}>
-        <Text style={FONTS.h4}>Filter</Text>
-        <TouchableOpacity onPress={() => setSelectedCategoriesList([])}>
-          <Text style={[FONTS.h4,
-          selectedCategoriesList.length == 0 ?
-            { color: COLORS.black } :
-            { color: COLORS.red }]}>Clear All</Text>
-        </TouchableOpacity>
-      </View>
-      <Separator />
-      <View style={styles.filterViewMain}>
-        <View style={styles.filterViewLeftSide} >
-          {allcategories && allcategories?.map((cat) => {
-            return (
-              <RenderMainCategory key={cat?.id} title={cat?.name} />
-            )
-          })}
+    <Portal>
+      <Modal
+        isVisible={isDialogVisible}
+        deviceWidth={deviceWidth}
+        deviceHeight={deviceHeight}
+        style={{ marginTop: "20%", maxHeight: '73%', maxWidth: '100%' }}
+      >
+        <View style={SharedStyles.filtercontainer}>
+          <View style={styles.filterViewMain}>
+            <View style={styles.filterViewLeftSide} >
+              {allCategories && allCategories?.map((cat) => {
+                return (
+                  <MainCategory key={cat?.id} title={cat?.name} />
+                )
+              })}
+            </View>
+            <ScrollView style={styles.filterViewRightSide} >
+              {selectedCategoriesList.length != 0 && SelectedCategoryList()}
+              <MainCategoryChildrens data={childrenOfSelectedMainCategory}></MainCategoryChildrens>
+            </ScrollView>
+          </View>
+          <View style={styles.closefiltterContainer}>
+            <MyButton
+              text="Close"
+              onPress={onClosefilter}
+              style={styles.button}
+            />
+            <MyButton
+              text="Clear All"
+              onPress={onCleareAllfilter}
+              style={styles.button}
+            />
+            <MyButton
+              text="Apply"
+              onPress={onApplyfilter}
+              style={styles.button}
+            />
+          </View>
         </View>
-        <ScrollView style={styles.filterViewRightSide} >
-          {selectedCategoriesList.length != 0 && SelectedCategoryList()}
-          <RenderGroupComponent data={data}></RenderGroupComponent>
-        </ScrollView>
-      </View>
-      <View style={styles.closefiltterContainer}>
-        <MyButton
-          text="Close"
-          onPress={onClosefilter}
-          style={styles.button}
-        />
-        <MyButton
-          text="Apply"
-          onPress={onApplyfilter}
-          style={styles.button}
-        />
-      </View>
-    </View>
+      </Modal>
+    </Portal>
   );
 }
+
 const styles = StyleSheet.create({
+  filtercontainer: {
+    flex: 1,
+  },
   mainheader: {
     flexDirection: 'row',
-    marginTop: 25,
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   filterViewMain: {
     flexDirection: 'row',
-    height: '80%',
   },
   filterViewLeftSide: {
     width: '30%',
@@ -220,7 +241,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.red
   },
   button: {
-    marginTop: SIZES.base,
+    marginTop: SIZES.base - 4,
   },
   separatorStyle: {
     borderBottomColor: COLORS.lightGray,
