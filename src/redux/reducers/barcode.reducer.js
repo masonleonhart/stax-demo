@@ -24,9 +24,19 @@ const mostRecentBarcodeScanned = (state = {}, action) => {
   }
 };
 
+const scannedCompanyRanking = (state = {}, action) => {
+  switch (action.type) {
+    case "SET_SCANNED_COMPANY_RANKING":
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 // Combines all of our redcuers to be exported to _root.reducer
 
 export default combineReducers({
   barcodeDetails,
   mostRecentBarcodeScanned,
+  scannedCompanyRanking,
 });

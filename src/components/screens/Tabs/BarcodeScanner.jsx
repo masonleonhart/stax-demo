@@ -52,27 +52,35 @@ export default function BarcodeScanner({ navigation }) {
       dispatch({ type: "SET_MOST_RECENT_SCAN", payload: { type, data } });
 
       try {
-        console.log(accessToken);
-        console.log({ type, data });
         await axios.post(
           `${SERVER_ADDRESS}/api/v1/upc`,
           { data, type },
           { headers: { [AUTH_HEADER]: accessToken } }
         ).then((response) => {
-          console.log(response.data)
           if (response.data.status_code == 200) {
             dispatch({
               type: "SET_BARCODE_DETAILS",
-              payload: response.data.data,
+              payload: response.data.barcode_result.data,
+            });
+
+            dispatch({
+              type: "SET_SCANNED_COMPANY_RANKING",
+              payload: response.data.company_obj.scanned_company_ranking,
             });
             navigation.navigate("CompanyProfile");
           }
           else if (response.data.status_code == 400) {
-            dispatch({ type: "RESET_BARCODE_DETAILS" });
+            dispatch({
+              type: "SET_SCANNED_COMPANY_RANKING",
+              payload: {},
+            });
             navigation.navigate("NewProductForm");
           }
           else {
-            dispatch({ type: "RESET_BARCODE_DETAILS" });
+            dispatch({
+              type: "SET_SCANNED_COMPANY_RANKING",
+              payload: {},
+            });
             navigation.navigate("Scanner");
           }
 
