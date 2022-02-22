@@ -12,6 +12,8 @@ import MyButton from "../../reusedComponents/MyButton";
 import fonts from "../../reusedComponents/fonts";
 import SharedStyles from "../../reusedComponents/SharedStyles";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
+import HeaderComponent from "../../reusedComponents/HeaderComponent";
+import { COLORS } from "../../../constants/theme";
 
 export default function Landing({ navigation }) {
   const isFocused = useIsFocused();
@@ -39,15 +41,6 @@ export default function Landing({ navigation }) {
   // https://reactjs.org/docs/hooks-reference.html#usememo
 
   const styles = StyleSheet.create({
-    landingHeader: {
-      backgroundColor: myTheme.colors.red,
-      height: deviceHeight * 0.25,
-      paddingHorizontal: "5%",
-      marginBottom: "2.5%",
-    },
-    headerTextContainer: {
-      marginTop: "5%",
-    },
     headerWelcomeText: {
       color: "white",
       fontSize: 30,
@@ -58,20 +51,6 @@ export default function Landing({ navigation }) {
       color: "white",
       fontSize: 40,
       fontFamily: fonts.regular,
-    },
-    userImage: {
-      height: deviceHeight * 0.125,
-      width: deviceHeight * 0.125,
-      marginTop: "5%",
-      borderRadius: 100,
-      backgroundColor: "white",
-      justifyContent: "center",
-      alignItems: "center",
-    },
-    userInitials: {
-      fontFamily: fonts.bold,
-      fontSize: 40,
-      color: "#404040",
     },
     valuesWrapper: {
       borderBottomColor: myTheme.colors.grey,
@@ -130,19 +109,13 @@ export default function Landing({ navigation }) {
 
   return (
     <ScrollView>
-      <View style={[SharedStyles.flexRow, styles.landingHeader]}>
-        <View style={styles.headerTextContainer}>
-          <Text style={styles.headerWelcomeText}>Welcome back</Text>
-          <Text style={styles.headerNameText}>{userInfo.first_name}</Text>
-        </View>
-        <View style={styles.userImage}>
-          <Text style={styles.userInitials}>
-            {userInfo.first_name[0]}
-            {userInfo.last_name[0]}
-          </Text>
-        </View>
-      </View>
-
+      <HeaderComponent
+        mainTitle="Welcome back"
+        subTitle={userInfo?.first_name}
+        mainTitleStyle={styles.headerWelcomeText}
+        subTitleStyle={styles.headerNameText}
+        backgroundColor={COLORS.red}
+      />
       <View style={[SharedStyles.container]}>
         <View style={styles.valuesWrapper}>
           <View style={SharedStyles.flexRow}>

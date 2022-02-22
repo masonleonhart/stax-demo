@@ -156,7 +156,12 @@ export default function ValuesPairWiseMatching({ route, navigation }) {
               source={{ uri: values[valuesIndex].image_url }}
               style={styles.imageBackground}
             >
-              <View style={[styles.scrim, values[valuesIndex].scrim]}>
+              <View
+                style={[
+                  styles.scrim,
+                  { backgroundColor: values[valuesIndex].scrim },
+                ]}
+              >
                 <Text
                   style={[
                     styles.valueNameText,

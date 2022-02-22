@@ -1,8 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 
-import { View, ScrollView, StyleSheet, Dimensions, Image } from "react-native";
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  Dimensions,
+  Image,
+  Alert,
+} from "react-native";
 import { Text, IconButton, ProgressBar, useTheme } from "react-native-paper";
 
 import MyButton from "../../reusedComponents/MyButton";
@@ -13,7 +20,6 @@ import { MaterialCommunityIcons } from "react-native-vector-icons";
 import fonts from "../../reusedComponents/fonts";
 import SharedStyles from "../../reusedComponents/SharedStyles";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
-import userImage from "../../../../assets/userImage.png";
 import companyImage from "../../../../assets/companyImage.jpeg";
 
 export default function CompanyProfile({ navigation }) {
@@ -22,6 +28,9 @@ export default function CompanyProfile({ navigation }) {
   const windowWidth = Dimensions.get("window").width;
   const deviceHeight = Dimensions.get("window").height;
   const companyDetails = useSelector((store) => store.barcode.barcodeDetails);
+  const companyRanking = useSelector(
+    (store) => store.barcode.scannedCompanyRanking
+  );
   const userValues = useSelector((store) => store.user.userInfo.values);
   const userInfo = useSelector((store) => store.user.userInfo);
   const [isCollapsed1, setIsCollapsed1] = useState(true);
@@ -29,6 +38,35 @@ export default function CompanyProfile({ navigation }) {
   const [isCollapsed3, setIsCollapsed3] = useState(true);
   const [isCollapsed4, setIsCollapsed4] = useState(true);
   const [isCollapsed5, setIsCollapsed5] = useState(true);
+
+  const [overallMatch, setOverallMatch] = useState("Poor");
+
+  const determineMatchType = (zscore) => {
+    if (zscore <= -2) {
+      return "Terrible";
+    } else if (zscore > -2 && zscore <= -1) {
+      return "Poor";
+    } else if (zscore > -1 && zscore < 1) {
+      return "Average";
+    } else if (zscore >= 1 && zscore < 2) {
+      return "Good";
+    } else if (zscore >= 2) {
+      return "Excelent";
+    }
+  };
+
+  useEffect(() => {
+    if ("values_match_score" in companyRanking) {
+      setOverallMatch(determineMatchType(companyRanking.values_match_score));
+    } else {
+      setOverallMatch("Poor");
+
+      Alert.alert(
+        "Error",
+        "Unable to match company to parent, no parent data available."
+      );
+    }
+  }, [isFocused]);
 
   const styles = StyleSheet.create({
     companyHeader: {
@@ -104,13 +142,18 @@ export default function CompanyProfile({ navigation }) {
       fontFamily: fonts.bold,
       color: myTheme.colors.blue,
     },
+    wipText: {
+      textAlign: "center",
+      fontFamily: fonts.regular,
+      color: myTheme.colors.grey
+    },
     collapsedText: {
       fontSize: 16,
       flexWrap: "wrap",
       fontFamily: fonts.regular,
     },
     myButton: {
-      marginBottom: "10%",
+      marginBottom: "0.2%",
     },
     myButtonLabel: {
       color: myTheme.colors.grey,
@@ -134,8 +177,8 @@ export default function CompanyProfile({ navigation }) {
           />
           <View style={styles.userImage}>
             <Text style={styles.userInitials}>
-              {userInfo.first_name[0]}
-              {userInfo.last_name[0]}
+              {userInfo?.first_name[0]}
+              {userInfo?.last_name[0]}
             </Text>
           </View>
         </View>
@@ -143,10 +186,10 @@ export default function CompanyProfile({ navigation }) {
           {companyDetails.manufacturer
             ? companyDetails.manufacturer
             : companyDetails.brand
-            ? companyDetails.brand
-            : companyDetails.title
-            ? companyDetails.title
-            : "Company Profile"}
+              ? companyDetails.brand
+              : companyDetails.title
+                ? companyDetails.title
+                : "Company Profile"}
         </Text>
       </View>
 
@@ -155,17 +198,19 @@ export default function CompanyProfile({ navigation }) {
           <Text style={styles.sectionHeaderText}>Match to My Values</Text>
           <View style={[SharedStyles.flexRow, styles.overallMatchWrapper]}>
             <Text style={styles.overallMatch}>Overall Match:</Text>
-            <Text style={styles.matchValue}>Poor</Text>
+            <Text style={styles.matchValue}>{overallMatch}</Text>
           </View>
+
+          <Text style={styles.wipText}>(More defined match score is WIP)</Text>
 
           <View style={SharedStyles.flexRow}>
             <View style={SharedStyles.flexRow}>
               <MaterialCommunityIcons
-                name={userValues[0].icon_name}
+                name={userValues[0]?.icon_name}
                 color={myTheme.colors.blue}
                 size={30}
               />
-              <Text style={styles.sectionText}>{userValues[0].name}</Text>
+              <Text style={styles.sectionText}>{userValues[0]?.name}</Text>
             </View>
             <IconButton
               icon={isCollapsed1 ? "chevron-down" : "chevron-up"}
@@ -175,9 +220,10 @@ export default function CompanyProfile({ navigation }) {
             />
           </View>
           <View style={[SharedStyles.flexRow, { marginBottom: "5%" }]}>
-            <Text style={styles.progressText}>20%</Text>
+            <Text style={styles.progressText}>{companyRanking?.care_for_workers_1 != "Not found" ?
+              parseFloat(companyRanking?.care_for_workers_1) * 100 + '%' : "NA"}</Text>
             <ProgressBar
-              progress={0.2}
+              progress={companyRanking?.care_for_workers_1 != "Not found" ? parseFloat(companyRanking?.care_for_workers_1) : 0}
               color={myTheme.colors.grey}
               style={styles.progressBar}
             />
@@ -207,9 +253,10 @@ export default function CompanyProfile({ navigation }) {
             />
           </View>
           <View style={[SharedStyles.flexRow, { marginBottom: "5%" }]}>
-            <Text style={styles.progressText}>15%</Text>
+            <Text style={styles.progressText}>{companyRanking?.business_ethics_1 != "Not found" ?
+              parseFloat(companyRanking?.business_ethics_1) * 100 + '%' : "NA"}</Text>
             <ProgressBar
-              progress={0.15}
+              progress={companyRanking?.business_ethics_1 != "Not found" ? parseFloat(companyRanking?.business_ethics_1) : 0}
               color={myTheme.colors.grey}
               style={styles.progressBar}
             />
@@ -239,9 +286,10 @@ export default function CompanyProfile({ navigation }) {
             />
           </View>
           <View style={[SharedStyles.flexRow, { marginBottom: "5%" }]}>
-            <Text style={styles.progressText}>25%</Text>
+            <Text style={styles.progressText}>{companyRanking?.waste_1 != "Not found" ?
+              parseFloat(companyRanking?.waste_1) * 10 + '%' : "NA"}</Text>
             <ProgressBar
-              progress={0.25}
+              progress={companyRanking?.waste_1 != "Not found" ? parseFloat(companyRanking?.waste_1) / 10 : 0}
               color={myTheme.colors.grey}
               style={styles.progressBar}
             />
@@ -271,9 +319,10 @@ export default function CompanyProfile({ navigation }) {
             />
           </View>
           <View style={[SharedStyles.flexRow, { marginBottom: "5%" }]}>
-            <Text style={styles.progressText}>10%</Text>
+            <Text style={styles.progressText}>{companyRanking?.human_rights_1 != "Not found" ?
+              parseFloat(companyRanking?.human_rights_1) * 10 + '%' : "NA"}</Text>
             <ProgressBar
-              progress={0.1}
+              progress={companyRanking?.human_rights_1 != "Not found" ? parseFloat(companyRanking?.human_rights_1) / 10 : 0}
               color={myTheme.colors.grey}
               style={styles.progressBar}
             />
@@ -303,9 +352,10 @@ export default function CompanyProfile({ navigation }) {
             />
           </View>
           <View style={[SharedStyles.flexRow, { marginBottom: "5%" }]}>
-            <Text style={styles.progressText}>30%</Text>
+            <Text style={styles.progressText}>{companyRanking?.diversity_1 != "Not found" ?
+              parseFloat(companyRanking?.diversity_1) + '%' : "NA"}</Text>
             <ProgressBar
-              progress={0.3}
+              progress={companyRanking?.diversity_1 != "Not found" ? parseFloat(companyRanking?.diversity_1) / 100 : 0}
               color={myTheme.colors.grey}
               style={styles.progressBar}
             />
@@ -324,6 +374,12 @@ export default function CompanyProfile({ navigation }) {
             style={styles.myButton}
             labelStyle={styles.myButtonLabel}
             buttonColor={"#e3e3e3"}
+          />
+          <MyButton
+            onPress={() => navigation.navigate("ReportProductForm", { name: "report" })}
+            text="Report This Product"
+            labelStyle={styles.myButtonLabel}
+            buttonColor={myTheme.colors.red}
           />
         </View>
       </View>
