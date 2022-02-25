@@ -11,6 +11,7 @@ import SharedStyles from "../../reusedComponents/SharedStyles";
 import MyButton from "../../reusedComponents/MyButton";
 import NewProductModal from "../../modals/NewProductModal";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
+import fonts from "../../reusedComponents/fonts";
 
 export default function NoScanReturn(props) {
   const myTheme = useTheme();
@@ -31,7 +32,7 @@ export default function NoScanReturn(props) {
     title: "",
     price: "",
     store: "",
-    flag: "Created"
+    flag: "Created",
   });
 
   const [formStore, setFormStore] = useState({
@@ -66,13 +67,7 @@ export default function NoScanReturn(props) {
   // Function to disable button or not based on if form fields are filled out with the price field foramtted
 
   useEffect(() => {
-    if (
-      formDetails.store &&
-      formDetails.title &&
-      formStore.price &&
-      formStore.price.includes(".") &&
-      formStore.price.indexOf(".") + 3 === formStore.price.length
-    ) {
+    if (formDetails.title && formDetails.manufacturer) {
       setIsButtonDisabled(false);
     } else {
       setIsButtonDisabled(true);
@@ -84,15 +79,21 @@ export default function NoScanReturn(props) {
   const submitButtonPress = async () => {
     setIsDialogVisible(true);
     try {
-      await axios.post(`${SERVER_ADDRESS}/api/v1/new_upc`, {
-        ...formDetails,
-        ...formStore
-      }, { headers: { [AUTH_HEADER]: accessToken } }
-      ).then((res) => {
-        console.log(res);
-      }).catch((err) => {
-        console.log(err);
-      });
+      await axios
+        .post(
+          `${SERVER_ADDRESS}/api/v1/new_upc`,
+          {
+            ...formDetails,
+            ...formStore,
+          },
+          { headers: { [AUTH_HEADER]: accessToken } }
+        )
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
 
       await setUpcPostStatus(true);
     } catch (error) {
@@ -118,6 +119,7 @@ export default function NoScanReturn(props) {
       fontSize: 18,
       lineHeight: 27,
       textAlign: "center",
+      fontFamily: fonts.regular
     },
     textInput: {
       backgroundColor: "transparent",
@@ -163,16 +165,6 @@ export default function NoScanReturn(props) {
       />
 
       <TextInput
-        onChangeText={(text) => setFormDetails({ ...formDetails, title: text })}
-        value={formDetails.title}
-        autoCapitalize="words"
-        label="What is the product name?"
-        left={<TextInput.Icon name="new-box" color={myTheme.colors.green} />}
-        theme={inputTheme}
-        style={styles.textInput}
-      />
-
-      <TextInput
         onChangeText={(text) =>
           setFormDetails({ ...formDetails, manufacturer: text })
         }
@@ -185,11 +177,21 @@ export default function NoScanReturn(props) {
       />
 
       <TextInput
+        onChangeText={(text) => setFormDetails({ ...formDetails, title: text })}
+        value={formDetails.title}
+        autoCapitalize="words"
+        label="What is the product name?"
+        left={<TextInput.Icon name="new-box" color={myTheme.colors.green} />}
+        theme={inputTheme}
+        style={styles.textInput}
+      />
+
+      <TextInput
         onChangeText={(text) => setFormStore({ price: text })}
         onFocus={onPriceFocus}
         onBlur={onPriceBlur}
         value={formStore.price}
-        label="What is the product price?"
+        label="What is the price of the product?"
         keyboardType="numeric"
         left={
           <TextInput.Icon name="currency-usd" color={myTheme.colors.green} />

@@ -39,6 +39,13 @@ export default function BarcodeScanner({ navigation }) {
     setIsDialogVisible(false);
   }, [isFocused]);
 
+  useEffect(() => {
+    handleBarCodeScanned({
+      "data": "022000116734",
+      "type": "org.gs1.EAN-13"
+    })
+  }, [])
+
   // Function to call on scan of barcode
   // Checks to make sure the barcode is of type UPC-A / UPC-E, if so, save the barcode data and type
   // in a reducer, send the type and data to the api and navigate to company profile if successful return,
@@ -52,45 +59,43 @@ export default function BarcodeScanner({ navigation }) {
       dispatch({ type: "SET_MOST_RECENT_SCAN", payload: { type, data } });
 
       try {
-        await axios.post(
-          `${SERVER_ADDRESS}/api/v1/upc`,
-          { data, type },
-          { headers: { [AUTH_HEADER]: accessToken } }
-        ).then((response) => {
-          if (response.data.status_code == 200) {
-            dispatch({
-              type: "SET_BARCODE_DETAILS",
-              payload: response.data.barcode_result.data,
-            });
+        await axios
+          .post(
+            `${SERVER_ADDRESS}/api/v1/upc`,
+            { data, type },
+            { headers: { [AUTH_HEADER]: accessToken } }
+          )
+          .then((response) => {
+            if (response.status === 200) {
+              dispatch({
+                type: "SET_BARCODE_DETAILS",
+                payload: response.data.barcode_result.data,
+              });
 
-            dispatch({
-              type: "SET_SCANNED_COMPANY_RANKING",
-              payload: response.data.company_obj.scanned_company_ranking,
-            });
-            navigation.navigate("CompanyProfile");
-          }
-          else if (response.data.status_code == 400) {
-            dispatch({
-              type: "SET_SCANNED_COMPANY_RANKING",
-              payload: {},
-            });
+              dispatch({
+                type: "SET_SCANNED_COMPANY_RANKING",
+                payload: response.data.company_obj.scanned_company_ranking,
+              });
+              navigation.navigate("CompanyProfile");
+            } else if (response.status === 400) {
+              dispatch({
+                type: "SET_SCANNED_COMPANY_RANKING",
+                payload: {},
+              });
+              navigation.navigate("NewProductForm");
+            } else {
+              dispatch({
+                type: "SET_SCANNED_COMPANY_RANKING",
+                payload: {},
+              });
+              navigation.navigate("Scanner");
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            dispatch({ type: "RESET_BARCODE_DETAILS" });
             navigation.navigate("NewProductForm");
-          }
-          else {
-            dispatch({
-              type: "SET_SCANNED_COMPANY_RANKING",
-              payload: {},
-            });
-            navigation.navigate("Scanner");
-          }
-
-        }).catch((err) => {
-          console.log(err);
-          dispatch({ type: "RESET_BARCODE_DETAILS" });
-          navigation.navigate("NewProductForm");
-
-        });
-
+          });
       } catch (error) {
         console.log(error);
         dispatch({ type: "RESET_BARCODE_DETAILS" });
