@@ -98,7 +98,7 @@ export default function Values({ navigation }) {
       marginBottom: "5%",
     },
     valueCardName: {
-      fontSize: 20,
+      fontSize: 18,
       fontFamily: fonts.bold,
       width: "80%",
     },
