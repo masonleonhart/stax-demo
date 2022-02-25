@@ -12,6 +12,7 @@ import {
 } from "react-native-paper";
 
 import MyButton from "../reusedComponents/MyButton";
+import fonts from "../reusedComponents/fonts";
 
 export default function NewProductModal({
   isDialogVisible,
@@ -70,8 +71,9 @@ export default function NewProductModal({
     },
     successText: {
       fontSize: 25,
-      fontWeight: "600",
       textAlign: "center",
+      fontFamily: fonts.bold,
+      color: myTheme.colors.grey
     },
     button: {
       marginTop: "0%",
@@ -95,7 +97,7 @@ export default function NewProductModal({
             </Text>
           ) : upcPostStatus === false ? (
               <Text style={styles.successText}>
-                {isReportOrAdd ? 'Error in adding reporting product, please try again.' : 'Error in adding new product, please try again.'}
+                {isReportOrAdd ? 'Error in reporting product, please try again.' : 'Error in adding new product, please try again.'}
             </Text>
           ) : (
             <ActivityIndicator size={100} color={myTheme.colors.red} />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 
@@ -27,23 +27,20 @@ export default function CompanyProfile({ navigation }) {
   const myTheme = useTheme();
   const windowWidth = Dimensions.get("window").width;
   const deviceHeight = Dimensions.get("window").height;
-  const companyDetails = useSelector((store) => store.barcode.barcodeDetails);
+  const barcodeDetails = useSelector((store) => store.barcode.barcodeDetails);
   const companyRanking = useSelector(
     (store) => store.barcode.scannedCompanyRanking
   );
   const userValues = useSelector((store) => store.user.userInfo.values);
   const userInfo = useSelector((store) => store.user.userInfo);
-  const [isCollapsed1, setIsCollapsed1] = useState(true);
-  const [isCollapsed2, setIsCollapsed2] = useState(true);
-  const [isCollapsed3, setIsCollapsed3] = useState(true);
-  const [isCollapsed4, setIsCollapsed4] = useState(true);
-  const [isCollapsed5, setIsCollapsed5] = useState(true);
-
   const [overallMatch, setOverallMatch] = useState("Poor");
+  const [valueMatchList, setValueMatchList] = useState([]);
+
+  const renderedValuesParent = useRef(null);
 
   const determineMatchType = (zscore) => {
     if (zscore <= -2) {
-      return "Terrible";
+      return "Bad";
     } else if (zscore > -2 && zscore <= -1) {
       return "Poor";
     } else if (zscore > -1 && zscore < 1) {
@@ -55,18 +52,68 @@ export default function CompanyProfile({ navigation }) {
     }
   };
 
+  const matchValuesToMStarData = (userValues) => {
+    let listOfValues = [];
+
+    for (const value of userValues) {
+      let valueModified = value.name.toLowerCase().split(" ").join("_");
+
+      if (valueModified.includes("reduced_waste")) {
+        valueModified = "waste";
+      } else if (valueModified.includes("respect_to_human_rights")) {
+        valueModified = "human_rights";
+      } else if (valueModified.includes("diverse_leadership")) {
+        valueModified = "diversity";
+      } else if (valueModified.includes("efficient_water_use")) {
+        valueModified = "water";
+      } else if (valueModified.includes("low_carbon_footprint")) {
+        valueModified = "carbon_intensity";
+      }
+
+      const valueZscore = companyRanking[`${valueModified}_zscore`];
+
+      const matchScore =
+        valueZscore !== "nan" ? determineMatchType(valueZscore) : "No Data";
+
+      listOfValues.push({ ...value, matchScore });
+    }
+
+    setValueMatchList(listOfValues);
+  };
+
   useEffect(() => {
     if ("values_match_score" in companyRanking) {
+      matchValuesToMStarData(userValues);
+
       setOverallMatch(determineMatchType(companyRanking.values_match_score));
     } else {
       setOverallMatch("Poor");
+
+      setValueMatchList(userValues);
 
       Alert.alert(
         "Error",
         "Unable to match company to parent, no parent data available."
       );
     }
-  }, [isFocused]);
+  }, []);
+
+  const RenderValue = ({ value }) => (
+    <View style={styles.valueWrapper}>
+      <View style={styles.valueNameWrapper}>
+        <MaterialCommunityIcons
+          name={value.icon_name}
+          color={myTheme.colors.blue}
+          size={30}
+        />
+        <Text style={styles.valueName}>{value.name}</Text>
+      </View>
+      <View style={[SharedStyles.flexRow, { marginBottom: "5%" }]}>
+        <Text style={styles.overallMatch}>Match to Value:</Text>
+        <Text style={styles.matchValue}>{value.matchScore}</Text>
+      </View>
+    </View>
+  );
 
   const styles = StyleSheet.create({
     companyHeader: {
@@ -81,14 +128,14 @@ export default function CompanyProfile({ navigation }) {
       justifyContent: "center",
     },
     companyImage: {
-      height: deviceHeight * 0.125,
-      width: deviceHeight * 0.125,
+      height: deviceHeight * 0.1,
+      width: deviceHeight * 0.1,
       borderRadius: 100,
       left: 20,
     },
     userImage: {
-      height: deviceHeight * 0.125,
-      width: deviceHeight * 0.125,
+      height: deviceHeight * 0.1,
+      width: deviceHeight * 0.1,
       borderRadius: 100,
       backgroundColor: "white",
       justifyContent: "center",
@@ -101,10 +148,16 @@ export default function CompanyProfile({ navigation }) {
     },
     comapnyName: {
       color: "white",
+      fontSize: 20,
+      fontFamily: fonts.regular,
+      textAlign: "center",
+      marginTop: "2.5%",
+    },
+    parentName: {
+      color: "white",
       fontSize: 24,
       fontFamily: fonts.bold,
       textAlign: "center",
-      marginTop: "2.5%",
     },
     sectionWrapper: {
       borderBottomColor: myTheme.colors.grey,
@@ -117,25 +170,29 @@ export default function CompanyProfile({ navigation }) {
       fontFamily: fonts.bold,
       marginBottom: "5%",
     },
-    sectionText: {
-      fontSize: 18,
-      marginVertical: "5%",
-      marginLeft: "5%",
-      fontFamily: fonts.bold,
-    },
-    progressText: {
-      fontSize: 16,
-      fontFamily: fonts.medium,
-    },
-    progressBar: {
-      width: windowWidth * 0.7,
-    },
     overallMatchWrapper: {
       marginVertical: "5%",
+      borderBottomColor: myTheme.colors.lightGrey,
+      borderBottomWidth: 1,
+      paddingBottom: "5%",
     },
     overallMatch: {
       fontSize: 18,
       fontFamily: fonts.medium,
+    },
+    valueWrapper: {
+      borderBottomColor: myTheme.colors.lightGrey,
+      borderBottomWidth: 1,
+    },
+    valueNameWrapper: {
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    valueName: {
+      fontSize: 18,
+      marginVertical: "5%",
+      marginLeft: "5%",
+      fontFamily: fonts.bold,
     },
     matchValue: {
       fontSize: 18,
@@ -145,18 +202,20 @@ export default function CompanyProfile({ navigation }) {
     wipText: {
       textAlign: "center",
       fontFamily: fonts.regular,
-      color: myTheme.colors.grey
-    },
-    collapsedText: {
-      fontSize: 16,
-      flexWrap: "wrap",
-      fontFamily: fonts.regular,
-    },
-    myButton: {
-      marginBottom: "0.2%",
-    },
-    myButtonLabel: {
       color: myTheme.colors.grey,
+    },
+    missingValuesText: {
+      marginVertical: "5%",
+      fontFamily: fonts.regular,
+      textAlign: "center",
+      color: myTheme.colors.grey,
+    },
+    discoverButtonLabel: {
+      color: myTheme.colors.grey,
+    },
+    discoverButton: {
+      marginTop: "0%",
+      marginBottom: "0%",
     },
   });
 
@@ -183,14 +242,17 @@ export default function CompanyProfile({ navigation }) {
           </View>
         </View>
         <Text style={styles.comapnyName}>
-          {companyDetails.manufacturer
-            ? companyDetails.manufacturer
-            : companyDetails.brand
-              ? companyDetails.brand
-              : companyDetails.title
-                ? companyDetails.title
-                : "Company Profile"}
+          {barcodeDetails.manufacturer
+            ? barcodeDetails.manufacturer
+            : barcodeDetails.brand
+            ? barcodeDetails.brand
+            : barcodeDetails.title
+            ? barcodeDetails.title
+            : "Company Profile"}
         </Text>
+        {"name" in companyRanking && (
+          <Text style={styles.parentName}>Owned By: {companyRanking.name}</Text>
+        )}
       </View>
 
       <View style={SharedStyles.container}>
@@ -203,185 +265,40 @@ export default function CompanyProfile({ navigation }) {
 
           <Text style={styles.wipText}>(More defined match score is WIP)</Text>
 
-          <View style={SharedStyles.flexRow}>
-            <View style={SharedStyles.flexRow}>
-              <MaterialCommunityIcons
-                name={userValues[0]?.icon_name}
-                color={myTheme.colors.blue}
-                size={30}
-              />
-              <Text style={styles.sectionText}>{userValues[0]?.name}</Text>
-            </View>
-            <IconButton
-              icon={isCollapsed1 ? "chevron-down" : "chevron-up"}
-              size={30}
-              color={myTheme.colors.grey}
-              onPress={() => setIsCollapsed1(!isCollapsed1)}
-            />
+          <View ref={renderedValuesParent}>
+            {valueMatchList.map((value) => {
+              if (value.matchScore !== "No Data") {
+                return <RenderValue key={value.id} value={value} />;
+              }
+            })}
           </View>
-          <View style={[SharedStyles.flexRow, { marginBottom: "5%" }]}>
-            <Text style={styles.progressText}>{companyRanking?.care_for_workers_1 != "Not found" ?
-              parseFloat(companyRanking?.care_for_workers_1) * 100 + '%' : "NA"}</Text>
-            <ProgressBar
-              progress={companyRanking?.care_for_workers_1 != "Not found" ? parseFloat(companyRanking?.care_for_workers_1) : 0}
-              color={myTheme.colors.grey}
-              style={styles.progressBar}
-            />
-          </View>
-          <Collapsible collapsed={isCollapsed1} style={styles.collapsible}>
-            <Text style={styles.collapsedText}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis
-              tempor vitae justo ac molestie. Suspendisse eu arcu metus. Lorem
-              ipsum.
-            </Text>
-          </Collapsible>
 
-          <View style={SharedStyles.flexRow}>
-            <View style={SharedStyles.flexRow}>
-              <MaterialCommunityIcons
-                name={userValues[1].icon_name}
-                color={myTheme.colors.blue}
-                size={30}
-              />
-              <Text style={styles.sectionText}>{userValues[1].name}</Text>
-            </View>
-            <IconButton
-              icon={isCollapsed2 ? "chevron-down" : "chevron-up"}
-              size={30}
-              color={myTheme.colors.grey}
-              onPress={() => setIsCollapsed2(!isCollapsed2)}
-            />
-          </View>
-          <View style={[SharedStyles.flexRow, { marginBottom: "5%" }]}>
-            <Text style={styles.progressText}>{companyRanking?.business_ethics_1 != "Not found" ?
-              parseFloat(companyRanking?.business_ethics_1) * 100 + '%' : "NA"}</Text>
-            <ProgressBar
-              progress={companyRanking?.business_ethics_1 != "Not found" ? parseFloat(companyRanking?.business_ethics_1) : 0}
-              color={myTheme.colors.grey}
-              style={styles.progressBar}
-            />
-          </View>
-          <Collapsible collapsed={isCollapsed2} style={styles.collapsible}>
-            <Text style={styles.collapsedText}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis
-              tempor vitae justo ac molestie. Suspendisse eu arcu metus. Lorem
-              ipsum.
-            </Text>
-          </Collapsible>
-
-          <View style={SharedStyles.flexRow}>
-            <View style={SharedStyles.flexRow}>
-              <MaterialCommunityIcons
-                name={userValues[2].icon_name}
-                color={myTheme.colors.blue}
-                size={30}
-              />
-              <Text style={styles.sectionText}>{userValues[2].name}</Text>
-            </View>
-            <IconButton
-              icon={isCollapsed3 ? "chevron-down" : "chevron-up"}
-              size={30}
-              color={myTheme.colors.grey}
-              onPress={() => setIsCollapsed3(!isCollapsed3)}
-            />
-          </View>
-          <View style={[SharedStyles.flexRow, { marginBottom: "5%" }]}>
-            <Text style={styles.progressText}>{companyRanking?.waste_1 != "Not found" ?
-              parseFloat(companyRanking?.waste_1) * 10 + '%' : "NA"}</Text>
-            <ProgressBar
-              progress={companyRanking?.waste_1 != "Not found" ? parseFloat(companyRanking?.waste_1) / 10 : 0}
-              color={myTheme.colors.grey}
-              style={styles.progressBar}
-            />
-          </View>
-          <Collapsible collapsed={isCollapsed3} style={styles.collapsible}>
-            <Text style={styles.collapsedText}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis
-              tempor vitae justo ac molestie. Suspendisse eu arcu metus. Lorem
-              ipsum.
-            </Text>
-          </Collapsible>
-
-          <View style={SharedStyles.flexRow}>
-            <View style={SharedStyles.flexRow}>
-              <MaterialCommunityIcons
-                name={userValues[3].icon_name}
-                color={myTheme.colors.blue}
-                size={30}
-              />
-              <Text style={styles.sectionText}>{userValues[3].name}</Text>
-            </View>
-            <IconButton
-              icon={isCollapsed4 ? "chevron-down" : "chevron-up"}
-              size={30}
-              color={myTheme.colors.grey}
-              onPress={() => setIsCollapsed4(!isCollapsed4)}
-            />
-          </View>
-          <View style={[SharedStyles.flexRow, { marginBottom: "5%" }]}>
-            <Text style={styles.progressText}>{companyRanking?.human_rights_1 != "Not found" ?
-              parseFloat(companyRanking?.human_rights_1) * 10 + '%' : "NA"}</Text>
-            <ProgressBar
-              progress={companyRanking?.human_rights_1 != "Not found" ? parseFloat(companyRanking?.human_rights_1) / 10 : 0}
-              color={myTheme.colors.grey}
-              style={styles.progressBar}
-            />
-          </View>
-          <Collapsible collapsed={isCollapsed4} style={styles.collapsible}>
-            <Text style={styles.collapsedText}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis
-              tempor vitae justo ac molestie. Suspendisse eu arcu metus. Lorem
-              ipsum.
-            </Text>
-          </Collapsible>
-
-          <View style={SharedStyles.flexRow}>
-            <View style={SharedStyles.flexRow}>
-              <MaterialCommunityIcons
-                name={userValues[4].icon_name}
-                color={myTheme.colors.blue}
-                size={30}
-              />
-              <Text style={styles.sectionText}>{userValues[4].name}</Text>
-            </View>
-            <IconButton
-              icon={isCollapsed5 ? "chevron-down" : "chevron-up"}
-              size={30}
-              color={myTheme.colors.grey}
-              onPress={() => setIsCollapsed5(!isCollapsed5)}
-            />
-          </View>
-          <View style={[SharedStyles.flexRow, { marginBottom: "5%" }]}>
-            <Text style={styles.progressText}>{companyRanking?.diversity_1 != "Not found" ?
-              parseFloat(companyRanking?.diversity_1) + '%' : "NA"}</Text>
-            <ProgressBar
-              progress={companyRanking?.diversity_1 != "Not found" ? parseFloat(companyRanking?.diversity_1) / 100 : 0}
-              color={myTheme.colors.grey}
-              style={styles.progressBar}
-            />
-          </View>
-          <Collapsible collapsed={isCollapsed5} style={styles.collapsible}>
-            <Text style={styles.collapsedText}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis
-              tempor vitae justo ac molestie. Suspendisse eu arcu metus. Lorem
-              ipsum.
-            </Text>
-          </Collapsible>
-
-          <MyButton
-            disabled={true}
-            text="Discover Better Aligned Companies (WIP)"
-            style={styles.myButton}
-            labelStyle={styles.myButtonLabel}
-            buttonColor={"#e3e3e3"}
-          />
-          <MyButton
-            onPress={() => navigation.navigate("ReportProductForm", { name: "report" })}
-            text="Report This Product"
-            labelStyle={styles.myButtonLabel}
-            buttonColor={myTheme.colors.red}
-          />
+          {renderedValuesParent.current !== null &&
+            renderedValuesParent.current["_children"].length !==
+              userValues.length && (
+              <Text style={styles.missingValuesText}>
+                Not seeing all of the data you were expecting? Not all companies
+                reports every metric. Any missing value is due to there being no
+                data available.
+              </Text>
+            )}
         </View>
+
+        <MyButton
+          disabled={true}
+          text="Discover Better Aligned Companies (WIP)"
+          style={styles.discoverButton}
+          labelStyle={styles.discoverButtonLabel}
+          buttonColor={"#e3e3e3"}
+        />
+
+        <MyButton
+          onPress={() =>
+            navigation.navigate("ReportProductForm", { name: "report" })
+          }
+          text="Report This Product"
+          buttonColor={myTheme.colors.red}
+        />
       </View>
     </ScrollView>
   );

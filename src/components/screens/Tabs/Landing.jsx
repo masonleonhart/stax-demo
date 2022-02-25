@@ -68,7 +68,7 @@ export default function Landing({ navigation }) {
       alignItems: "center",
       marginTop: "5%",
       flex: 1,
-      borderBottomColor: "#e3e3e3",
+      borderBottomColor: myTheme.colors.lightGrey,
       borderBottomWidth: 1,
       paddingBottom: "5%",
     },

@@ -1,5 +1,5 @@
 import React from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createStackNavigator } from "@react-navigation/stack";
 
 import { useSelector } from "react-redux";
 
@@ -16,7 +16,7 @@ import NewProductForm from "../screens/topStack/NewProductForm";
 import ReportProductForm from "../screens/topStack/ReportProductForm";
 
 export default function TopStack() {
-  const Stack = createNativeStackNavigator();
+  const Stack = createStackNavigator();
   const myTheme = useTheme();
   const companyDetails = useSelector((store) => store.barcode.barcodeDetails);
 
