@@ -91,6 +91,6 @@ const myTheme = {
     cream: "#ede0cf",
     green: "#3c5b46",
     grey: "#1c1939",
-    lightGrey: "#f9f9fb",
+    lightGrey: "#e3e3e3",
   },
 };

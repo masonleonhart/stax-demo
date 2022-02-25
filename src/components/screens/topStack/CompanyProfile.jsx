@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 
@@ -33,19 +33,14 @@ export default function CompanyProfile({ navigation }) {
   );
   const userValues = useSelector((store) => store.user.userInfo.values);
   const userInfo = useSelector((store) => store.user.userInfo);
-  const [isCollapsed1, setIsCollapsed1] = useState(true);
-  const [isCollapsed2, setIsCollapsed2] = useState(true);
-  const [isCollapsed3, setIsCollapsed3] = useState(true);
-  const [isCollapsed4, setIsCollapsed4] = useState(true);
-  const [isCollapsed5, setIsCollapsed5] = useState(true);
-
   const [overallMatch, setOverallMatch] = useState("Poor");
+  const [valueMatchList, setValueMatchList] = useState([]);
 
-  const [matchToValues, setMatchToValues] = useState([]);
+  const renderedValuesParent = useRef(null);
 
   const determineMatchType = (zscore) => {
     if (zscore <= -2) {
-      return "Terrible";
+      return "Bad";
     } else if (zscore > -2 && zscore <= -1) {
       return "Poor";
     } else if (zscore > -1 && zscore < 1) {
@@ -83,7 +78,7 @@ export default function CompanyProfile({ navigation }) {
       listOfValues.push({ ...value, matchScore });
     }
 
-    setMatchToValues(listOfValues);
+    setValueMatchList(listOfValues);
   };
 
   useEffect(() => {
@@ -94,17 +89,17 @@ export default function CompanyProfile({ navigation }) {
     } else {
       setOverallMatch("Poor");
 
-      setMatchToValues(userValues);
+      setValueMatchList(userValues);
 
       Alert.alert(
         "Error",
         "Unable to match company to parent, no parent data available."
       );
     }
-  }, [isFocused]);
+  }, []);
 
   const RenderValue = ({ value }) => (
-    <>
+    <View style={styles.valueWrapper}>
       <View style={styles.valueNameWrapper}>
         <MaterialCommunityIcons
           name={value.icon_name}
@@ -117,7 +112,7 @@ export default function CompanyProfile({ navigation }) {
         <Text style={styles.overallMatch}>Match to Value:</Text>
         <Text style={styles.matchValue}>{value.matchScore}</Text>
       </View>
-    </>
+    </View>
   );
 
   const styles = StyleSheet.create({
@@ -177,10 +172,17 @@ export default function CompanyProfile({ navigation }) {
     },
     overallMatchWrapper: {
       marginVertical: "5%",
+      borderBottomColor: myTheme.colors.lightGrey,
+      borderBottomWidth: 1,
+      paddingBottom: "5%",
     },
     overallMatch: {
       fontSize: 18,
       fontFamily: fonts.medium,
+    },
+    valueWrapper: {
+      borderBottomColor: myTheme.colors.lightGrey,
+      borderBottomWidth: 1,
     },
     valueNameWrapper: {
       flexDirection: "row",
@@ -202,11 +204,18 @@ export default function CompanyProfile({ navigation }) {
       fontFamily: fonts.regular,
       color: myTheme.colors.grey,
     },
-    myButton: {
-      marginBottom: "0.2%",
+    missingValuesText: {
+      marginVertical: "5%",
+      fontFamily: fonts.regular,
+      textAlign: "center",
+      color: myTheme.colors.grey,
     },
-    myButtonLabel: {
-      color: "black"
+    discoverButtonLabel: {
+      color: myTheme.colors.grey,
+    },
+    discoverButton: {
+      marginTop: "0%",
+      marginBottom: "0%",
     },
   });
 
@@ -256,26 +265,40 @@ export default function CompanyProfile({ navigation }) {
 
           <Text style={styles.wipText}>(More defined match score is WIP)</Text>
 
-          {matchToValues.map((value) => (
-            <RenderValue key={value.id} value={value} />
-          ))}
+          <View ref={renderedValuesParent}>
+            {valueMatchList.map((value) => {
+              if (value.matchScore !== "No Data") {
+                return <RenderValue key={value.id} value={value} />;
+              }
+            })}
+          </View>
 
-          <MyButton
-            disabled={true}
-            text="Discover Better Aligned Companies (WIP)"
-            style={styles.myButton}
-            labelStyle={styles.myButtonLabel}
-            buttonColor={"#e3e3e3"}
-          />
-          <MyButton
-            onPress={() =>
-              navigation.navigate("ReportProductForm", { name: "report" })
-            }
-            text="Report This Product"
-            labelStyle={styles.myButtonLabel}
-            buttonColor={myTheme.colors.red}
-          />
+          {renderedValuesParent.current !== null &&
+            renderedValuesParent.current["_children"].length !==
+              userValues.length && (
+              <Text style={styles.missingValuesText}>
+                Not seeing all of the data you were expecting? Not all companies
+                reports every metric. Any missing value is due to there being no
+                data available.
+              </Text>
+            )}
         </View>
+
+        <MyButton
+          disabled={true}
+          text="Discover Better Aligned Companies (WIP)"
+          style={styles.discoverButton}
+          labelStyle={styles.discoverButtonLabel}
+          buttonColor={"#e3e3e3"}
+        />
+
+        <MyButton
+          onPress={() =>
+            navigation.navigate("ReportProductForm", { name: "report" })
+          }
+          text="Report This Product"
+          buttonColor={myTheme.colors.red}
+        />
       </View>
     </ScrollView>
   );

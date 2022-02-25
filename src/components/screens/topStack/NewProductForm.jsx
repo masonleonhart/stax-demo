@@ -4,8 +4,9 @@ import { useIsFocused } from "@react-navigation/core";
 import axios from "axios";
 import { SERVER_ADDRESS, AUTH_HEADER } from "@env";
 
-import { ScrollView, StyleSheet } from "react-native";
-import { Text, TextInput, useTheme } from "react-native-paper";
+import { StyleSheet } from "react-native";
+import { Text, TextInput, useTheme, configureFonts } from "react-native-paper";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import SharedStyles from "../../reusedComponents/SharedStyles";
 import MyButton from "../../reusedComponents/MyButton";
@@ -79,21 +80,14 @@ export default function NoScanReturn(props) {
   const submitButtonPress = async () => {
     setIsDialogVisible(true);
     try {
-      await axios
-        .post(
-          `${SERVER_ADDRESS}/api/v1/new_upc`,
-          {
-            ...formDetails,
-            ...formStore,
-          },
-          { headers: { [AUTH_HEADER]: accessToken } }
-        )
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      const response = await axios.post(
+        `${SERVER_ADDRESS}/api/v1/add_new_products`,
+        {
+          ...formDetails,
+          ...formStore,
+        },
+        { headers: { [AUTH_HEADER]: accessToken } }
+      );
 
       await setUpcPostStatus(true);
     } catch (error) {
@@ -107,26 +101,42 @@ export default function NoScanReturn(props) {
   // Shared theme for text inputs
   const inputTheme = {
     colors: {
-      primary: myTheme.colors.green,
-      text: myTheme.colors.grey,
-      placeholder: myTheme.colors.grey,
+      primary: myTheme.colors.blue,
+      text: "black",
+      placeholder: "black",
     },
+    fonts: configureFonts({
+      ios: {
+        regular: {
+          fontFamily: fonts.bold,
+        },
+      },
+    }),
   };
 
   const styles = StyleSheet.create({
-    text: {
+    headerText: {
       marginVertical: "5%",
+      fontFamily: fonts.bold,
+      fontSize: 24,
+      color: myTheme.colors.grey,
+    },
+    text: {
       fontSize: 18,
-      lineHeight: 27,
-      textAlign: "center",
-      fontFamily: fonts.regular
+      fontFamily: fonts.regular,
+      color: myTheme.colors.grey,
     },
     textInput: {
       backgroundColor: "transparent",
       marginTop: "5%",
     },
+    requiredText: {
+      marginVertical: "5%",
+      fontFamily: fonts.regular,
+      color: myTheme.colors.grey,
+    },
     button: {
-      marginTop: "15%",
+      marginTop: "0%",
     },
   });
 
@@ -137,7 +147,7 @@ export default function NoScanReturn(props) {
   }
 
   return (
-    <ScrollView
+    <KeyboardAwareScrollView
       style={SharedStyles.container}
       keyboardShouldPersistTaps="handled"
     >
@@ -147,6 +157,8 @@ export default function NoScanReturn(props) {
         setIsDialogVisible={setIsDialogVisible}
         upcPostStatus={upcPostStatus}
       />
+
+      <Text style={styles.headerText}>New Product</Text>
 
       <Text style={styles.text}>
         Congratulations, you found a product that we have not yet indexed!
@@ -159,19 +171,19 @@ export default function NoScanReturn(props) {
         value={formDetails.store}
         autoCapitalize="words"
         label="What store are you in?"
-        left={<TextInput.Icon name="cart" color={myTheme.colors.green} />}
+        left={<TextInput.Icon name="cart" color={myTheme.colors.blue} />}
         theme={inputTheme}
         style={styles.textInput}
       />
 
       <TextInput
         onChangeText={(text) =>
-          setFormDetails({ ...formDetails, manufacturer: text })
+          setFormDetails({ ...formDetails, manufacturer: text, brand: text })
         }
         value={formDetails.manufacturer}
         autoCapitalize="words"
-        label="Who makes the product?"
-        left={<TextInput.Icon name="domain" color={myTheme.colors.green} />}
+        label="Who makes the product?*"
+        left={<TextInput.Icon name="domain" color={myTheme.colors.blue} />}
         theme={inputTheme}
         style={styles.textInput}
       />
@@ -180,8 +192,13 @@ export default function NoScanReturn(props) {
         onChangeText={(text) => setFormDetails({ ...formDetails, title: text })}
         value={formDetails.title}
         autoCapitalize="words"
-        label="What is the product name?"
-        left={<TextInput.Icon name="new-box" color={myTheme.colors.green} />}
+        label="What is the product name?*"
+        left={
+          <TextInput.Icon
+            name="package-variant-closed"
+            color={myTheme.colors.blue}
+          />
+        }
         theme={inputTheme}
         style={styles.textInput}
       />
@@ -194,11 +211,13 @@ export default function NoScanReturn(props) {
         label="What is the price of the product?"
         keyboardType="numeric"
         left={
-          <TextInput.Icon name="currency-usd" color={myTheme.colors.green} />
+          <TextInput.Icon name="currency-usd" color={myTheme.colors.blue} />
         }
         theme={inputTheme}
         style={styles.textInput}
       />
+
+      <Text style={styles.requiredText}>* Required</Text>
 
       <MyButton
         text="Submit"
@@ -206,6 +225,6 @@ export default function NoScanReturn(props) {
         disabled={isButtonDisabled}
         style={styles.button}
       />
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 }

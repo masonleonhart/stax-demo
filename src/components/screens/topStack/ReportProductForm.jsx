@@ -4,8 +4,9 @@ import { useIsFocused } from "@react-navigation/core";
 import axios from "axios";
 import { SERVER_ADDRESS, AUTH_HEADER } from "@env";
 
-import { ScrollView, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { Text, TextInput, useTheme, configureFonts } from "react-native-paper";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import SharedStyles from "../../reusedComponents/SharedStyles";
 import MyButton from "../../reusedComponents/MyButton";
@@ -25,14 +26,13 @@ export default function ReportProductForm(props) {
   const accessToken = useSelector((store) => store.user.userInfo.accessToken);
 
   const [formDetails, setFormDetails] = useState({
-    id: recentScan.data,
     barcode_formats: `${recentScan?.type?.split(".")[2]} ${recentScan?.data}`,
     barcode_number: recentScan?.data,
     suggestion: "",
-    description: "",
+    decription: "",
+    brand: "",
     manufacturer: "",
     title: "",
-    price: "",
     store: "",
     flag: "reported",
   });
@@ -73,7 +73,7 @@ export default function ReportProductForm(props) {
       formDetails.manufacturer &&
       formDetails.title &&
       formDetails.suggestion &&
-      formDetails.description
+      formDetails.decription
     ) {
       setIsButtonDisabled(false);
     } else {
@@ -86,25 +86,14 @@ export default function ReportProductForm(props) {
   const submitButtonPress = async () => {
     setIsDialogVisible(true);
     try {
-      console.log({
-        ...formDetails,
-        ...formStore,
-      });
-      await axios
-        .post(
-          `${SERVER_ADDRESS}/api/v1/report_upc`,
-          {
-            ...formDetails,
-            ...formStore,
-          },
-          { headers: { [AUTH_HEADER]: accessToken } }
-        )
-        .then((res) => {
-          console.log(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      const response = await axios.post(
+        `${SERVER_ADDRESS}/api/v1/report_incorrect_product`,
+        {
+          ...formDetails,
+          ...formStore,
+        },
+        { headers: { [AUTH_HEADER]: accessToken } }
+      );
 
       await setUpcPostStatus(true);
     } catch (error) {
@@ -137,17 +126,24 @@ export default function ReportProductForm(props) {
       marginVertical: "5%",
       fontFamily: fonts.bold,
       fontSize: 24,
+      color: myTheme.colors.grey,
     },
     text: {
       fontSize: 18,
       fontFamily: fonts.regular,
+      color: myTheme.colors.grey,
     },
     textInput: {
       backgroundColor: "transparent",
       marginTop: "5%",
     },
+    requiredText: {
+      marginVertical: "5%",
+      fontFamily: fonts.regular,
+      color: myTheme.colors.grey,
+    },
     button: {
-      marginTop: "10%",
+      marginTop: "0%",
     },
   });
 
@@ -158,7 +154,7 @@ export default function ReportProductForm(props) {
   }
 
   return (
-    <ScrollView
+    <KeyboardAwareScrollView
       style={SharedStyles.container}
       keyboardShouldPersistTaps="handled"
     >
@@ -169,13 +165,11 @@ export default function ReportProductForm(props) {
         upcPostStatus={upcPostStatus}
       />
 
-      <Text style={styles.headerText}>
-        Report a Product
-      </Text>
+      <Text style={styles.headerText}>Report a Product</Text>
 
       <Text style={styles.text}>
-        If you want to report this product details as wrong. Please fill out
-        this quick form to help us store off this product information.
+        If you want to report these product details as wrong, pease fill out
+        this quick form to help us imporve our product information.
       </Text>
 
       <TextInput
@@ -190,11 +184,11 @@ export default function ReportProductForm(props) {
 
       <TextInput
         onChangeText={(text) =>
-          setFormDetails({ ...formDetails, manufacturer: text })
+          setFormDetails({ ...formDetails, manufacturer: text, brand: text })
         }
         value={formDetails.manufacturer}
         autoCapitalize="words"
-        label="Who makes the product?"
+        label="Who makes the product?*"
         left={<TextInput.Icon name="domain" color={myTheme.colors.blue} />}
         theme={inputTheme}
         style={styles.textInput}
@@ -204,8 +198,13 @@ export default function ReportProductForm(props) {
         onChangeText={(text) => setFormDetails({ ...formDetails, title: text })}
         value={formDetails.title}
         autoCapitalize="words"
-        label="What is the product name?"
-        left={<TextInput.Icon name="new-box" color={myTheme.colors.blue} />}
+        label="What is the product name?*"
+        left={
+          <TextInput.Icon
+            name="package-variant-closed"
+            color={myTheme.colors.blue}
+          />
+        }
         theme={inputTheme}
         style={styles.textInput}
       />
@@ -215,7 +214,7 @@ export default function ReportProductForm(props) {
         onFocus={onPriceFocus}
         onBlur={onPriceBlur}
         value={formStore.price}
-        label="What is price of the product?"
+        label="What is the price of the product?"
         keyboardType="numeric"
         left={
           <TextInput.Icon name="currency-usd" color={myTheme.colors.blue} />
@@ -226,27 +225,28 @@ export default function ReportProductForm(props) {
 
       <TextInput
         onChangeText={(text) =>
-          setFormDetails({ ...formDetails, suggestion: text })
+          setFormDetails({ ...formDetails, decription: text })
         }
-        value={formDetails.suggestion}
-        autoCapitalize="words"
-        label="What is your suggested change?"
-        left={<TextInput.Icon name="domain" color={myTheme.colors.blue} />}
+        value={formDetails.description}
+        label="Provide a description of the product*"
+        left={<TextInput.Icon name="lead-pencil" color={myTheme.colors.blue} />}
         theme={inputTheme}
         style={styles.textInput}
       />
 
       <TextInput
         onChangeText={(text) =>
-          setFormDetails({ ...formDetails, description: text })
+          setFormDetails({ ...formDetails, suggestion: text })
         }
-        value={formDetails.description}
+        value={formDetails.suggestion}
         autoCapitalize="words"
-        label="Provide a description of the product"
-        left={<TextInput.Icon name="domain" color={myTheme.colors.blue} />}
+        label="What is your suggested change?*"
+        left={<TextInput.Icon name="new-box" color={myTheme.colors.blue} />}
         theme={inputTheme}
         style={styles.textInput}
       />
+
+      <Text style={styles.requiredText}>* Required</Text>
 
       <MyButton
         text="Submit"
@@ -254,6 +254,6 @@ export default function ReportProductForm(props) {
         disabled={isButtonDisabled}
         style={styles.button}
       />
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 }

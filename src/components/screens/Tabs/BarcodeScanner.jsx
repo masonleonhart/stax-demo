@@ -52,43 +52,39 @@ export default function BarcodeScanner({ navigation }) {
       dispatch({ type: "SET_MOST_RECENT_SCAN", payload: { type, data } });
 
       try {
-        await axios
-          .post(
-            `${SERVER_ADDRESS}/api/v1/upc`,
-            { data, type },
-            { headers: { [AUTH_HEADER]: accessToken } }
-          )
-          .then((response) => {
-            if (response.status === 200) {
-              dispatch({
-                type: "SET_BARCODE_DETAILS",
-                payload: response.data.barcode_result.data,
-              });
+        const response = await axios.post(
+          `${SERVER_ADDRESS}/api/v1/upc`,
+          { data, type },
+          { headers: { [AUTH_HEADER]: accessToken } }
+        );
 
-              dispatch({
-                type: "SET_SCANNED_COMPANY_RANKING",
-                payload: response.data.company_obj.scanned_company_ranking,
-              });
-              navigation.navigate("CompanyProfile");
-            } else if (response.status === 400) {
-              dispatch({
-                type: "SET_SCANNED_COMPANY_RANKING",
-                payload: {},
-              });
-              navigation.navigate("NewProductForm");
-            } else {
-              dispatch({
-                type: "SET_SCANNED_COMPANY_RANKING",
-                payload: {},
-              });
-              navigation.navigate("Scanner");
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-            dispatch({ type: "RESET_BARCODE_DETAILS" });
-            navigation.navigate("NewProductForm");
+        if (response.data.status_code === 400) {
+          dispatch({
+            type: "SET_SCANNED_COMPANY_RANKING",
+            payload: {},
           });
+          navigation.navigate("NewProductForm");
+        } else if (response.status === 200) {
+          dispatch({
+            type: "SET_BARCODE_DETAILS",
+            payload: response.data.barcode_result.data,
+          });
+
+          if ("error" in response.data.company_obj) {
+          } else {
+            dispatch({
+              type: "SET_SCANNED_COMPANY_RANKING",
+              payload: response.data.company_obj.scanned_company_ranking,
+            });
+          }
+          navigation.navigate("CompanyProfile");
+        } else {
+          dispatch({
+            type: "SET_SCANNED_COMPANY_RANKING",
+            payload: {},
+          });
+          navigation.navigate("Scanner");
+        }
       } catch (error) {
         console.log(error);
         dispatch({ type: "RESET_BARCODE_DETAILS" });
@@ -161,6 +157,11 @@ export default function BarcodeScanner({ navigation }) {
       <BarCodeScanner
         onBarCodeScanned={!scanned && handleBarCodeScanned}
         style={styles.barcodeScanner}
+        barCodeTypes={[
+          BarCodeScanner.Constants.BarCodeType.upc_e,
+          BarCodeScanner.Constants.BarCodeType.upc_a,
+          BarCodeScanner.Constants.BarCodeType.ean13,
+        ]}
       >
         <ActivityModal isDialogVisible={isDialogVisible} />
 
