@@ -39,13 +39,6 @@ export default function BarcodeScanner({ navigation }) {
     setIsDialogVisible(false);
   }, [isFocused]);
 
-  useEffect(() => {
-    handleBarCodeScanned({
-      "data": "022000116734",
-      "type": "org.gs1.EAN-13"
-    })
-  }, [])
-
   // Function to call on scan of barcode
   // Checks to make sure the barcode is of type UPC-A / UPC-E, if so, save the barcode data and type
   // in a reducer, send the type and data to the api and navigate to company profile if successful return,
