@@ -29,7 +29,7 @@ export default function ReportProductForm(props) {
     barcode_formats: `${recentScan?.type?.split(".")[2]} ${recentScan?.data}`,
     barcode_number: recentScan?.data,
     suggestion: "",
-    decription: "",
+    description: "",
     brand: "",
     manufacturer: "",
     title: "",
@@ -73,7 +73,7 @@ export default function ReportProductForm(props) {
       formDetails.manufacturer &&
       formDetails.title &&
       formDetails.suggestion &&
-      formDetails.decription
+      formDetails.description
     ) {
       setIsButtonDisabled(false);
     } else {
@@ -225,7 +225,7 @@ export default function ReportProductForm(props) {
 
       <TextInput
         onChangeText={(text) =>
-          setFormDetails({ ...formDetails, decription: text })
+          setFormDetails({ ...formDetails, description: text })
         }
         value={formDetails.description}
         label="Provide a description of the product*"

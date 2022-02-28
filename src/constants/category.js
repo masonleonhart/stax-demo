@@ -6,18 +6,18 @@ const CatrgoryJson = [
     children: [
       {
         id: 28,
-        name: "Toys, Kids & Baby",
+        name: "Alcohol",
         depth: 1,
         children: [
           {
             id: 29,
-            name: "Baby Care",
+            name: "Spirits",
             depth: 2,
             children: []
           },
           {
             id: 37,
-            name: "Furniture",
+            name: "Beer",
             depth: 2,
             children: []
           },
@@ -29,142 +29,255 @@ const CatrgoryJson = [
           }
         ]
       },
+      // {
+      //   id: 41,
+      //   name: "Watches",
+      //   depth: 1,
+      //   children: [
+      //     {
+      //       id: 42,
+      //       name: "Eyewear",
+      //       depth: 2,
+      //       children: []
+      //     },
+      //   ]
+      // },
+      // {
+      //   id: 43,
+      //   name: "Shoes",
+      //   depth: 1,
+      //   children: [
+      //     {
+      //       id: 44,
+      //       name: "Adult",
+      //       depth: 2,
+      //       children: []
+      //     },
+      //     {
+      //       id: 45,
+      //       name: "Luxury",
+      //       depth: 2,
+      //       children: []
+      //     },
+      //   ]
+      // },
       {
-        id: 30,
-        name: "Beauty & Health",
+        id: 46,
+        name: "Clothing",
         depth: 1,
         children: [
           {
-            id: 31,
-            name: "Family Care",
-            depth: 2,
-            children: []
-          },
-          {
-            id: 32,
-            name: "Grooming",
-            depth: 2,
-            children: []
-          },
-          {
-            id: 33,
-            name: "Hair Care",
-            depth: 2,
-            children: []
-          },
-          {
-            id: 34,
-            name: "Oral Care",
-            depth: 2,
-            children: []
-          },
-          {
-            id: 35,
-            name: "Medicine",
-            depth: 2,
-            children: []
-          },
-          {
-            id: 36,
-            depth: 2,
-            name: "Personal Care",
-            children: []
-          }
-        ]
-      },
-      {
-        id: 2,
-        name: "Groceries",
-        depth: 1,
-        children: [
-          {
-            id: 3,
-            name: "Laundry",
-            depth: 2,
-            children: []
-          },
-          {
-            id: 4,
-            name: "Home Care",
-            depth: 2,
-            children: []
-          },
-          {
-            id: 5,
-            name: "Pest Control",
-            depth: 2,
-            children: []
-          },
-          {
-            id: 6,
-            name: "Home Storage",
-            depth: 2,
-            children: []
-          },
-          {
-            id: 7,
-            name: "Shoe Care",
-            depth: 2,
-            children: []
-          },
-          {
-            id: 8,
-            name: "Beverages",
+            id: 47,
+            name: "Adult",
             depth: 2,
             children: [
               {
-                id: 9,
-                depth: 3,
-                name: "Coffee",
-                children: []
-              },
-            ]
-          },
-          {
-            id: 20,
-            name: "Food",
-            depth: 2,
-            children: [
-              {
-                id: 21,
-                name: "Snacks",
+                id: 49,
+                name: "Athletic",
                 depth: 3,
                 children: []
               },
               {
-                id: 22,
-                name: "Candy",
+                id: 50,
+                name: "Casual",
                 depth: 3,
                 children: []
               },
               {
-                id: 23,
-                name: "Meals",
+                id: 51,
+                name: "Up Scale",
                 depth: 3,
                 children: []
               },
               {
-                id: 24,
-                name: "Dairy",
+                id: 52,
+                name: "Luxury",
                 depth: 3,
                 children: []
               },
               {
-                id: 25,
-                name: "Baking",
-                depth: 3,
-                children: []
-              },
-              {
-                id: 26,
-                name: "Ice Cream",
+                id: 53,
+                name: "Lingerie",
                 depth: 3,
                 children: []
               }
             ]
-          }
+          },
+          {
+            id: 48,
+            name: "Child",
+            depth: 2,
+            children: [
+              {
+                id: 49,
+                name: "Athletic",
+                depth: 3,
+                children: []
+              },
+              {
+                id: 50,
+                name: "Casual",
+                depth: 3,
+                children: []
+              },
+              {
+                id: 51,
+                name: "Up Scale",
+                depth: 3,
+                children: []
+              },
+              {
+                id: 52,
+                name: "Luxury",
+                depth: 3,
+                children: []
+              },
+              {
+                id: 53,
+                name: "Lingerie",
+                depth: 3,
+                children: []
+              }
+            ]
+          },
         ]
       }
+      // {
+      //   id: 30,
+      //   name: "Beauty & Health",
+      //   depth: 1,
+      //   children: [
+      //     {
+      //       id: 31,
+      //       name: "Family Care",
+      //       depth: 2,
+      //       children: []
+      //     },
+      //     {
+      //       id: 32,
+      //       name: "Grooming",
+      //       depth: 2,
+      //       children: []
+      //     },
+      //     {
+      //       id: 33,
+      //       name: "Hair Care",
+      //       depth: 2,
+      //       children: []
+      //     },
+      //     {
+      //       id: 34,
+      //       name: "Oral Care",
+      //       depth: 2,
+      //       children: []
+      //     },
+      //     {
+      //       id: 35,
+      //       name: "Medicine",
+      //       depth: 2,
+      //       children: []
+      //     },
+      //     {
+      //       id: 36,
+      //       depth: 2,
+      //       name: "Personal Care",
+      //       children: []
+      //     }
+      //   ]
+      // },
+      // {
+      //   id: 2,
+      //   name: "Groceries",
+      //   depth: 1,
+      //   children: [
+      //     {
+      //       id: 3,
+      //       name: "Laundry",
+      //       depth: 2,
+      //       children: []
+      //     },
+      //     {
+      //       id: 4,
+      //       name: "Home Care",
+      //       depth: 2,
+      //       children: []
+      //     },
+      //     {
+      //       id: 5,
+      //       name: "Pest Control",
+      //       depth: 2,
+      //       children: []
+      //     },
+      //     {
+      //       id: 6,
+      //       name: "Home Storage",
+      //       depth: 2,
+      //       children: []
+      //     },
+      //     {
+      //       id: 7,
+      //       name: "Shoe Care",
+      //       depth: 2,
+      //       children: []
+      //     },
+      //     {
+      //       id: 8,
+      //       name: "Beverages",
+      //       depth: 2,
+      //       children: [
+      //         {
+      //           id: 9,
+      //           depth: 3,
+      //           name: "Coffee",
+      //           children: []
+      //         },
+      //       ]
+      //     },
+      //     {
+      //       id: 20,
+      //       name: "Food",
+      //       depth: 2,
+      //       children: [
+      //         {
+      //           id: 21,
+      //           name: "Snacks",
+      //           depth: 3,
+      //           children: []
+      //         },
+      //         {
+      //           id: 22,
+      //           name: "Candy",
+      //           depth: 3,
+      //           children: []
+      //         },
+      //         {
+      //           id: 23,
+      //           name: "Meals",
+      //           depth: 3,
+      //           children: []
+      //         },
+      //         {
+      //           id: 24,
+      //           name: "Dairy",
+      //           depth: 3,
+      //           children: []
+      //         },
+      //         {
+      //           id: 25,
+      //           name: "Baking",
+      //           depth: 3,
+      //           children: []
+      //         },
+      //         {
+      //           id: 26,
+      //           name: "Ice Cream",
+      //           depth: 3,
+      //           children: []
+      //         }
+      //       ]
+      //     }
+      //   ]
+      // }
     ]
   },
   {
@@ -179,85 +292,82 @@ const CatrgoryJson = [
         children: [
           {
             id: 60,
-            name: "Private Banking",
+            name: "Diversified Banks",
             depth: 2,
-            children: [
-              {
-                id: 61,
-                name: "Axis",
-                depth: 3,
-                children: [
-
-                ]
-              },
-              {
-                id: 62,
-                name: "HDFC",
-                depth: 3,
-                children: []
-              },
-              {
-                id: 63,
-                name: "HSBC",
-                depth: 3,
-                children: []
-              }
-            ]
-          }
-        ]
-      },
-      {
-        id: 53,
-        name: "Beauty & Health",
-        depth: 1,
-        children: [
+            children: []
+          },
           {
-            id: 56,
-            name: "Fitness",
+            id: 61,
+            name: "Investment and Brokerage",
+            depth: 2,
+            children: []
+          },
+          {
+            id: 62,
+            name: "Regional Banks",
+            depth: 2,
+            children: []
+          },
+          {
+            id: 63,
+            name: "Thrifts and Mortgages",
             depth: 2,
             children: []
           }
         ]
       },
-      {
-        id: 54,
-        name: "Entertainment",
-        depth: 1,
-        children: [
-          {
-            id: 57,
-            name: "Casinos and Gaming",
-            depth: 2,
-            children: []
-          }
-        ]
-      },
-      {
-        id: 55,
-        name: "Restaurants",
-        depth: 1,
-        children: [
-          {
-            id: 59,
-            name: "Restaurants Sub",
-            depth: 2,
-            children: []
-          }
-        ]
-      },
-      {
-        id: 58,
-        name: "Tourism & Travel",
-        depth: 1,
-        children: [
-          {
-            id: 59,
-            name: "Hotels",
-            depth: 2,
-            children: []
-          }
-        ]
-      },
+      // {
+      //   id: 53,
+      //   name: "Beauty & Health",
+      //   depth: 1,
+      //   children: [
+      //     {
+      //       id: 56,
+      //       name: "Fitness",
+      //       depth: 2,
+      //       children: []
+      //     }
+      //   ]
+      // },
+      // {
+      //   id: 54,
+      //   name: "Entertainment",
+      //   depth: 1,
+      //   children: [
+      //     {
+      //       id: 57,
+      //       name: "Casinos and Gaming",
+      //       depth: 2,
+      //       children: []
+      //     }
+      //   ]
+      // },
+      // {
+      //   id: 55,
+      //   name: "Restaurants",
+      //   depth: 1,
+      //   children: [
+      //     {
+      //       id: 59,
+      //       name: "Restaurants Sub",
+      //       depth: 2,
+      //       children: []
+      //     }
+      //   ]
+      // },
+      // {
+      //   id: 58,
+      //   name: "Tourism & Travel",
+      //   depth: 1,
+      //   children: [
+      //     {
+      //       id: 59,
+      //       name: "Hotels",
+      //       depth: 2,
+      //       children: []
+      //     }
+      //   ]
+      // },
     ]
   }
 ]
