@@ -10,16 +10,22 @@ import {
   StatusBar,
   SafeAreaView,
   ScrollView,
+  Button,
 } from "react-native";
 import { Text } from "react-native-paper";
-
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerItem,
+} from "@react-navigation/drawer";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { COLORS, FONTS } from "../../../constants/theme";
-import FilterModal from "../../modals/FilterModal";
 import HeaderComponent from "../../reusedComponents/HeaderComponent";
 import fonts from "../../reusedComponents/fonts";
-
+import { NavigationContainer } from "@react-navigation/native";
+import FilterStack from "../../navigation/FilterStack";
 const MyStatusBar = ({ backgroundColor, ...props }) => (
   <View style={[{ backgroundColor }]}>
     <StatusBar translucent backgroundColor={backgroundColor} {...props} />
@@ -29,8 +35,15 @@ const MyStatusBar = ({ backgroundColor, ...props }) => (
 export default function Discover({}) {
   const isFocused = useIsFocused();
   const [companyList, setCompanyList] = useState([]);
-  const [isDialogVisible, setIsDialogVisible] = React.useState(false);
-
+  let navigation;
+  function CustomDrawerContent(props) {
+    return (
+      <DrawerContentScrollView {...props}>
+        <FilterStack navigation={props.navigation} />
+      </DrawerContentScrollView>
+    );
+  }
+  const Drawer = createDrawerNavigator();
   function RenderCompany({ company }) {
     return (
       <Company
@@ -42,10 +55,6 @@ export default function Discover({}) {
     );
   }
 
-  const onClickfilter = () => {
-    setIsDialogVisible(true);
-  };
-
   useEffect(() => {
     setCompanyList(getCompanies());
   }, []);
@@ -53,59 +62,72 @@ export default function Discover({}) {
   if (!isFocused) {
     return <EmptyStateView />;
   }
-  const SearchComponent = () => {
+  function DiscoverUi({ navigation }) {
+    navigation = navigation;
     return (
-      <View style={styles.searchComponentMainConatainer}>
-        <View style={styles.searchComponentIcon}>
-          <TouchableOpacity onPress={onClickfilter}>
-            <Feather name="list" size={28} color={COLORS.blue} />
-          </TouchableOpacity>
-        </View>
+      <View
+        style={{
+          backgroundColor: COLORS.white,
+        }}>
+        <MyStatusBar backgroundColor={COLORS.blue} barStyle="light-content" />
+        <HeaderComponent
+          mainTitle="Discover"
+          subTitle="Allgned Companies"
+          mainTitleStyle={styles.headerDiscoverText}
+          subTitleStyle={styles.headerNameText}
+          backgroundColor={COLORS.blue}
+        />
 
-        <View style={styles.searchComponentSearchBarView}>
-          <View style={styles.searchInsileIcon}>
-            <Feather name="search" size={24} color="#7c82a1" />
-            <Text style={{ marginLeft: 5, color: "#7c82a1" }}>Search</Text>
+        <View style={styles.searchComponentMainConatainer}>
+          <View style={styles.searchComponentIcon}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.openDrawer();
+              }}>
+              <Feather name="list" size={28} color={COLORS.blue} />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.searchComponentSearchBarView}>
+            <View style={styles.searchInsileIcon}>
+              <Feather name="search" size={24} color="#7c82a1" />
+              <Text style={{ marginLeft: 5, color: "#7c82a1" }}>Search</Text>
+            </View>
           </View>
         </View>
+        <ScrollView
+          stlye={styles.companyList}
+          contentContainerStyle={styles.companyListContainer}>
+          {companyList.map((company) => (
+            <RenderCompany key={company.id} company />
+          ))}
+        </ScrollView>
       </View>
     );
-  };
+  }
+  function MyDrawer() {
+    return (
+      <Drawer.Navigator
+        drawerContent={(props) => <CustomDrawerContent {...props} />}>
+        <Drawer.Screen
+          name="Discover"
+          component={DiscoverUi}
+          options={{ headerShown: false }}
+        />
+      </Drawer.Navigator>
+    );
+  }
   return (
-    <View
-      style={{
-        backgroundColor: COLORS.white,
-      }}
-    >
-      <MyStatusBar backgroundColor={COLORS.blue} barStyle="light-content" />
-      <HeaderComponent
-        mainTitle="Discover"
-        subTitle="Allgned Companies"
-        mainTitleStyle={styles.headerDiscoverText}
-        subTitleStyle={styles.headerNameText}
-        backgroundColor={COLORS.blue}
-      />
-      <FilterModal
-        isDialogVisible={isDialogVisible}
-        setIsDialogVisible={setIsDialogVisible}
-      />
-      {SearchComponent()}
-      <ScrollView
-        stlye={styles.companyList}
-        contentContainerStyle={styles.companyListContainer}
-      >
-        {companyList.map((company) => (
-          <RenderCompany key={company.id} company />
-        ))}
-      </ScrollView>
-    </View>
+    <NavigationContainer independent={true}>
+      <MyDrawer />
+    </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
   companyList: {
     backgroundColor: COLORS.white,
-    flex: 1
+    flex: 1,
   },
   companyListContainer: {
     marginHorizontal: 16,
