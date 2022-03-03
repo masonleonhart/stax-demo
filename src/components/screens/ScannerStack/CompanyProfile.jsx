@@ -294,7 +294,11 @@ export default function CompanyProfile({ navigation }) {
 
         <MyButton
           onPress={() =>
-            navigation.navigate("ReportProductForm", { name: "report" })
+            navigation.navigate("ReportProductForm", {
+              screen: "report",
+              companyRanking,
+              barcodeDetails,
+            })
           }
           text="Report This Product"
           buttonColor={myTheme.colors.red}

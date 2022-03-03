@@ -5,7 +5,7 @@ import { MaterialCommunityIcons } from "react-native-vector-icons";
 import { useTheme } from "react-native-paper";
 
 import Landing from "../screens/Tabs/Landing";
-import BarcodeScanner from "../screens/Tabs/BarcodeScanner";
+import ScannerStack from "./ScannerStack";
 import Account from "../screens/Tabs/Account";
 import Discover from "../screens/Tabs/Discover";
 
@@ -40,8 +40,8 @@ export default function TabNavigation() {
         }}
       />
       <Tab.Screen
-        name="Scanner"
-        component={BarcodeScanner}
+        name="ScannerStack"
+        component={ScannerStack}
         options={{
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
