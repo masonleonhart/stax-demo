@@ -13,21 +13,21 @@ const CatrgoryJson = [
             id: 29,
             name: "Spirits",
             depth: 2,
-            children: []
+            children: [],
           },
           {
             id: 37,
             name: "Beer",
             depth: 2,
-            children: []
+            children: [],
           },
           {
             id: 38,
-            name: "Clothing",
+            name: "Wine",
             depth: 2,
-            children: []
-          }
-        ]
+            children: [],
+          },
+        ],
       },
       // {
       //   id: 41,
@@ -63,85 +63,35 @@ const CatrgoryJson = [
       // },
       {
         id: 46,
-        name: "Clothing",
+        name: "Clothing, Shoes, Accessories",
         depth: 1,
         children: [
           {
             id: 47,
-            name: "Adult",
+            name: "Active Wear",
             depth: 2,
-            children: [
-              {
-                id: 49,
-                name: "Athletic",
-                depth: 3,
-                children: []
-              },
-              {
-                id: 50,
-                name: "Casual",
-                depth: 3,
-                children: []
-              },
-              {
-                id: 51,
-                name: "Up Scale",
-                depth: 3,
-                children: []
-              },
-              {
-                id: 52,
-                name: "Luxury",
-                depth: 3,
-                children: []
-              },
-              {
-                id: 53,
-                name: "Lingerie",
-                depth: 3,
-                children: []
-              }
-            ]
+            children: [],
           },
           {
             id: 48,
-            name: "Child",
+            name: "Business Wear",
             depth: 2,
-            children: [
-              {
-                id: 49,
-                name: "Athletic",
-                depth: 3,
-                children: []
-              },
-              {
-                id: 50,
-                name: "Casual",
-                depth: 3,
-                children: []
-              },
-              {
-                id: 51,
-                name: "Up Scale",
-                depth: 3,
-                children: []
-              },
-              {
-                id: 52,
-                name: "Luxury",
-                depth: 3,
-                children: []
-              },
-              {
-                id: 53,
-                name: "Lingerie",
-                depth: 3,
-                children: []
-              }
-            ]
+            children: [],
           },
-        ]
-      }
+          {
+            id: 49,
+            name: "Casual Wear",
+            depth: 2,
+            children: [],
+          },
+          {
+            id: 50,
+            name: "Luxury Wear",
+            depth: 2,
+            children: [],
+          },
+        ],
+      },
       // {
       //   id: 30,
       //   name: "Beauty & Health",
@@ -278,7 +228,7 @@ const CatrgoryJson = [
       //     }
       //   ]
       // }
-    ]
+    ],
   },
   {
     id: 51,
@@ -287,34 +237,16 @@ const CatrgoryJson = [
     children: [
       {
         id: 52,
-        name: "Banking",
+        name: "Financial",
         depth: 1,
         children: [
           {
             id: 60,
-            name: "Diversified Banks",
+            name: "Banking",
             depth: 2,
-            children: []
+            children: [],
           },
-          {
-            id: 61,
-            name: "Investment and Brokerage",
-            depth: 2,
-            children: []
-          },
-          {
-            id: 62,
-            name: "Regional Banks",
-            depth: 2,
-            children: []
-          },
-          {
-            id: 63,
-            name: "Thrifts and Mortgages",
-            depth: 2,
-            children: []
-          }
-        ]
+        ],
       },
       // {
       //   id: 53,
@@ -355,22 +287,22 @@ const CatrgoryJson = [
       //     }
       //   ]
       // },
-      // {
-      //   id: 58,
-      //   name: "Tourism & Travel",
-      //   depth: 1,
-      //   children: [
-      //     {
-      //       id: 59,
-      //       name: "Hotels",
-      //       depth: 2,
-      //       children: []
-      //     }
-      //   ]
-      // },
-    ]
-  }
-]
+      {
+        id: 58,
+        name: "Tourism & Travel",
+        depth: 1,
+        children: [
+          {
+            id: 59,
+            name: "Hotels",
+            depth: 2,
+            children: [],
+          },
+        ],
+      },
+    ],
+  },
+];
 export function getAllCategory() {
   return CatrgoryJson;
 }
