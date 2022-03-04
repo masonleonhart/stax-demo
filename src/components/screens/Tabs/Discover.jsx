@@ -56,7 +56,7 @@ export default function Discover({}) {
   }
 
   useEffect(() => {
-    setCompanyList(getCompanies());
+    setCompanyList();
   }, []);
 
   if (!isFocused) {
@@ -95,13 +95,15 @@ export default function Discover({}) {
             </View>
           </View>
         </View>
-        <ScrollView
-          stlye={styles.companyList}
-          contentContainerStyle={styles.companyListContainer}>
-          {companyList.map((company) => (
-            <RenderCompany key={company.id} company />
-          ))}
-        </ScrollView>
+        {companyList?.length > 0 && (
+          <ScrollView
+            stlye={styles.companyList}
+            contentContainerStyle={styles.companyListContainer}>
+            {companyList.map((company) => (
+              <RenderCompany key={company.id} company />
+            ))}
+          </ScrollView>
+        )}
       </View>
     );
   }

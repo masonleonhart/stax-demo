@@ -46,14 +46,15 @@ export default function FilterStack({ navigation }) {
       <TouchableOpacity
         onPress={() => onSelectCategory(title, index, hasChild)}>
         <View
-          style={
+          style={[
             title === selectedFilter
               ? styles.selectedChildView
-              : styles.childView
-          }>
+              : styles.childView,
+          ]}>
           <Text
             style={[
-              FONTS.h4,
+              FONTS.h3,
+              styles.childText,
               title === selectedFilter ? { color: COLORS.white } : undefined,
             ]}>
             {title}
@@ -96,7 +97,7 @@ export default function FilterStack({ navigation }) {
                 color={COLORS.grey}
                 onPress={onBack}
               />
-              <Text style={[FONTS.h4]}>
+              <Text style={[FONTS.h2, styles.titleText]}>
                 {selectedCategoryTitle[currentDepth]}
               </Text>
             </View>
@@ -112,7 +113,10 @@ const styles = StyleSheet.create({
   filtercontainer: {
     flex: 1,
   },
-  backButton: { flexDirection: "row", alignItems: "center" },
+  backButton: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   filterViewMain: {
     flexDirection: "row",
     textAlign: "center",
@@ -129,19 +133,29 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     borderBottomWidth: 1,
-    height: 40,
+    minHeight: 50,
     color: COLORS.black,
     paddingLeft: SIZES.base + 10,
   },
+  childTextView: {
+    width: "100%",
+  },
+  childText: {
+    flex: 1,
+    flexWrap: "wrap",
+  },
+  titleText: {
+    flex: 1,
+    flexWrap: "wrap",
+  },
   selectedChildView: {
     flexDirection: "row",
-    justifyContent: "space-between",
     width: "100%",
     alignItems: "center",
     borderBottomWidth: 1,
-    height: 40,
-    backgroundColor: COLORS.blue,
+    minHeight: 50,
     color: COLORS.white,
     paddingLeft: SIZES.base + 10,
+    backgroundColor: COLORS.blue,
   },
 });
