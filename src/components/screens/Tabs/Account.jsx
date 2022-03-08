@@ -128,8 +128,8 @@ export default function Account({ navigation }) {
         <AccountPressable text="My Values" onPress={valuesNavButton} />
         {userInfo.providerId === "password" && (
           <AccountPressable
-            text="Update Password"
-            onPress={() => navigation.navigate("UpdatePasswordStack")}
+            text="Update User Information"
+            onPress={() => navigation.navigate("UpdateUserInfoStack")}
           />
         )}
         <AccountPressable
