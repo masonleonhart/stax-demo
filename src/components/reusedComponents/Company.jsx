@@ -1,6 +1,7 @@
 import React from 'react'
 import { Text, Image, View, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { MaterialCommunityIcons } from "react-native-vector-icons";
+import { determineMatchType } from '../../constants/helpers';
 import { COLORS, FONTS, SIZES } from '../../constants/theme';
 import Separator from './Separator';
 const SCREEN_HEIGHT = Dimensions.get("screen").height;
@@ -20,7 +21,7 @@ const ImageComponent = ({ uri, styles }) => {
         />
     )
 }
-const HeaderComponent = ({ companyCoverImageUri, companyLogoImageUri, companyName }) => {
+const HeaderComponent = ({ companyCoverImageUri, companyLogoImageUri, companyName, industry }) => {
     return (
         <>
             <ImageComponent
@@ -40,7 +41,7 @@ const HeaderComponent = ({ companyCoverImageUri, companyLogoImageUri, companyNam
                     />
                 </View>
                 <Text style={styles.imageComponentLeftText}>{companyName}</Text>
-                <Text style={styles.imageComponentRightText}>Shoes</Text>
+                <Text style={styles.imageComponentRightText}>{industry}</Text>
             </View>
         </>
     )
@@ -112,21 +113,23 @@ const NewsComponent = ({ newsData, title }) => {
         </>
     )
 }
-const Company = ({ name, onPress }) => {
+const Company = ({ name, values_match_score, onPress, industry }) => {
+
     return (
         <TouchableOpacity style={styles.card} onPress={onPress}>
             <HeaderComponent
                 companyName={name}
+                industry={industry}
                 companyCoverImageUri="https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/aa45540e-ad2a-40b5-a132-ff89d7cdfc33/air-zoom-alphafly-next-flyknit-road-racing-shoes-13jzhr.png"
                 companyLogoImageUri="https://99designs-blog.imgix.net/blog/wp-content/uploads/2016/08/adidas.png?auto=format&q=60&fit=max&w=930"
             />
             <LineComponent
                 title="Matching Values"
-                subtitile="Excellent"
+                subtitile={determineMatchType(values_match_score)} // TODO: Change color
                 subtitileColor={COLORS.green}
                 separator={true}
             />
-            <LineComponent
+            {/* <LineComponent
                 title="Cost"
                 subtitile="$4"
                 subtitileColor={COLORS.black}
@@ -145,7 +148,7 @@ const Company = ({ name, onPress }) => {
                 subtitile="20% Off-STAX20"
                 subtitileColor={COLORS.black}
                 separator={true}
-            />
+            /> */}
             <NewsComponent
                 title="Latest News"
                 newsData={NewsData}
