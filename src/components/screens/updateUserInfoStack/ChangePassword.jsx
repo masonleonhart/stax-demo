@@ -72,7 +72,7 @@ export default function ChangePassword({ navigation }) {
           {
             text: "OK",
             onPress: () =>
-              navigation.navigate("TabStack", { screen: "Account" }),
+            navigation.navigate("UpdateUserInfoLanding"),
           },
         ]);
       } catch (error) {

@@ -10,8 +10,7 @@ import AuthStack from "./AuthStack";
 import TermsOfUse from "../screens/topStack/TermsOfUse";
 import TabStack from "./TabsNav";
 import ValuesStack from "./ValuesStack";
-import UpdatePasswordStack from "./UpdatePasswordStack";
-import CompanyProfile from "../screens/topStack/CompanyProfile";
+import UpdateUserInfoStack from "./UpdateUserInfoStack";
 import NewProductForm from "../screens/topStack/NewProductForm";
 import ReportProductForm from "../screens/topStack/ReportProductForm";
 
@@ -63,12 +62,7 @@ export default function TopStack() {
       />
       <Stack.Screen name="TabStack" component={TabStack} />
       <Stack.Screen name="ValuesStack" component={ValuesStack} />
-      <Stack.Screen name="UpdatePasswordStack" component={UpdatePasswordStack} />
-      <Stack.Screen
-        name="CompanyProfile"
-        component={CompanyProfile}
-        options={{ headerShown: true, headerTransparent: true }}
-      />
+      <Stack.Screen name="UpdateUserInfoStack" component={UpdateUserInfoStack} />
       <Stack.Screen
         name="NewProductForm"
         component={NewProductForm}

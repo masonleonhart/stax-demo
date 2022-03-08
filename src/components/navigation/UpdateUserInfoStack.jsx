@@ -3,10 +3,12 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import { useTheme, IconButton } from "react-native-paper";
 
-import VerifyPassword from "../screens/updatePasswordStack/VerifyPassword";
-import ChangePassword from "../screens/updatePasswordStack/ChangePassword";
+import VerifyPassword from "../screens/updateUserInfoStack/VerifyPassword";
+import UpdateUserInfoLanding from "../screens/updateUserInfoStack/UpdateUserInfoLanding";
+import ChangePassword from "../screens/updateUserInfoStack/ChangePassword";
+import ChangeName from "../screens/updateUserInfoStack/ChangeName";
 
-export default function UpdatePasswordStack() {
+export default function UpdateUserInfoStack() {
   const Stack = createStackNavigator();
   const myTheme = useTheme();
 
@@ -32,7 +34,9 @@ export default function UpdatePasswordStack() {
       })}
     >
       <Stack.Screen name="VerifyPassword" component={VerifyPassword} />
+      <Stack.Screen name="UpdateUserInfoLanding" component={UpdateUserInfoLanding} />
       <Stack.Screen name="ChangePassword" component={ChangePassword} />
+      <Stack.Screen name="ChangeName" component={ChangeName} />
     </Stack.Navigator>
   );
 }

@@ -14,7 +14,7 @@ import NewProductModal from "../../modals/NewProductModal";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
 import fonts from "../../reusedComponents/fonts";
 
-export default function ReportProductForm(props) {
+export default function ReportProductForm({ route }) {
   const myTheme = useTheme();
   const isFocused = useIsFocused();
   const recentScan = useSelector(
@@ -24,6 +24,8 @@ export default function ReportProductForm(props) {
   const [isDialogVisible, setIsDialogVisible] = useState(false);
   const [upcPostStatus, setUpcPostStatus] = useState(null);
   const accessToken = useSelector((store) => store.user.userInfo.accessToken);
+  const barcodeDetails = route.params.barcodeDetails;
+  const companyRanking = route.params.companyRanking;
 
   const [formDetails, setFormDetails] = useState({
     barcode_formats: `${recentScan?.type?.split(".")[2]} ${recentScan?.data}`,
@@ -39,6 +41,10 @@ export default function ReportProductForm(props) {
 
   const [formStore, setFormStore] = useState({
     price: "",
+  });
+
+  const [formOwner, setFormOwner] = useState({
+    owner: "",
   });
 
   // Formatter for price on focus, convert to nice string
@@ -65,6 +71,17 @@ export default function ReportProductForm(props) {
       setFormStore({ price: "" });
     }
   };
+
+  useEffect(() => {
+    setFormDetails({
+      ...formDetails,
+      brand: barcodeDetails.manufacturer,
+      manufacturer: barcodeDetails.manufacturer,
+      title: barcodeDetails.title,
+    });
+
+    "name" in companyRanking && setFormOwner({ owner: companyRanking.name });
+  }, []);
 
   // Function to disable button or not based on if form fields are filled out with the price field foramtted
 
@@ -176,7 +193,7 @@ export default function ReportProductForm(props) {
         onChangeText={(text) => setFormDetails({ ...formDetails, store: text })}
         value={formDetails.store}
         autoCapitalize="words"
-        label="What store are you in?"
+        label="Are you at home or in a store (which store)?"
         left={<TextInput.Icon name="cart" color={myTheme.colors.blue} />}
         theme={inputTheme}
         style={styles.textInput}
@@ -193,6 +210,20 @@ export default function ReportProductForm(props) {
         theme={inputTheme}
         style={styles.textInput}
       />
+
+      {"name" in companyRanking && (
+        <TextInput
+          onChangeText={(text) =>
+            setFormOwner({ owneer: text })
+          }
+          value={formOwner.owner}
+          autoCapitalize="words"
+          label="Who owns that company?"
+          left={<TextInput.Icon name="domain" color={myTheme.colors.blue} />}
+          theme={inputTheme}
+          style={styles.textInput}
+        />
+      )}
 
       <TextInput
         onChangeText={(text) => setFormDetails({ ...formDetails, title: text })}
@@ -228,7 +259,7 @@ export default function ReportProductForm(props) {
           setFormDetails({ ...formDetails, description: text })
         }
         value={formDetails.description}
-        label="Provide a description of the product*"
+        label="Product description*"
         left={<TextInput.Icon name="lead-pencil" color={myTheme.colors.blue} />}
         theme={inputTheme}
         style={styles.textInput}

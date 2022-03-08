@@ -35,6 +35,7 @@ export default function CompanyProfile({ navigation }) {
   const userInfo = useSelector((store) => store.user.userInfo);
   const [overallMatch, setOverallMatch] = useState("Poor");
   const [valueMatchList, setValueMatchList] = useState([]);
+  const [renderMissingText, setRenderMissingText] = useState(false);
 
   const renderedValuesParent = useRef(null);
 
@@ -97,6 +98,17 @@ export default function CompanyProfile({ navigation }) {
       );
     }
   }, []);
+
+  useEffect(() => {
+    if (
+      renderedValuesParent.current !== null &&
+      renderedValuesParent.current["_children"].length !== userValues.length
+    ) {
+      setRenderMissingText(true);
+    } else {
+      setRenderMissingText(false);
+    }
+  }, [renderedValuesParent.current]);
 
   const RenderValue = ({ value }) => (
     <View style={styles.valueWrapper}>
@@ -273,15 +285,13 @@ export default function CompanyProfile({ navigation }) {
             })}
           </View>
 
-          {renderedValuesParent.current !== null &&
-            renderedValuesParent.current["_children"].length !==
-              userValues.length && (
-              <Text style={styles.missingValuesText}>
-                Not seeing all of the data you were expecting? Not all companies
-                reports every metric. Any missing value is due to there being no
-                data available.
-              </Text>
-            )}
+          {renderMissingText && (
+            <Text style={styles.missingValuesText}>
+              Not seeing all of the data you were expecting? Not all companies
+              reports every metric. Any missing value is due to there being no
+              data available.
+            </Text>
+          )}
         </View>
 
         <MyButton
@@ -294,7 +304,11 @@ export default function CompanyProfile({ navigation }) {
 
         <MyButton
           onPress={() =>
-            navigation.navigate("ReportProductForm", { name: "report" })
+            navigation.navigate("ReportProductForm", {
+              screen: "report",
+              companyRanking,
+              barcodeDetails,
+            })
           }
           text="Report This Product"
           buttonColor={myTheme.colors.red}

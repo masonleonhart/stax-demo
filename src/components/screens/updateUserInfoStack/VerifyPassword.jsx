@@ -67,7 +67,7 @@ export default function VerifyPassword({ navigation }) {
       await dispatch({ type: "SET_USER_INFO", payload: userData });
 
       setIsDialogVisible(false);
-      navigation.navigate("ChangePassword");
+      navigation.navigate("UpdateUserInfoLanding");
     } catch (error) {
       Alert.alert("Error", error.message);
 
@@ -125,7 +125,7 @@ export default function VerifyPassword({ navigation }) {
       <ActivityModal isDialogVisible={isDialogVisible} />
 
       <View>
-        <Text style={styles.headerText}>Update Password</Text>
+        <Text style={styles.headerText}>Update User Info</Text>
         <Text style={styles.subheaderText}>
           Please first verify your current password
         </Text>
