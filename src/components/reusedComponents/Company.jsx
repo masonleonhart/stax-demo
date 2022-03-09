@@ -18,7 +18,7 @@ const NewsData = [
     id: 1,
     news: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
     thumbnail:
-      "https://99designs-blog.imgix.net/blog/wp-content/uploads/2016/08/adidas.png?auto=format&q=60&fit=max&w=930",
+      "https://www.adaptivewfs.com/wp-content/uploads/2020/07/logo-placeholder-image.png",
   },
 ];
 const ImageComponent = ({ uri, styles }) => {
@@ -238,11 +238,15 @@ const styles = StyleSheet.create({
     marginRight: "5%",
     ...FONTS.h4,
     color: COLORS.lightGray,
+    flex: 1,
+    flexWrap: "wrap",
   },
   imageComponentLeftText: {
     ...FONTS.h2,
     marginLeft: "2%",
     color: COLORS.darkBlue,
+    flex: 1,
+    flexWrap: "wrap",
   },
   leftTextStyle: {
     ...FONTS.h3,
@@ -265,6 +269,7 @@ const styles = StyleSheet.create({
     marginBottom: SIZES.base,
   },
   newsRightText: {
+    fontFamily: "DM Sans",
     flex: 1,
     flexWrap: "wrap",
     margin: 10,
