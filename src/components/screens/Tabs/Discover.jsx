@@ -32,11 +32,10 @@ const MyStatusBar = ({ backgroundColor, ...props }) => (
   </View>
 );
 
-export default function Discover({}) {
+export default function Discover({ }) {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
-  const [count, setCount] = useState(0);
-  const [lis, setLis] = useState([]);
+
   const discoverState = useSelector(
     (store) => store.discover.discoverCompaniesListState
   );
@@ -54,16 +53,10 @@ export default function Discover({}) {
   const Drawer = createDrawerNavigator();
 
   const getCompanyList = async () => {
-    console.log(
-      `${SERVER_ADDRESS}/api/v1/search?filter=${appliedFilter}&page=${
-        discoverState.page ?? 0
-      }&size=20`
-    );
     try {
       dispatch({ type: "DISCOVER_COMPANY_LIST_LOADING" });
       const response = await axios.get(
-        `${SERVER_ADDRESS}/api/v1/search?filter=${appliedFilter}&page=${
-          discoverState.page ?? 0
+        `${SERVER_ADDRESS}/api/v1/search?filter=${appliedFilter}&page=${discoverState.page ?? 0
         }&size=20`,
         { headers: { [AUTH_HEADER]: accessToken } }
       );
@@ -155,10 +148,9 @@ export default function Discover({}) {
     );
   }
   return (
-    // <NavigationContainer independent={true}>
-    //   <MyDrawer />
-    // </NavigationContainer>
-    <DiscoverUi />
+    <NavigationContainer independent={true}>
+      <MyDrawer />
+    </NavigationContainer>
   );
 }
 

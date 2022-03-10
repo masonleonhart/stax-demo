@@ -201,14 +201,16 @@ const Company = ({
   const [liked, setLiked] = useState(isLiked);
   const accessToken = useSelector((store) => store.user.userInfo.accessToken);
   const openLink = (link) => {
+    if (!link) {
+      return;
+    }
     Linking.openURL(link);
   };
-  const share = () => {};
+  const share = () => { };
   const toggleLike = async (id, liked) => {
     try {
-      const url = `${SERVER_ADDRESS}/api/v1/${
-        liked ? "remove-user-favourite-company" : "favourite-company"
-      }`;
+      const url = `${SERVER_ADDRESS}/api/v1/${liked ? "remove-user-favourite-company" : "favourite-company"
+        }`;
 
       const response = await axios.post(
         url,
@@ -227,7 +229,7 @@ const Company = ({
     }
   };
   return (
-    <TouchableOpacity style={styles.card}>
+    <View style={styles.card}>
       <HeaderComponent
         companyName={name}
         industry={industry}
@@ -271,7 +273,7 @@ const Company = ({
         separator={true}
       />
       <NewsComponent title="Latest News" newsData={NewsData} />
-    </TouchableOpacity>
+    </View>
   );
 };
 
