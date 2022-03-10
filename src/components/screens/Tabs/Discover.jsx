@@ -53,21 +53,21 @@ export default function Discover({}) {
   const Drawer = createDrawerNavigator();
 
   const getCompanyList = async () => {
-    // try {
-    //   dispatch({ type: "DISCOVER_COMPANY_LIST_LOADING" });
-    //   const response = await axios.get(
-    //     `${SERVER_ADDRESS}/api/v1/search?filter=${appliedFilter}&page=${
-    //       discoverState.page ?? 0
-    //     }`,
-    //     { headers: { [AUTH_HEADER]: accessToken } }
-    //   );
-    dispatch({
-      type: "SET_DISCOVER_COMPANY_LIST",
-      payload: [...(discoverState.companyList ?? []), ...response.data],
-    });
-    // } catch (error) {
-    //   console.error(error);
-    // }
+    try {
+      dispatch({ type: "DISCOVER_COMPANY_LIST_LOADING" });
+      const response = await axios.get(
+        `${SERVER_ADDRESS}/api/v1/search?filter=${appliedFilter}&page=${
+          discoverState.page ?? 0
+        }`,
+        { headers: { [AUTH_HEADER]: accessToken } }
+      );
+      dispatch({
+        type: "SET_DISCOVER_COMPANY_LIST",
+        payload: [...(discoverState.companyList ?? []), ...response.data],
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -110,41 +110,23 @@ export default function Discover({}) {
             </View>
           </View>
         </View>
-        {companyList?.length > 0 && (
-          <FlatList
-            contentContainerStyle={styles.companyListContainer}
-            data={discoverState.companyList}
-            onEndReachedThreshold={0.5}
-            onEndReached={async () => {
-              dispatch({ type: "INCREASE_PAGE_NO" });
-              return Promise.resolve(true);
-            }}
-            keyExtractor={(item) => item.id?.toString()}
-            renderItem={({ item }) => {
-              return (
-                <Company
-                  {...item}
-                  onPress={() => {
-                    console.log(company);
-                  }}
-                />
-              );
-            }}
-          />
-          // <ScrollView
-          //   stlye={styles.companyList}
-          //   contentContainerStyle={styles.companyListContainer}>
-          //   {companyList.map((company) => (
-          //     <Company
-          //       key={company.id}
-          //       {...company}
-          //       onPress={() => {
-          //         console.log(company);
-          //       }}
-          //     />
-          //   ))}
-          // </ScrollView>
-        )}
+        <View style={styles.companyListWrapper}>
+          {companyList?.length > 0 && (
+            <FlatList
+              contentContainerStyle={styles.companyListContainer}
+              data={discoverState.companyList}
+              onEndReachedThreshold={0.5}
+              onEndReached={async () => {
+                dispatch({ type: "INCREASE_PAGE_NO" });
+                return Promise.resolve(true);
+              }}
+              keyExtractor={(item) => item.id?.toString()}
+              renderItem={({ item }) => {
+                return <Company {...item} />;
+              }}
+            />
+          )}
+        </View>
         <ActivityModal isDialogVisible={discoverState.loading} />
       </View>
     );
@@ -175,6 +157,9 @@ const styles = StyleSheet.create({
   },
   companyListContainer: {
     marginHorizontal: 16,
+  },
+  companyListWrapper: {
+    backgroundColor: COLORS.lightWhite,
   },
   searchComponentMainConatainer: {
     flexDirection: "row",

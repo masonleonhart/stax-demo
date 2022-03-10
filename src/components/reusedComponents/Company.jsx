@@ -6,9 +6,10 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
+  Linking,
 } from "react-native";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
-import { determineMatchType } from "../../constants/helpers";
+import { determineColor, determineMatchType } from "../../constants/helpers";
 import { COLORS, FONTS, SIZES } from "../../constants/theme";
 import Separator from "./Separator";
 const SCREEN_HEIGHT = Dimensions.get("screen").height;
@@ -24,6 +25,11 @@ const NewsData = [
 const ImageComponent = ({ uri, styles }) => {
   return <Image style={[styles]} source={{ uri }} />;
 };
+const openLink = (link) => {
+  Linking.openURL(link);
+};
+const share = () => {};
+const toggleLike = () => {};
 const HeaderComponent = ({
   companyCoverImageUri,
   companyLogoImageUri,
@@ -59,7 +65,33 @@ const LineComponent = ({
   subtitileColor,
   separator,
   titleColor,
+  costSize,
+  selectedCost,
 }) => {
+  let costWidgets = [];
+  for (let i = 0; i < costSize; i++) {
+    costWidgets.push(
+      <View
+        style={[
+          selectedCost <= i
+            ? styles.costIconContainerDisabled
+            : styles.costIconContainer,
+        ]}>
+        <Text
+          style={[
+            styles.costIcon,
+            {
+              color:
+                selectedCost > i
+                  ? "rgba(102, 94, 104, 0.75)"
+                  : "rgba(102, 94, 104, 0.3)",
+            },
+          ]}>
+          $
+        </Text>
+      </View>
+    );
+  }
   return (
     <>
       <View
@@ -79,15 +111,21 @@ const LineComponent = ({
           ]}>
           {title}
         </Text>
-        <Text
-          style={[
-            styles.rightTextStyle,
-            {
-              color: subtitileColor ? `${subtitileColor}` : COLORS.borderColor,
-            },
-          ]}>
-          {subtitile}
-        </Text>
+        {title !== "Cost" ? (
+          <Text
+            style={[
+              styles.rightTextStyle,
+              {
+                color: subtitileColor
+                  ? `${subtitileColor}`
+                  : COLORS.borderColor,
+              },
+            ]}>
+            {subtitile}
+          </Text>
+        ) : (
+          <View style={[styles.costIconWrapper]}>{costWidgets}</View>
+        )}
       </View>
       {separator ? <Separator /> : null}
     </>
@@ -108,10 +146,13 @@ const IconComponent = ({ titleColor, title, icons, separator }) => {
         </Text>
         <View style={styles.iconListContainer}>
           {icons.map((value) => (
-            <TouchableOpacity key={value.id} style={{ marginLeft: SIZES.base }}>
+            <TouchableOpacity
+              key={value.id}
+              style={{ marginLeft: SIZES.base }}
+              onPress={value.onPress}>
               <MaterialCommunityIcons
                 name={value.name}
-                color={COLORS.blue}
+                color="#1C1939"
                 size={25}
               />
             </TouchableOpacity>
@@ -147,38 +188,55 @@ const NewsComponent = ({ newsData, title }) => {
     </>
   );
 };
-const Company = ({ name, values_match_score, onPress, industry }) => {
+const Company = ({
+  name,
+  values_match_score,
+  industry,
+  parent_logo_image,
+  link,
+  isLiked,
+}) => {
   return (
-    <TouchableOpacity style={styles.card} onPress={onPress}>
+    <TouchableOpacity style={styles.card}>
       <HeaderComponent
         companyName={name}
         industry={industry}
         companyCoverImageUri="https://png.pngtree.com/png-clipart/20190619/original/pngtree-vector-picture-icon-png-image_4013511.jpg"
-        companyLogoImageUri="https://www.adaptivewfs.com/wp-content/uploads/2020/07/logo-placeholder-image.png"
+        companyLogoImageUri={
+          parent_logo_image
+            ? parent_logo_image
+            : "https://www.adaptivewfs.com/wp-content/uploads/2020/07/logo-placeholder-image.png"
+        }
       />
       <LineComponent
         title="Matching Values"
         subtitile={determineMatchType(values_match_score)} // TODO: Change color
-        subtitileColor={COLORS.green}
+        subtitileColor={determineColor(values_match_score)}
         separator={true}
       />
       <LineComponent
         title="Cost"
-        subtitile="$4"
         subtitileColor={COLORS.black}
+        costSize={4}
+        selectedCost={0}
         separator={true}
       />
       <IconComponent
         title="Actions"
         icons={[
-          { id: 1, name: "heart-outline" },
-          { id: 2, name: "share-circle" },
-          { id: 3, name: "cast" },
+          {
+            id: 1,
+            name: isLiked ? "heart" : "heart-outline",
+            onPress: () => toggleLike(),
+          },
+          { id: 2, name: "share-circle", onPress: () => share() },
+          { id: 3, name: "cast", onPress: () => openLink(link) },
         ]}
+        separator={true}
       />
       <LineComponent
-        title="Discount Code"
-        subtitile="20% Off-STAX20"
+        title="DiscountCode"
+        subtitile="-"
         subtitileColor={COLORS.black}
         separator={true}
       />
@@ -192,7 +250,9 @@ export default Company;
 const styles = StyleSheet.create({
   card: {
     backgroundColor: "white",
-    borderRadius: 16,
+
+    borderBottomRightRadius: 16,
+    borderBottomLeftRadius: 16,
     shadowOpacity: 0.2,
     shadowRadius: 4,
     shadowColor: "black",
@@ -202,7 +262,7 @@ const styles = StyleSheet.create({
     },
     elevation: 1,
     marginVertical: 20,
-    paddingBottom: 20,
+    paddingBottom: 5,
   },
   thumb: {
     height: 200,
@@ -238,6 +298,7 @@ const styles = StyleSheet.create({
     marginRight: "5%",
     ...FONTS.h4,
     color: COLORS.lightGray,
+    textAlign: "right",
     flex: 1,
     flexWrap: "wrap",
   },
@@ -269,11 +330,37 @@ const styles = StyleSheet.create({
     marginBottom: SIZES.base,
   },
   newsRightText: {
-    fontFamily: "DM Sans",
+    ...FONTS.h4,
+    fontFamily: "DMSans-Medium",
     flex: 1,
     flexWrap: "wrap",
     margin: 10,
-    ...FONTS.h4,
     color: COLORS.borderColor,
+  },
+  costIcon: {
+    ...FONTS.h4,
+    paddingLeft: "2%",
+    paddingRight: "2%",
+  },
+  costIconWrapper: {
+    marginLeft: "auto",
+    marginRight: "5%",
+    flexDirection: "row",
+    alignContent: "center",
+    justifyContent: "center",
+  },
+  costIconContainer: {
+    borderWidth: 1,
+    borderColor: "rgba(102, 94, 104, 0.5)",
+    marginLeft: 5,
+    borderRadius: 50,
+    backgroundColor: "rgba(102, 94, 104, 0.5)",
+  },
+  costIconContainerDisabled: {
+    borderWidth: 1,
+    borderColor: "rgba(102, 94, 104, 0.15)",
+    marginLeft: 5,
+    borderRadius: 50,
+    backgroundColor: "rgba(102, 94, 104, 0.15)",
   },
 });
