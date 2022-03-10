@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Text,
   Image,
@@ -12,6 +12,10 @@ import { MaterialCommunityIcons } from "react-native-vector-icons";
 import { determineColor, determineMatchType } from "../../constants/helpers";
 import { COLORS, FONTS, SIZES } from "../../constants/theme";
 import Separator from "./Separator";
+import { SERVER_ADDRESS, AUTH_HEADER } from "@env";
+import axios from "axios";
+import { useSelector } from "react-redux";
+
 const SCREEN_HEIGHT = Dimensions.get("screen").height;
 
 const NewsData = [
@@ -25,11 +29,7 @@ const NewsData = [
 const ImageComponent = ({ uri, styles }) => {
   return <Image style={[styles]} source={{ uri }} />;
 };
-const openLink = (link) => {
-  Linking.openURL(link);
-};
-const share = () => {};
-const toggleLike = () => {};
+
 const HeaderComponent = ({
   companyCoverImageUri,
   companyLogoImageUri,
@@ -189,6 +189,7 @@ const NewsComponent = ({ newsData, title }) => {
   );
 };
 const Company = ({
+  id,
   name,
   values_match_score,
   industry,
@@ -196,6 +197,34 @@ const Company = ({
   link,
   isLiked,
 }) => {
+  const [liked, setLiked] = useState(isLiked);
+  const accessToken = useSelector((store) => store.user.userInfo.accessToken);
+  const openLink = (link) => {
+    Linking.openURL(link);
+  };
+  const share = () => {};
+  const toggleLike = async (id, liked) => {
+    try {
+      const url = `${SERVER_ADDRESS}/api/v1/${
+        liked ? "remove-user-favourite-company" : "favourite-company"
+      }`;
+
+      const response = await axios.post(
+        url,
+        {
+          company_id: id,
+        },
+        {
+          headers: { [AUTH_HEADER]: accessToken },
+        }
+      );
+      if (response.status) {
+        setLiked((prev) => !prev);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <TouchableOpacity style={styles.card}>
       <HeaderComponent
@@ -226,8 +255,8 @@ const Company = ({
         icons={[
           {
             id: 1,
-            name: isLiked ? "heart" : "heart-outline",
-            onPress: () => toggleLike(),
+            name: liked ? "heart" : "heart-outline",
+            onPress: () => toggleLike(id, liked),
           },
           { id: 2, name: "share-circle", onPress: () => share() },
           { id: 3, name: "cast", onPress: () => openLink(link) },
