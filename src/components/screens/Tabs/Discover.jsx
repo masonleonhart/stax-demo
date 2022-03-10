@@ -36,6 +36,7 @@ export default function Discover({}) {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const [count, setCount] = useState(0);
+  const [lis, setLis] = useState([]);
   const discoverState = useSelector(
     (store) => store.discover.discoverCompaniesListState
   );
@@ -53,18 +54,25 @@ export default function Discover({}) {
   const Drawer = createDrawerNavigator();
 
   const getCompanyList = async () => {
+    console.log(
+      `${SERVER_ADDRESS}/api/v1/search?filter=${appliedFilter}&page=${
+        discoverState.page ?? 0
+      }&size=20`
+    );
     try {
       dispatch({ type: "DISCOVER_COMPANY_LIST_LOADING" });
       const response = await axios.get(
         `${SERVER_ADDRESS}/api/v1/search?filter=${appliedFilter}&page=${
           discoverState.page ?? 0
-        }`,
+        }&size=20`,
         { headers: { [AUTH_HEADER]: accessToken } }
       );
       dispatch({
         type: "SET_DISCOVER_COMPANY_LIST",
-        payload: [...(discoverState.companyList ?? []), ...response.data],
+        payload: [...(discoverState?.companyList ?? []), ...response.data],
       });
+      // console.log(response.data.map((c) => c.name));
+      // setLis((old) => old.concat(response.data));
     } catch (error) {
       console.error(error);
     }
@@ -115,19 +123,22 @@ export default function Discover({}) {
             <FlatList
               contentContainerStyle={styles.companyListContainer}
               data={discoverState.companyList}
-              onEndReachedThreshold={0.5}
+              // data={lis}
+              onEndReachedThreshold={800}
               onEndReached={async () => {
                 dispatch({ type: "INCREASE_PAGE_NO" });
                 return Promise.resolve(true);
               }}
-              keyExtractor={(item) => item.id?.toString()}
+              keyExtractor={(item) => item.name}
               renderItem={({ item }) => {
                 return <Company {...item} />;
               }}
             />
           )}
         </View>
-        <ActivityModal isDialogVisible={discoverState.loading} />
+        <ActivityModal
+          isDialogVisible={discoverState.loading && !companyList.length}
+        />
       </View>
     );
   }
@@ -144,9 +155,10 @@ export default function Discover({}) {
     );
   }
   return (
-    <NavigationContainer independent={true}>
-      <MyDrawer />
-    </NavigationContainer>
+    // <NavigationContainer independent={true}>
+    //   <MyDrawer />
+    // </NavigationContainer>
+    <DiscoverUi />
   );
 }
 

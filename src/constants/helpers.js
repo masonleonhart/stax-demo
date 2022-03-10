@@ -10,7 +10,7 @@ export const determineMatchType = (zscore) => {
   } else if (zscore >= 1 && zscore < 2) {
     return "Good";
   } else if (zscore >= 2) {
-    return "Excelent";
+    return "Excellent";
   }
 };
 

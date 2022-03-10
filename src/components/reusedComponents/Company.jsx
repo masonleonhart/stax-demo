@@ -72,6 +72,7 @@ const LineComponent = ({
   for (let i = 0; i < costSize; i++) {
     costWidgets.push(
       <View
+        key={i}
         style={[
           selectedCost <= i
             ? styles.costIconContainerDisabled
