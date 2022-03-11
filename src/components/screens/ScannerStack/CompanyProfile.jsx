@@ -61,22 +61,23 @@ export default function CompanyProfile({ navigation }) {
 
       if (valueModified.includes("reduced_waste")) {
         valueModified = "waste";
-      } else if (valueModified.includes("respect_to_human_rights")) {
+      } else if (valueModified.includes("respect_for_human_rights")) {
         valueModified = "human_rights";
-      } else if (valueModified.includes("diverse_leadership")) {
+      } else if (valueModified.includes("women_in_leadership")) {
         valueModified = "diversity";
       } else if (valueModified.includes("efficient_water_use")) {
         valueModified = "water";
       } else if (valueModified.includes("low_carbon_footprint")) {
         valueModified = "carbon_intensity";
+      } else if (valueModified.includes("ethical_practices")) {
+        valueModified = "business_ethics";
       }
 
-      const valueZscore = companyRanking[`${valueModified}_zscore`];
+      const valuePercentage = companyRanking[`${valueModified}_pct_rank`];
 
-      const matchScore =
-        valueZscore !== "nan" ? determineMatchType(valueZscore) : "No Data";
+      const valuePercentageRounded = Number(parseFloat(valuePercentage).toFixed(2));
 
-      listOfValues.push({ ...value, matchScore });
+      listOfValues.push({ ...value, valuePercentageRounded });
     }
 
     setValueMatchList(listOfValues);
@@ -121,8 +122,12 @@ export default function CompanyProfile({ navigation }) {
         <Text style={styles.valueName}>{value.name}</Text>
       </View>
       <View style={[SharedStyles.flexRow, { marginBottom: "5%" }]}>
-        <Text style={styles.overallMatch}>Match to Value:</Text>
-        <Text style={styles.matchValue}>{value.matchScore}</Text>
+        <Text style={styles.progressText}>{value.valuePercentageRounded * 100}%</Text>
+        <ProgressBar
+          progress={value.valuePercentageRounded}
+          color={myTheme.colors.blue}
+          style={styles.progressBar}
+        />
       </View>
     </View>
   );
@@ -206,6 +211,13 @@ export default function CompanyProfile({ navigation }) {
       marginLeft: "5%",
       fontFamily: fonts.bold,
     },
+    progressText: {
+      fontSize: 16,
+      fontFamily: fonts.medium,
+    },
+    progressBar: {
+      width: windowWidth * 0.7,
+    },
     matchValue: {
       fontSize: 18,
       fontFamily: fonts.bold,
@@ -279,7 +291,7 @@ export default function CompanyProfile({ navigation }) {
 
           <View ref={renderedValuesParent}>
             {valueMatchList.map((value) => {
-              if (value.matchScore !== "No Data") {
+              if (value.valuePercentageRounded) {
                 return <RenderValue key={value.id} value={value} />;
               }
             })}
