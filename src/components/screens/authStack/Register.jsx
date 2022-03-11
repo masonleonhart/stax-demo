@@ -2,29 +2,21 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";
 
-import {
-  StyleSheet,
-  Image,
-  View,
-  ScrollView,
-  Pressable,
-  Alert,
-} from "react-native";
+import { StyleSheet, View, Pressable, Alert } from "react-native";
 import {
   TextInput,
   Text,
-  Surface,
-  Appbar,
   useTheme,
   HelperText,
   configureFonts,
 } from "react-native-paper";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
 
 import MyButton from "../../reusedComponents/MyButton";
 import ActivityModal from "../../modals/ActivityModal";
 
 import fonts from "../../reusedComponents/fonts";
-import StaxLogo from "../../../../assets/StaxLogoVerticleCreamWithGreen.png";
 
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
 
@@ -62,26 +54,28 @@ export default function RegisterAccount({ navigation }) {
       try {
         setIsDialogVisible(true);
 
+        await dispatch({
+          type: "SET_PERSONAL_NAME",
+          payload: {
+            first_name: registerForm.first_name,
+            last_name: registerForm.last_name,
+          },
+        });
+
         await auth.createUserWithEmailAndPassword(
           registerForm.email,
           registerForm.password
         );
 
         setIsDialogVisible(false);
-
-        navigation.navigate("RegisterName", registerForm);
       } catch (error) {
         setIsDialogVisible(false);
 
-        Alert.alert("Error", error.message);
+        "messagee" in error
+          ? Alert.alert("Error", error.message)
+          : console.log(error);
       }
     }
-  };
-
-  const handleLoginNavPress = () => {
-    dispatch({ type: "SET_REGISTER_COMPLETED_TRUE" });
-
-    navigation.navigate("Login");
   };
 
   useEffect(() => {
@@ -102,7 +96,9 @@ export default function RegisterAccount({ navigation }) {
     if (
       !registerForm.email ||
       !registerForm.password ||
-      !registerForm.confirmPassword
+      !registerForm.confirmPassword ||
+      !registerForm.first_name ||
+      !registerForm.last_name
     ) {
       setCanContinue(false);
     } else {
@@ -114,9 +110,9 @@ export default function RegisterAccount({ navigation }) {
 
   const inputTheme = {
     colors: {
-      primary: myTheme.colors.green,
-      text: myTheme.colors.grey,
-      placeholder: myTheme.colors.grey,
+      primary: myTheme.colors.blue,
+      text: "black",
+      placeholder: "black",
     },
     fonts: configureFonts({
       ios: {
@@ -130,32 +126,19 @@ export default function RegisterAccount({ navigation }) {
   // Styles for the RegisterAccount view
 
   const styles = StyleSheet.create({
-    appbar: {
-      backgroundColor: "transparent",
-    },
-    logoSurface: {
-      height: "20%",
-      width: "100%",
-      backgroundColor: "transparent",
-      marginBottom: "5%",
-    },
-    staxLogo: {
-      height: "100%",
-      width: "40%",
-      marginLeft: "auto",
-      marginRight: "auto",
-    },
     scrollView: {
       flexGrow: 1,
-      paddingBottom: 250,
       marginHorizontal: "5%",
+    },
+    headerText: {
+      marginVertical: "5%",
+      fontFamily: fonts.bold,
+      fontSize: 24,
+      color: myTheme.colors.grey,
     },
     textInput: {
       backgroundColor: "transparent",
       marginTop: "5%",
-    },
-    buttonLabel: {
-      color: myTheme.colors.green,
     },
     termsOfUseOne: {
       marginTop: "10%",
@@ -171,7 +154,7 @@ export default function RegisterAccount({ navigation }) {
     },
     termsofUseThree: {
       textDecorationLine: "underline",
-      color: myTheme.colors.green,
+      color: myTheme.colors.blue,
       fontFamily: fonts.regular,
     },
     signInWrapper: {
@@ -187,9 +170,9 @@ export default function RegisterAccount({ navigation }) {
       color: myTheme.colors.grey,
       fontFamily: fonts.regular,
     },
-    signInTextGreen: {
+    signInTextBlue: {
       marginLeft: "5%",
-      color: myTheme.colors.green,
+      color: myTheme.colors.blue,
       fontFamily: fonts.bold,
     },
   });
@@ -201,16 +184,12 @@ export default function RegisterAccount({ navigation }) {
   }
 
   return (
-    <View>
-      <Appbar style={styles.appbar} />
-
+    <KeyboardAwareScrollView contentContainerStyle={styles.scrollView}>
       <ActivityModal isDialogVisible={isDialogVisible} />
 
-      <Surface style={styles.logoSurface}>
-        <Image source={StaxLogo} resizeMode="contain" style={styles.staxLogo} />
-      </Surface>
+      <Text style={styles.headerText}>Sign up with Stax</Text>
 
-      <ScrollView contentContainerStyle={styles.scrollView}>
+      <View>
         <TextInput
           value={registerForm.email}
           onChangeText={(text) =>
@@ -219,7 +198,33 @@ export default function RegisterAccount({ navigation }) {
           underlineColor={myTheme.colors.grey}
           label="Email"
           autoCapitalize="none"
-          left={<TextInput.Icon name="email" color={myTheme.colors.green} />}
+          left={<TextInput.Icon name="email" color={myTheme.colors.blue} />}
+          style={styles.textInput}
+          theme={inputTheme}
+        />
+
+        <TextInput
+          value={registerForm.first_name}
+          onChangeText={(text) =>
+            setRegisterForm({ ...registerForm, first_name: text })
+          }
+          underlineColor={myTheme.colors.grey}
+          label="First Name"
+          autoCapitalize="words"
+          left={<TextInput.Icon name="account" color={myTheme.colors.blue} />}
+          style={styles.textInput}
+          theme={inputTheme}
+        />
+
+        <TextInput
+          value={registerForm.last_name}
+          onChangeText={(text) =>
+            setRegisterForm({ ...registerForm, last_name: text })
+          }
+          underlineColor={myTheme.colors.grey}
+          label="Last Name"
+          autoCapitalize="words"
+          left={<TextInput.Icon name="account" color={myTheme.colors.blue} />}
           style={styles.textInput}
           theme={inputTheme}
         />
@@ -233,11 +238,11 @@ export default function RegisterAccount({ navigation }) {
           error={continueClicks > 0 && passwordError}
           underlineColor={myTheme.colors.grey}
           label="Password"
-          left={<TextInput.Icon name="lock" color={myTheme.colors.green} />}
+          left={<TextInput.Icon name="lock" color={myTheme.colors.blue} />}
           right={
             <TextInput.Icon
               name="eye"
-              color={myTheme.colors.green}
+              color={myTheme.colors.blue}
               onPress={() => setSecurePassword(!securePassword)}
             />
           }
@@ -258,11 +263,11 @@ export default function RegisterAccount({ navigation }) {
           error={continueClicks > 0 && passwordError}
           underlineColor={myTheme.colors.grey}
           label="Confirm Password"
-          left={<TextInput.Icon name="lock" color={myTheme.colors.green} />}
+          left={<TextInput.Icon name="lock" color={myTheme.colors.blue} />}
           right={
             <TextInput.Icon
               name="eye"
-              color={myTheme.colors.green}
+              color={myTheme.colors.blue}
               onPress={() => setSecurePassword(!securePassword)}
             />
           }
@@ -273,13 +278,10 @@ export default function RegisterAccount({ navigation }) {
         <HelperText type="error" visible={continueClicks > 0 && passwordError}>
           Passwords do not match
         </HelperText>
+      </View>
 
-        <MyButton
-          onPress={() => handleContinue()}
-          text="Continue"
-          labelStyle={styles.buttonLabel}
-          buttonColor={myTheme.colors.cream}
-        />
+      <View>
+        <MyButton onPress={() => handleContinue()} text="Continue" />
 
         {/* possible refactor of terms of use */}
         <Text style={styles.termsOfUseOne}>
@@ -295,14 +297,14 @@ export default function RegisterAccount({ navigation }) {
           style={styles.signInWrapper}
           underlayColor="rgba(0, 0, 0, .1)"
           rippleColor="rgba(0, 0, 0, .1)"
-          onPress={handleLoginNavPress}
+          onPress={() => navigation.navigate("Login")}
         >
           <View style={styles.signInText}>
             <Text style={styles.signInTextGrey}>Already have an account?</Text>
-            <Text style={styles.signInTextGreen}>Sign In</Text>
+            <Text style={styles.signInTextBlue}>Sign In</Text>
           </View>
         </Pressable>
-      </ScrollView>
-    </View>
+      </View>
+    </KeyboardAwareScrollView>
   );
 }

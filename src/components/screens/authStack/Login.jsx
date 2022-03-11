@@ -117,12 +117,6 @@ export default function Login({ navigation }) {
     }
   }, [response]);
 
-  const handleRegisterNavPress = () => {
-    dispatch({ type: "SET_REGISTER_COMPLETED_FALSE" });
-
-    navigation.navigate("Register");
-  };
-
   // Shared theme for text inputs
 
   const inputTheme = {
@@ -170,7 +164,6 @@ export default function Login({ navigation }) {
       color: myTheme.colors.grey,
     },
     forgotPassword: {
-      marginTop: "15%",
       color: myTheme.colors.cream,
       marginLeft: "auto",
       marginRight: "auto",
@@ -251,14 +244,20 @@ export default function Login({ navigation }) {
           onPress={promptAsync}
           light
         />
-
-        <Text style={styles.forgotPassword}>Forgot your password?</Text>
+        <Pressable
+          style={styles.registerWrapper}
+          underlayColor="rgba(0, 0, 0, .1)"
+          rippleColor="rgba(0, 0, 0, .1)"
+          onPress={() => navigation.navigate("ResetPassword")}
+        >
+          <Text style={styles.forgotPassword}>Forgot your password?</Text>
+        </Pressable>
 
         <Pressable
           style={styles.registerWrapper}
           underlayColor="rgba(0, 0, 0, .1)"
           rippleColor="rgba(0, 0, 0, .1)"
-          onPress={handleRegisterNavPress}
+          onPress={() => navigation.navigate("Register")}
         >
           <View style={SharedStyles.flexRow}>
             <Text style={styles.registerTextCream}>Don't have an account?</Text>

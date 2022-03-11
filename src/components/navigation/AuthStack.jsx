@@ -1,11 +1,11 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import { useTheme } from "react-native-paper";
+import { useTheme, IconButton } from "react-native-paper";
 
 import Login from "../screens/authStack/Login";
 import Register from "../screens/authStack/Register";
-import RegisterName from "../screens/authStack/RegisterName";
+import ResetPassword from "../screens/authStack/ResetPassword";
 
 export default function AuthStack() {
   const Stack = createStackNavigator();
@@ -15,17 +15,30 @@ export default function AuthStack() {
 
   return (
     <Stack.Navigator
-      screenOptions={() => ({
-        headerShown: false,
+      screenOptions={({ navigation }) => ({
+        headerMode: "screen",
         gestureEnabled: true,
+        headerTitle: "",
         cardStyle: {
-          backgroundColor: myTheme.colors.cream,
+          backgroundColor: "white",
         },
+        headerLeft: () => (
+          <IconButton
+            icon="chevron-left"
+            size={30}
+            color={myTheme.colors.darkGrey}
+            onPress={() => navigation.goBack()}
+          />
+        ),
       })}
     >
-      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen name="Register" component={Register} />
-      <Stack.Screen name="RegisterName" component={RegisterName} />
+      <Stack.Screen name="ResetPassword" component={ResetPassword} />
     </Stack.Navigator>
   );
 }

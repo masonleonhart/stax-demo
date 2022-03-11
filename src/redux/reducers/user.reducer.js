@@ -16,17 +16,6 @@ const userInfo = (state = {}, action) => {
   }
 };
 
-const registerCompleted = (state = true, action) => {
-  switch (action.type) {
-    case "SET_REGISTER_COMPLETED_FALSE":
-      return false;
-    case "SET_REGISTER_COMPLETED_TRUE":
-      return true;
-    default:
-      return state;
-  }
-};
-
 const personalName = (state = { first_name: "", last_name: "" }, action) => {
   switch (action.type) {
     case "SET_PERSONAL_NAME":
@@ -60,7 +49,6 @@ const valuesQuizSelection = (state = [], action) => {
 
 export default combineReducers({
   userInfo,
-  registerCompleted,
   personalName,
   email,
   valuesQuizSelection,
