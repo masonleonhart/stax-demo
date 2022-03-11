@@ -63,6 +63,7 @@ export default function BarcodeScanner({ navigation }) {
             type: "SET_SCANNED_COMPANY_RANKING",
             payload: {},
           });
+          dispatch({ type: "RESET_BARCODE_DETAILS" });
           navigation.navigate("NewProductForm");
         } else if (response.status === 200) {
           dispatch({

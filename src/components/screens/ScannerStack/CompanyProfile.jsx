@@ -21,6 +21,7 @@ import fonts from "../../reusedComponents/fonts";
 import SharedStyles from "../../reusedComponents/SharedStyles";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
 import companyImage from "../../../../assets/companyImage.jpeg";
+import { determineMatchType } from '../../../constants/helpers';
 
 export default function CompanyProfile({ navigation }) {
   const isFocused = useIsFocused();
@@ -39,19 +40,7 @@ export default function CompanyProfile({ navigation }) {
 
   const renderedValuesParent = useRef(null);
 
-  const determineMatchType = (zscore) => {
-    if (zscore <= -2) {
-      return "Bad";
-    } else if (zscore > -2 && zscore <= -1) {
-      return "Poor";
-    } else if (zscore > -1 && zscore < 1) {
-      return "Average";
-    } else if (zscore >= 1 && zscore < 2) {
-      return "Good";
-    } else if (zscore >= 2) {
-      return "Excelent";
-    }
-  };
+
 
   const matchValuesToMStarData = (userValues) => {
     let listOfValues = [];
@@ -257,10 +246,10 @@ export default function CompanyProfile({ navigation }) {
           {barcodeDetails.manufacturer
             ? barcodeDetails.manufacturer
             : barcodeDetails.brand
-            ? barcodeDetails.brand
-            : barcodeDetails.title
-            ? barcodeDetails.title
-            : "Company Profile"}
+              ? barcodeDetails.brand
+              : barcodeDetails.title
+                ? barcodeDetails.title
+                : "Company Profile"}
         </Text>
         {"name" in companyRanking && (
           <Text style={styles.parentName}>Owned By: {companyRanking.name}</Text>
