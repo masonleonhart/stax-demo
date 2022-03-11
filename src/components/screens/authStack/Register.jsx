@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useIsFocused } from "@react-navigation/native";
 
-import { StyleSheet, View, ScrollView, Pressable, Alert } from "react-native";
+import { StyleSheet, View, Pressable, Alert } from "react-native";
 import {
   TextInput,
   Text,
-  Appbar,
   useTheme,
   HelperText,
   configureFonts,
@@ -127,13 +126,9 @@ export default function RegisterAccount({ navigation }) {
   // Styles for the RegisterAccount view
 
   const styles = StyleSheet.create({
-    appbar: {
-      backgroundColor: "transparent",
-    },
     scrollView: {
       flexGrow: 1,
       marginHorizontal: "5%",
-      justifyContent: "center",
     },
     headerText: {
       marginVertical: "5%",
@@ -190,8 +185,6 @@ export default function RegisterAccount({ navigation }) {
 
   return (
     <KeyboardAwareScrollView contentContainerStyle={styles.scrollView}>
-      <Appbar style={styles.appbar} />
-
       <ActivityModal isDialogVisible={isDialogVisible} />
 
       <Text style={styles.headerText}>Sign up with Stax</Text>
