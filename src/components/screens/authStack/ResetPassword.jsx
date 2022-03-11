@@ -122,7 +122,7 @@ export default function ResetPassword({ navigation }) {
         />
       </View>
       <MyButton
-        text="Update Password"
+        text="Submit"
         onPress={changePassword}
         style={styles.button}
       />
