@@ -117,12 +117,6 @@ export default function Login({ navigation }) {
     }
   }, [response]);
 
-  const handleRegisterNavPress = () => {
-    dispatch({ type: "SET_REGISTER_COMPLETED_FALSE" });
-
-    navigation.navigate("Register");
-  };
-
   // Shared theme for text inputs
 
   const inputTheme = {
@@ -258,7 +252,7 @@ export default function Login({ navigation }) {
           style={styles.registerWrapper}
           underlayColor="rgba(0, 0, 0, .1)"
           rippleColor="rgba(0, 0, 0, .1)"
-          onPress={handleRegisterNavPress}
+          onPress={() => navigation.navigate("Register")}
         >
           <View style={SharedStyles.flexRow}>
             <Text style={styles.registerTextCream}>Don't have an account?</Text>

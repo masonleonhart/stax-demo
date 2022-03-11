@@ -16,9 +16,6 @@ import EmptyStateView from "../../reusedComponents/EmptyStateView";
 export default function Splash({ navigation }) {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
-  const registerCompleted = useSelector(
-    (store) => store.user.registerCompleted
-  );
   const first_name = useSelector((store) => store.user.personalName.first_name);
   const last_name = useSelector((store) => store.user.personalName.last_name);
   const email = useSelector((store) => store.user.email);
@@ -39,11 +36,12 @@ export default function Splash({ navigation }) {
   // When the page finishes rendering, open the webview to run login
 
   useEffect(() => {
+    console.log(first_name, last_name)
     // onAuthStateChanged returns an unsubscriber
     const unsubscribeAuth = auth.onAuthStateChanged(
       async (authenticatedUser) => {
         try {
-          if (authenticatedUser && registerCompleted) {
+          if (authenticatedUser) {
             const authenticateData = {
               access_token:
                 authenticatedUser.toJSON().stsTokenManager.accessToken,
@@ -81,7 +79,7 @@ export default function Splash({ navigation }) {
 
     // unsubscribe auth listener on unmount
     return unsubscribeAuth;
-  }, [registerCompleted, first_name, last_name]);
+  }, [first_name, last_name]);
 
   // if the screen isn't in focus yet, render a placeholder screen
 
