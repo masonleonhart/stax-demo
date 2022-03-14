@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useIsFocused } from "@react-navigation/core";
-import { getCompanies } from "../../../constants/companies";
 import Company from "../../reusedComponents/Company.jsx";
 import { Feather } from "@expo/vector-icons";
+import { SERVER_ADDRESS, AUTH_HEADER } from "@env";
+import axios from "axios";
 
 import {
   View,
   StyleSheet,
   StatusBar,
-  SafeAreaView,
   ScrollView,
-  Button,
+  FlatList,
 } from "react-native";
 import { Text } from "react-native-paper";
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
-  DrawerItemList,
-  DrawerItem,
 } from "@react-navigation/drawer";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -26,16 +24,25 @@ import HeaderComponent from "../../reusedComponents/HeaderComponent";
 import fonts from "../../reusedComponents/fonts";
 import { NavigationContainer } from "@react-navigation/native";
 import FilterStack from "../../navigation/FilterStack";
+import { useDispatch, useSelector } from "react-redux";
+import ActivityModal from "../../modals/ActivityModal";
 const MyStatusBar = ({ backgroundColor, ...props }) => (
   <View style={[{ backgroundColor }]}>
     <StatusBar translucent backgroundColor={backgroundColor} {...props} />
   </View>
 );
 
-export default function Discover({}) {
+export default function Discover({ }) {
   const isFocused = useIsFocused();
-  const [companyList, setCompanyList] = useState([]);
-  let navigation;
+  const dispatch = useDispatch();
+
+  const discoverState = useSelector(
+    (store) => store.discover.discoverCompaniesListState
+  );
+  const appliedFilter = discoverState.appliedFilter ?? "";
+  const companyList = discoverState.companyList ?? [];
+  const accessToken = useSelector((store) => store.user.userInfo.accessToken);
+
   function CustomDrawerContent(props) {
     return (
       <DrawerContentScrollView {...props}>
@@ -44,20 +51,29 @@ export default function Discover({}) {
     );
   }
   const Drawer = createDrawerNavigator();
-  function RenderCompany({ company }) {
-    return (
-      <Company
-        {...company}
-        onPress={() => {
-          console.log(company);
-        }}
-      />
-    );
-  }
+
+  const getCompanyList = async () => {
+    try {
+      dispatch({ type: "DISCOVER_COMPANY_LIST_LOADING" });
+      const response = await axios.get(
+        `${SERVER_ADDRESS}/api/v1/search?filter=${appliedFilter}&page=${discoverState.page ?? 0
+        }&size=20`,
+        { headers: { [AUTH_HEADER]: accessToken } }
+      );
+      dispatch({
+        type: "SET_DISCOVER_COMPANY_LIST",
+        payload: [...(discoverState?.companyList ?? []), ...response.data],
+      });
+      // console.log(response.data.map((c) => c.name));
+      // setLis((old) => old.concat(response.data));
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    setCompanyList();
-  }, []);
+    getCompanyList();
+  }, [appliedFilter, discoverState.page]);
 
   if (!isFocused) {
     return <EmptyStateView />;
@@ -72,7 +88,7 @@ export default function Discover({}) {
         <MyStatusBar backgroundColor={COLORS.blue} barStyle="light-content" />
         <HeaderComponent
           mainTitle="Discover"
-          subTitle="Allgned Companies"
+          subTitle="Aligned Companies"
           mainTitleStyle={styles.headerDiscoverText}
           subTitleStyle={styles.headerNameText}
           backgroundColor={COLORS.blue}
@@ -95,15 +111,27 @@ export default function Discover({}) {
             </View>
           </View>
         </View>
-        {companyList?.length > 0 && (
-          <ScrollView
-            stlye={styles.companyList}
-            contentContainerStyle={styles.companyListContainer}>
-            {companyList.map((company) => (
-              <RenderCompany key={company.id} company />
-            ))}
-          </ScrollView>
-        )}
+        <View style={styles.companyListWrapper}>
+          {companyList?.length > 0 && (
+            <FlatList
+              contentContainerStyle={styles.companyListContainer}
+              data={discoverState.companyList}
+              // data={lis}
+              onEndReachedThreshold={800}
+              onEndReached={async () => {
+                dispatch({ type: "INCREASE_PAGE_NO" });
+                return Promise.resolve(true);
+              }}
+              keyExtractor={(item) => item.name}
+              renderItem={({ item }) => {
+                return <Company {...item} />;
+              }}
+            />
+          )}
+        </View>
+        <ActivityModal
+          isDialogVisible={discoverState.loading && !companyList.length}
+        />
       </View>
     );
   }
@@ -133,6 +161,9 @@ const styles = StyleSheet.create({
   },
   companyListContainer: {
     marginHorizontal: 16,
+  },
+  companyListWrapper: {
+    backgroundColor: COLORS.lightWhite,
   },
   searchComponentMainConatainer: {
     flexDirection: "row",
