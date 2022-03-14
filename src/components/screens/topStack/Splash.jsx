@@ -36,7 +36,6 @@ export default function Splash({ navigation }) {
   // When the page finishes rendering, open the webview to run login
 
   useEffect(() => {
-    console.log(first_name, last_name)
     // onAuthStateChanged returns an unsubscriber
     const unsubscribeAuth = auth.onAuthStateChanged(
       async (authenticatedUser) => {
