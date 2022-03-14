@@ -119,6 +119,7 @@ export default function ResetPassword({ navigation }) {
           left={<TextInput.Icon name="email" color={myTheme.colors.blue} />}
           style={styles.textInput}
           theme={inputTheme}
+          autoCapitalize="none"
         />
       </View>
       <MyButton
