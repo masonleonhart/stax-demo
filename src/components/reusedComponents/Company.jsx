@@ -12,7 +12,8 @@ import { MaterialCommunityIcons } from "react-native-vector-icons";
 import { determineColor, determineMatchType } from "../../constants/helpers";
 import { COLORS, FONTS, SIZES } from "../../constants/theme";
 import Separator from "./Separator";
-import { SERVER_ADDRESS, AUTH_HEADER } from "@env";
+import { AUTH_HEADER } from "@env";
+import SERVER_ADDRESS from "../../constants/server_address";
 import axios from "axios";
 import { useSelector } from "react-redux";
 

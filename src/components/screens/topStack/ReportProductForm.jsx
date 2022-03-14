@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useIsFocused } from "@react-navigation/core";
 import axios from "axios";
-import { SERVER_ADDRESS, AUTH_HEADER } from "@env";
+import { AUTH_HEADER } from "@env";
+import SERVER_ADDRESS from "../../../constants/server_address";
 
 import { StyleSheet } from "react-native";
 import { Text, TextInput, useTheme, configureFonts } from "react-native-paper";
