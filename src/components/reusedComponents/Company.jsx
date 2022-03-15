@@ -8,7 +8,7 @@ import {
   Dimensions,
   Linking,
 } from "react-native";
-import { MaterialCommunityIcons } from "react-native-vector-icons";
+import { MaterialCommunityIcons, Feather } from "react-native-vector-icons";
 import { determineColor, determineMatchType } from "../../constants/helpers";
 import { COLORS, FONTS, SIZES } from "../../constants/theme";
 import Separator from "./Separator";
@@ -134,6 +134,15 @@ const LineComponent = ({
   );
 };
 const IconComponent = ({ titleColor, title, icons, separator }) => {
+  const iconList = icons.map(({ IconLibrary, id, onPress, name }) => (
+    <TouchableOpacity
+      key={id}
+      style={{ marginLeft: SIZES.base }}
+      onPress={onPress}
+    >
+      <IconLibrary name={name} color="#1C1939" size={25} />
+    </TouchableOpacity>
+  ));
   return (
     <>
       <View style={styles.iconComponentContainer}>
@@ -146,20 +155,7 @@ const IconComponent = ({ titleColor, title, icons, separator }) => {
           ]}>
           {title}
         </Text>
-        <View style={styles.iconListContainer}>
-          {icons.map((value) => (
-            <TouchableOpacity
-              key={value.id}
-              style={{ marginLeft: SIZES.base }}
-              onPress={value.onPress}>
-              <MaterialCommunityIcons
-                name={value.name}
-                color="#1C1939"
-                size={25}
-              />
-            </TouchableOpacity>
-          ))}
-        </View>
+        <View style={styles.iconListContainer}>{iconList}</View>
       </View>
       {separator ? <Separator /> : null}
     </>
@@ -210,8 +206,9 @@ const Company = ({
   const share = () => { };
   const toggleLike = async (id, liked) => {
     try {
-      const url = `${SERVER_ADDRESS}/api/v1/${liked ? "remove-user-favourite-company" : "favourite-company"
-        }`;
+      const url = `${SERVER_ADDRESS}/api/v1/${
+        liked ? "remove-user-favourite-company" : "favourite-company"
+      }`;
 
       const response = await axios.post(
         url,
@@ -259,11 +256,22 @@ const Company = ({
         icons={[
           {
             id: 1,
+            IconLibrary: MaterialCommunityIcons,
             name: liked ? "heart" : "heart-outline",
             onPress: () => toggleLike(id, liked),
           },
-          { id: 2, name: "share-circle", onPress: () => share() },
-          { id: 3, name: "cast", onPress: () => openLink(link) },
+          {
+            id: 2,
+            IconLibrary: Feather,
+            name: "upload",
+            onPress: () => share(),
+          },
+          {
+            id: 3,
+            IconLibrary: Feather,
+            name: "external-link",
+            onPress: () => openLink(link),
+          },
         ]}
         separator={true}
       />

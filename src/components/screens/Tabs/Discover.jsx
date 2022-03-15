@@ -101,7 +101,7 @@ export default function Discover({ }) {
               onPress={() => {
                 navigation.openDrawer();
               }}>
-              <Feather name="list" size={28} color={COLORS.blue} />
+              <Ionicons name="ios-options-outline" size={28} color={COLORS.blue} />
             </TouchableOpacity>
           </View>
 
