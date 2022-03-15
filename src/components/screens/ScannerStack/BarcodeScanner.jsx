@@ -4,7 +4,8 @@ import { BarCodeScanner } from "expo-barcode-scanner";
 import { useDispatch, useSelector } from "react-redux";
 import { Dimensions } from "react-native";
 import axios from "axios";
-import { SERVER_ADDRESS, AUTH_HEADER } from "@env";
+import SERVER_ADDRESS from "../../../constants/server_address";
+import { AUTH_HEADER } from "@env";
 
 import { StyleSheet, Text, View } from "react-native";
 

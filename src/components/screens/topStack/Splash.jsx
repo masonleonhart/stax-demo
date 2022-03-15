@@ -4,7 +4,7 @@ import { useIsFocused } from "@react-navigation/native";
 import Firebase from "../../../../config/firebase";
 import axios from "axios";
 
-import { SERVER_ADDRESS } from "@env";
+import SERVER_ADDRESS from "../../../constants/server_address";
 
 import { View, ImageBackground } from "react-native";
 
