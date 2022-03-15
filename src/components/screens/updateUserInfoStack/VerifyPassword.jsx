@@ -3,7 +3,7 @@ import { useIsFocused } from "@react-navigation/core";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 
-import { SERVER_ADDRESS } from "@env";
+import SERVER_ADDRESS from "../../../constants/server_address";
 
 import { View, StyleSheet, Alert } from "react-native";
 import { Text, TextInput, useTheme, configureFonts } from "react-native-paper";
