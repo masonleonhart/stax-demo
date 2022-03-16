@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useIsFocused } from "@react-navigation/core";
 import Company from "../../reusedComponents/Company.jsx";
-import { Feather } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import { AUTH_HEADER } from "@env";
 import SERVER_ADDRESS from "../../../constants/server_address";
 import axios from "axios";
