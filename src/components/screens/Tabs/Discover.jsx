@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useIsFocused } from "@react-navigation/core";
 import Company from "../../reusedComponents/Company.jsx";
-import { Feather } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import { AUTH_HEADER } from "@env";
 import SERVER_ADDRESS from "../../../constants/server_address";
 import axios from "axios";
@@ -33,7 +33,7 @@ const MyStatusBar = ({ backgroundColor, ...props }) => (
   </View>
 );
 
-export default function Discover({ }) {
+export default function Discover() {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
 
@@ -57,7 +57,8 @@ export default function Discover({ }) {
     try {
       dispatch({ type: "DISCOVER_COMPANY_LIST_LOADING" });
       const response = await axios.get(
-        `${SERVER_ADDRESS}/api/v1/search?filter=${appliedFilter}&page=${discoverState.page ?? 0
+        `${SERVER_ADDRESS}/api/v1/search?filter=${appliedFilter}&page=${
+          discoverState.page ?? 0
         }&size=20`,
         { headers: { [AUTH_HEADER]: accessToken } }
       );
@@ -68,6 +69,7 @@ export default function Discover({ }) {
       // console.log(response.data.map((c) => c.name));
       // setLis((old) => old.concat(response.data));
     } catch (error) {
+      dispatch({ type: "DISCOVER_COMPANY_LIST_LOADING_STOP" });
       console.error(error);
     }
   };
@@ -80,12 +82,12 @@ export default function Discover({ }) {
     return <EmptyStateView />;
   }
   function DiscoverUi({ navigation }) {
-    navigation = navigation;
     return (
       <View
         style={{
           backgroundColor: COLORS.white,
-        }}>
+        }}
+      >
         <MyStatusBar backgroundColor={COLORS.blue} barStyle="light-content" />
         <HeaderComponent
           mainTitle="Discover"
@@ -100,15 +102,20 @@ export default function Discover({ }) {
             <TouchableOpacity
               onPress={() => {
                 navigation.openDrawer();
-              }}>
-              <Ionicons name="ios-options-outline" size={28} color={COLORS.blue} />
+              }}
+            >
+              <Ionicons
+                name="ios-options-outline"
+                size={28}
+                color={COLORS.blue}
+              />
             </TouchableOpacity>
           </View>
 
           <View style={styles.searchComponentSearchBarView}>
             <View style={styles.searchInsileIcon}>
               <Feather name="search" size={24} color="#7c82a1" />
-              <Text style={{ marginLeft: 5, color: "#7c82a1" }}>Search</Text>
+              <Text style={{ marginLeft: 10, color: "#7c82a1" }}>Search</Text>
             </View>
           </View>
         </View>
@@ -125,7 +132,15 @@ export default function Discover({ }) {
               }}
               keyExtractor={(item) => item.name}
               renderItem={({ item }) => {
-                return <Company {...item} />;
+                return (
+                  <Company
+                    {...item}
+                    id={item.entity_id}
+                    values_match_score={item.company.values_match_score}
+                    industry={item.company.industry}
+                    parent_logo_image={item.company.parent_logo_image}
+                  />
+                );
               }}
             />
           )}
@@ -139,7 +154,8 @@ export default function Discover({ }) {
   function MyDrawer() {
     return (
       <Drawer.Navigator
-        drawerContent={(props) => <CustomDrawerContent {...props} />}>
+        drawerContent={(props) => <CustomDrawerContent {...props} />}
+      >
         <Drawer.Screen
           name="Discover"
           component={DiscoverUi}
@@ -162,6 +178,7 @@ const styles = StyleSheet.create({
   },
   companyListContainer: {
     marginHorizontal: 16,
+    marginTop: -20,
   },
   companyListWrapper: {
     backgroundColor: COLORS.lightWhite,
@@ -172,6 +189,7 @@ const styles = StyleSheet.create({
     height: 50,
     marginVertical: 10,
     alignSelf: "center",
+    marginBottom: 20,
   },
   headerDiscoverText: {
     color: COLORS.white,
@@ -184,7 +202,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.regular,
   },
   searchComponentIcon: {
-    width: "20%",
+    width: "17%",
     height: 50,
     justifyContent: "center",
     alignItems: "center",
@@ -196,12 +214,12 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.lightGrayBackground,
     height: 50,
     borderRadius: 15,
-    marginLeft: 5,
+    marginLeft: 11,
   },
   searchInsileIcon: {
     alignItems: "center",
     flexDirection: "row",
     height: 50,
-    marginLeft: 10,
+    marginLeft: 15,
   },
 });
