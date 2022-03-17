@@ -48,7 +48,8 @@ const HeaderComponent = ({
               marginTop: -SIZES.base * 5,
               marginLeft: SIZES.base * 2,
             },
-          ]}>
+          ]}
+        >
           <ImageComponent
             uri={companyLogoImageUri}
             styles={styles.imageStyle}
@@ -78,7 +79,8 @@ const LineComponent = ({
           selectedCost <= i
             ? styles.costIconContainerDisabled
             : styles.costIconContainer,
-        ]}>
+        ]}
+      >
         <Text
           style={[
             styles.costIcon,
@@ -88,7 +90,8 @@ const LineComponent = ({
                   ? "rgba(102, 94, 104, 0.75)"
                   : "rgba(102, 94, 104, 0.3)",
             },
-          ]}>
+          ]}
+        >
           $
         </Text>
       </View>
@@ -103,14 +106,16 @@ const LineComponent = ({
             marginTop: SIZES.base + 2,
             marginLeft: SIZES.base + 2,
           },
-        ]}>
+        ]}
+      >
         <Text
           style={[
             styles.leftTextStyle,
             {
               color: titleColor ? `${titleColor}` : COLORS.darkBlue,
             },
-          ]}>
+          ]}
+        >
           {title}
         </Text>
         {title !== "Cost" ? (
@@ -122,7 +127,8 @@ const LineComponent = ({
                   ? `${subtitileColor}`
                   : COLORS.borderColor,
               },
-            ]}>
+            ]}
+          >
             {subtitile}
           </Text>
         ) : (
@@ -134,13 +140,13 @@ const LineComponent = ({
   );
 };
 const IconComponent = ({ titleColor, title, icons, separator }) => {
-  const iconList = icons.map(({ IconLibrary, id, onPress, name }) => (
+  const iconList = icons.map(({ IconLibrary, id, onPress, name, color }) => (
     <TouchableOpacity
       key={id}
       style={{ marginLeft: SIZES.base }}
       onPress={onPress}
     >
-      <IconLibrary name={name} color="#1C1939" size={25} />
+      <IconLibrary name={name} color={color} size={25} />
     </TouchableOpacity>
   ));
   return (
@@ -152,7 +158,8 @@ const IconComponent = ({ titleColor, title, icons, separator }) => {
             {
               color: titleColor ? `${titleColor}` : COLORS.grey,
             },
-          ]}>
+          ]}
+        >
           {title}
         </Text>
         <View style={styles.iconListContainer}>{iconList}</View>
@@ -170,7 +177,8 @@ const NewsComponent = ({ newsData, title }) => {
           newsData.map((news) => (
             <View
               key={news?.id}
-              style={[styles.flexRowCenterStyle, { marginTop: 10 }]}>
+              style={[styles.flexRowCenterStyle, { marginTop: 10 }]}
+            >
               <View style={[styles.newsImageContainer]}>
                 <ImageComponent
                   uri={news?.thumbnail}
@@ -203,7 +211,7 @@ const Company = ({
     }
     Linking.openURL(link);
   };
-  const share = () => { };
+  const share = () => {};
   const toggleLike = async (id, liked) => {
     try {
       const url = `${SERVER_ADDRESS}/api/v1/${
@@ -258,18 +266,21 @@ const Company = ({
             id: 1,
             IconLibrary: MaterialCommunityIcons,
             name: liked ? "heart" : "heart-outline",
+            color: "#1C1939",
             onPress: () => toggleLike(id, liked),
           },
           {
             id: 2,
             IconLibrary: Feather,
             name: "upload",
+            color: "#1C1939",
             onPress: () => share(),
           },
           {
             id: 3,
             IconLibrary: Feather,
             name: "external-link",
+            color: link ? "#1C1939" : "lightgray",
             onPress: () => openLink(link),
           },
         ]}

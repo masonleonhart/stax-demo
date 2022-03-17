@@ -16,6 +16,12 @@ const discoverCompaniesListState = (state = {}, action) => {
         companyList: action.payload,
       };
 
+    case "DISCOVER_COMPANY_LIST_LOADING_STOP":
+      return {
+        ...state,
+        loading: false,
+      };
+
     case "INCREASE_PAGE_NO":
       return {
         ...state,
