@@ -3,6 +3,9 @@ import { combineReducers } from "redux";
 const discoverCompaniesListState = (state = {}, action) => {
   switch (action.type) {
     case "SET_FILTER_LIST":
+      if (action.payload == state.appliedFilter) {
+        return state;
+      }
       return {
         ...state,
         appliedFilter: action.payload,
