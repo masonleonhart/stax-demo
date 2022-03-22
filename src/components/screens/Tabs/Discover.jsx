@@ -12,6 +12,7 @@ import {
   StatusBar,
   ScrollView,
   FlatList,
+  TextInput,
 } from "react-native";
 import { Text } from "react-native-paper";
 import {
@@ -37,6 +38,8 @@ export default function Discover() {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
 
+  const [searchValue, setSearchValue] = useState("");
+
   const discoverState = useSelector(
     (store) => store.discover.discoverCompaniesListState
   );
@@ -59,7 +62,7 @@ export default function Discover() {
       const response = await axios.get(
         `${SERVER_ADDRESS}/api/v1/search?filter=${appliedFilter}&page=${
           discoverState.page ?? 0
-        }&size=20`,
+        }&size=20&brandName=${discoverState.searchValue}`,
         { headers: { [AUTH_HEADER]: accessToken } }
       );
       dispatch({
@@ -76,7 +79,7 @@ export default function Discover() {
 
   useEffect(() => {
     getCompanyList();
-  }, [appliedFilter, discoverState.page]);
+  }, [appliedFilter, discoverState.page, discoverState.searchValue]);
 
   if (!isFocused) {
     return <EmptyStateView />;
@@ -114,8 +117,24 @@ export default function Discover() {
 
           <View style={styles.searchComponentSearchBarView}>
             <View style={styles.searchInsileIcon}>
-              <Feather name="search" size={24} color="#7c82a1" />
-              <Text style={{ marginLeft: 10, color: "#7c82a1" }}>Search</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  dispatch({
+                    type: "SEARCH_COMPANY",
+                    payload: searchValue,
+                  });
+                }}
+              >
+                <Feather name="search" size={24} color="#7c82a1" />
+              </TouchableOpacity>
+              <TextInput
+                style={styles.searchComponentSearchBar}
+                placeholder="Search"
+                value={searchValue}
+                onChangeText={(value) => {
+                  setSearchValue(value);
+                }}
+              ></TextInput>
             </View>
           </View>
         </View>
@@ -130,12 +149,13 @@ export default function Discover() {
                 dispatch({ type: "INCREASE_PAGE_NO" });
                 return Promise.resolve(true);
               }}
-              keyExtractor={(item) => item.name}
+              keyExtractor={(item,index) => item.name+"_"+index}
               renderItem={({ item }) => {
                 return (
                   <Company
                     {...item}
                     id={item.entity_id}
+                    name={item.brand}
                     values_match_score={item.company.values_match_score}
                     industry={item.company.industry}
                     parent_logo_image={item.company.parent_logo_image}
@@ -215,6 +235,12 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 15,
     marginLeft: 11,
+  },
+  searchComponentSearchBar: {
+    width: "80%",
+    backgroundColor: COLORS.lightGrayBackground,
+    height: 50,
+    marginLeft: 10,
   },
   searchInsileIcon: {
     alignItems: "center",
