@@ -199,7 +199,7 @@ const Company = ({
   name,
   values_match_score,
   industry,
-  parent_logo_image,
+  brand_logo_image,
   link,
   isLiked,
 }) => {
@@ -241,8 +241,8 @@ const Company = ({
         industry={industry}
         companyCoverImageUri="https://png.pngtree.com/png-clipart/20190619/original/pngtree-vector-picture-icon-png-image_4013511.jpg"
         companyLogoImageUri={
-          parent_logo_image
-            ? parent_logo_image
+          brand_logo_image && brand_logo_image !== null
+            ? brand_logo_image
             : "https://www.adaptivewfs.com/wp-content/uploads/2020/07/logo-placeholder-image.png"
         }
       />
