@@ -12,6 +12,7 @@ import {
   StatusBar,
   ScrollView,
   FlatList,
+  TextInput,
 } from "react-native";
 import { Text } from "react-native-paper";
 import {
@@ -33,9 +34,10 @@ const MyStatusBar = ({ backgroundColor, ...props }) => (
   </View>
 );
 
-export default function Discover() {
-  const isFocused = useIsFocused();
+function DiscoverUI({ navigation }) {
   const dispatch = useDispatch();
+
+  const [searchValue, setSearchValue] = useState("");
 
   const discoverState = useSelector(
     (store) => store.discover.discoverCompaniesListState
@@ -43,6 +45,119 @@ export default function Discover() {
   const appliedFilter = discoverState.appliedFilter ?? "";
   const companyList = discoverState.companyList ?? [];
   const accessToken = useSelector((store) => store.user.userInfo.accessToken);
+
+
+  const getCompanyList = async () => {
+    try {
+      dispatch({ type: "DISCOVER_COMPANY_LIST_LOADING" });
+      const response = await axios.get(
+        `${SERVER_ADDRESS}/api/v1/search?filter=${appliedFilter}&page=${
+          discoverState.page ?? 0
+        }&size=20&brandName=${discoverState.searchValue}`,
+        { headers: { [AUTH_HEADER]: accessToken } }
+      );
+      dispatch({
+        type: "SET_DISCOVER_COMPANY_LIST",
+        payload: [...(discoverState?.companyList ?? []), ...response.data],
+      });
+    } catch (error) {
+      dispatch({ type: "DISCOVER_COMPANY_LIST_LOADING_STOP" });
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getCompanyList();
+  }, [appliedFilter, discoverState.page, discoverState.searchValue]);
+
+  return (
+    <View
+      style={{
+        backgroundColor: COLORS.white,
+      }}
+    >
+      <MyStatusBar backgroundColor={COLORS.blue} barStyle="light-content" />
+      <HeaderComponent
+        mainTitle="Discover"
+        subTitle="Aligned Companies"
+        mainTitleStyle={styles.headerDiscoverText}
+        subTitleStyle={styles.headerNameText}
+        backgroundColor={COLORS.blue}
+      />
+
+      <View style={styles.searchComponentMainConatainer}>
+        <View style={styles.searchComponentIcon}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.openDrawer();
+            }}
+          >
+            <Ionicons
+              name="ios-options-outline"
+              size={28}
+              color={COLORS.blue}
+            />
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.searchComponentSearchBarView}>
+          <View style={styles.searchInsileIcon}>
+            <TouchableOpacity
+              onPress={() => {
+                dispatch({
+                  type: "SEARCH_COMPANY",
+                  payload: searchValue,
+                });
+              }}
+            >
+              <Feather name="search" size={24} color="#7c82a1" />
+            </TouchableOpacity>
+            <TextInput
+              style={styles.searchComponentSearchBar}
+              placeholder="Search"
+              value={searchValue}
+              onChangeText={(value) => {
+                setSearchValue(value);
+              }}
+            ></TextInput>
+          </View>
+        </View>
+      </View>
+      <View style={styles.companyListWrapper}>
+        {companyList?.length > 0 && (
+          <FlatList
+            contentContainerStyle={styles.companyListContainer}
+            data={discoverState.companyList}
+            onEndReachedThreshold={800}
+            onEndReached={async () => {
+              dispatch({ type: "INCREASE_PAGE_NO" });
+              return Promise.resolve(true);
+            }}
+            keyExtractor={(item,index) => item.name+"_"+index}
+            renderItem={({ item }) => {
+              return (
+                <Company
+                  {...item}
+                  id={item.entity_id}
+                  name={item.brand}
+                  values_match_score={item.company.values_match_score}
+                  industry={item.company.industry}
+                  parent_logo_image={item.company.parent_logo_image}
+                />
+              );
+            }}
+          />
+        )}
+      </View>
+      <ActivityModal
+        isDialogVisible={discoverState.loading && !companyList.length}
+      />
+    </View>
+  );
+}
+
+export default function Discover() {
+  const isFocused = useIsFocused();
 
   function CustomDrawerContent(props) {
     return (
@@ -53,120 +168,20 @@ export default function Discover() {
   }
   const Drawer = createDrawerNavigator();
 
-  const getCompanyList = async () => {
-    try {
-      dispatch({ type: "DISCOVER_COMPANY_LIST_LOADING" });
-      const response = await axios.get(
-        `${SERVER_ADDRESS}/api/v1/search?filter=${appliedFilter}&page=${
-          discoverState.page ?? 0
-        }&size=20`,
-        { headers: { [AUTH_HEADER]: accessToken } }
-      );
-      dispatch({
-        type: "SET_DISCOVER_COMPANY_LIST",
-        payload: [...(discoverState?.companyList ?? []), ...response.data],
-      });
-      // console.log(response.data.map((c) => c.name));
-      // setLis((old) => old.concat(response.data));
-    } catch (error) {
-      dispatch({ type: "DISCOVER_COMPANY_LIST_LOADING_STOP" });
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    getCompanyList();
-  }, [appliedFilter, discoverState.page]);
-
   if (!isFocused) {
     return <EmptyStateView />;
   }
-  function DiscoverUi({ navigation }) {
-    return (
-      <View
-        style={{
-          backgroundColor: COLORS.white,
-        }}
-      >
-        <MyStatusBar backgroundColor={COLORS.blue} barStyle="light-content" />
-        <HeaderComponent
-          mainTitle="Discover"
-          subTitle="Aligned Companies"
-          mainTitleStyle={styles.headerDiscoverText}
-          subTitleStyle={styles.headerNameText}
-          backgroundColor={COLORS.blue}
-        />
-
-        <View style={styles.searchComponentMainConatainer}>
-          <View style={styles.searchComponentIcon}>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.openDrawer();
-              }}
-            >
-              <Ionicons
-                name="ios-options-outline"
-                size={28}
-                color={COLORS.blue}
-              />
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.searchComponentSearchBarView}>
-            <View style={styles.searchInsileIcon}>
-              <Feather name="search" size={24} color="#7c82a1" />
-              <Text style={{ marginLeft: 10, color: "#7c82a1" }}>Search</Text>
-            </View>
-          </View>
-        </View>
-        <View style={styles.companyListWrapper}>
-          {companyList?.length > 0 && (
-            <FlatList
-              contentContainerStyle={styles.companyListContainer}
-              data={discoverState.companyList}
-              // data={lis}
-              onEndReachedThreshold={800}
-              onEndReached={async () => {
-                dispatch({ type: "INCREASE_PAGE_NO" });
-                return Promise.resolve(true);
-              }}
-              keyExtractor={(item) => item.name}
-              renderItem={({ item }) => {
-                return (
-                  <Company
-                    {...item}
-                    id={item.entity_id}
-                    values_match_score={item.company.values_match_score}
-                    industry={item.company.industry}
-                    parent_logo_image={item.company.parent_logo_image}
-                  />
-                );
-              }}
-            />
-          )}
-        </View>
-        <ActivityModal
-          isDialogVisible={discoverState.loading && !companyList.length}
-        />
-      </View>
-    );
-  }
-  function MyDrawer() {
-    return (
+  return (
+    <NavigationContainer independent={true}>
       <Drawer.Navigator
         drawerContent={(props) => <CustomDrawerContent {...props} />}
       >
         <Drawer.Screen
           name="Discover"
-          component={DiscoverUi}
+          component={DiscoverUI}
           options={{ headerShown: false }}
         />
       </Drawer.Navigator>
-    );
-  }
-  return (
-    <NavigationContainer independent={true}>
-      <MyDrawer />
     </NavigationContainer>
   );
 }
@@ -215,6 +230,12 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 15,
     marginLeft: 11,
+  },
+  searchComponentSearchBar: {
+    width: "80%",
+    backgroundColor: COLORS.lightGrayBackground,
+    height: 50,
+    marginLeft: 10,
   },
   searchInsileIcon: {
     alignItems: "center",

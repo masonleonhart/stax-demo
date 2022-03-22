@@ -2,6 +2,11 @@ import { combineReducers } from "redux";
 
 const discoverCompaniesListState = (state = {}, action) => {
   switch (action.type) {
+    case "SEARCH_COMPANY":
+      return {
+        ...state,
+        searchValue: action.payload,
+      };
     case "SET_FILTER_LIST":
       if (action.payload == state.appliedFilter) {
         return state;
