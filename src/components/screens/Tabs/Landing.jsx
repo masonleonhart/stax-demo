@@ -5,7 +5,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 
 import { Text, useTheme, IconButton } from "react-native-paper";
-import { ScrollView, View, StyleSheet, Dimensions } from "react-native";
+import {
+  ScrollView,
+  View,
+  StyleSheet,
+  Dimensions,
+  Pressable,
+} from "react-native";
 
 import MyButton from "../../reusedComponents/MyButton";
 
@@ -119,7 +125,9 @@ export default function Landing({ navigation }) {
       <View style={[SharedStyles.container]}>
         <View style={styles.valuesWrapper}>
           <View style={SharedStyles.flexRow}>
-            <Text style={styles.headerText}>My Top Values</Text>
+            <Pressable onPress={topValuesButtonPress}>
+              <Text style={styles.headerText}>My Top Values</Text>
+            </Pressable>
             <IconButton
               icon="chevron-right"
               size={30}
