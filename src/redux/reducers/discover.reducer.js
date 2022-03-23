@@ -3,6 +3,9 @@ import { combineReducers } from "redux";
 const discoverCompaniesListState = (state = {}, action) => {
   switch (action.type) {
     case "SEARCH_COMPANY":
+      if (action.payload == state.searchValue) {
+        return state;
+      }
       return {
         ...state,
         searchValue: action.payload,

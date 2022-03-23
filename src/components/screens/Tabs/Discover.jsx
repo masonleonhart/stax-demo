@@ -10,9 +10,9 @@ import {
   View,
   StyleSheet,
   StatusBar,
-  ScrollView,
   FlatList,
   TextInput,
+  Keyboard,
 } from "react-native";
 import { Text } from "react-native-paper";
 import {
@@ -37,14 +37,14 @@ const MyStatusBar = ({ backgroundColor, ...props }) => (
 function DiscoverUI({ navigation }) {
   const dispatch = useDispatch();
 
-  const [searchValue, setSearchValue] = useState("");
-
   const discoverState = useSelector(
     (store) => store.discover.discoverCompaniesListState
   );
   const appliedFilter = discoverState.appliedFilter ?? "";
   const companyList = discoverState.companyList ?? [];
   const accessToken = useSelector((store) => store.user.userInfo.accessToken);
+
+  const [searchValue, setSearchValue] = useState(discoverState.searchValue);
 
   const getCompanyList = async () => {
     try {
@@ -92,6 +92,7 @@ function DiscoverUI({ navigation }) {
           <TouchableOpacity
             onPress={() => {
               navigation.openDrawer();
+              Keyboard.dismiss();
             }}
           >
             <Ionicons
