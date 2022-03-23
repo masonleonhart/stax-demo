@@ -6,6 +6,8 @@ const discoverCompaniesListState = (state = {}, action) => {
       return {
         ...state,
         searchValue: action.payload,
+        companyList: [],
+        page: 0,
       };
     case "SET_FILTER_LIST":
       if (action.payload == state.appliedFilter) {

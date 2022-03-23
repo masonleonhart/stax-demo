@@ -104,16 +104,7 @@ function DiscoverUI({ navigation }) {
 
         <View style={styles.searchComponentSearchBarView}>
           <View style={styles.searchInsileIcon}>
-            <TouchableOpacity
-              onPress={() => {
-                dispatch({
-                  type: "SEARCH_COMPANY",
-                  payload: searchValue,
-                });
-              }}
-            >
-              <Feather name="search" size={24} color="#7c82a1" />
-            </TouchableOpacity>
+            <Feather name="search" size={24} color="#7c82a1" />
             <TextInput
               style={styles.searchComponentSearchBar}
               placeholder="Search"
@@ -121,34 +112,40 @@ function DiscoverUI({ navigation }) {
               onChangeText={(value) => {
                 setSearchValue(value);
               }}
+              onBlur={() => {
+                dispatch({
+                  type: "SEARCH_COMPANY",
+                  payload: searchValue,
+                });
+              }}
             ></TextInput>
           </View>
         </View>
       </View>
       <View style={styles.companyListWrapper}>
-        {companyList?.length > 0 && (
-          <FlatList
-            contentContainerStyle={styles.companyListContainer}
-            data={discoverState.companyList}
-            onEndReachedThreshold={800}
-            onEndReached={async () => {
-              dispatch({ type: "INCREASE_PAGE_NO" });
-              return Promise.resolve(true);
-            }}
-            keyExtractor={(item, index) => item.name + "_" + index}
-            renderItem={({ item }) => {
-              return (
-                <Company
-                  {...item}
-                  id={item.entity_id}
-                  name={item.brand}
-                  values_match_score={item.company.values_match_score}
-                  industry={item.company.industry}
-                  parent_logo_image={item.company.parent_logo_image}
-                />
-              );
-            }}
-          />
+        <FlatList
+          contentContainerStyle={styles.companyListContainer}
+          data={discoverState.companyList}
+          onEndReachedThreshold={800}
+          onEndReached={async () => {
+            dispatch({ type: "INCREASE_PAGE_NO" });
+            return Promise.resolve(true);
+          }}
+          keyExtractor={(item, index) => item.name + "_" + index}
+          renderItem={({ item }) => {
+            return (
+              <Company
+                {...item}
+                name={item.brand}
+                values_match_score={item.company.values_match_score}
+                industry={item.company.industry}
+                parent_logo_image={item.company.parent_logo_image}
+              />
+            );
+          }}
+        />
+        {companyList?.length == 0 && !discoverState.loading && (
+          <Text style={styles.noSearchMatchFound}>No matching data found</Text>
         )}
       </View>
       <ActivityModal
@@ -244,5 +241,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     height: 50,
     marginLeft: 15,
+  },
+  noSearchMatchFound: {
+    textAlign: "center",
+    paddingTop: 100,
   },
 });
