@@ -29,7 +29,7 @@ export default function FilterModal({
   const [childrenOfSelectedMainCategory, setChildrenOfSelectedMainCategory] = React.useState([]);
   const [allCategories, setAllCategories] = React.useState([]);
   const [selectedMainCategory, setselectedMainCategory] = React.useState('Retail');
-  const reduxSelectedCategoriesList = useSelector((store) => store.filter.filterListvaluesList);
+  const reduxSelectedCategoriesList = useSelector((store) => store.discover.discoverCompaniesListState.appliedFilter);
   const [selectedCategoriesList, setSelectedCategoriesList] = React.useState(reduxSelectedCategoriesList);
 
   React.useEffect(() => {

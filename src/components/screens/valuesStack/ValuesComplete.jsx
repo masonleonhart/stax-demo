@@ -137,8 +137,8 @@ export default function ValuesComplete({ route, navigation }) {
     <ScrollView contentContainerStyle={styles.scrollView}>
       <Text style={styles.headerText}>Your Results</Text>
       <Text style={styles.subheaderText}>
-        Here are your values, starting with your highest result! Feel free to
-        reorder them anytime by simply holding and dragging the item up or down.
+        Here are your values, starting with your highest result! To reorder,
+        simply hold and then drag the value up or down.
       </Text>
 
       <DraggableFlatList

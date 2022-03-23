@@ -60,31 +60,43 @@ export default function BarcodeScanner({ navigation }) {
         );
 
         if (response.data.status_code === 400) {
+          // Catches upc not in barcode lookup
           dispatch({
             type: "SET_SCANNED_COMPANY_RANKING",
             payload: {},
           });
+          dispatch({ type: "RESET_BARCODE_DETAILS" });
           navigation.navigate("NewProductForm");
         } else if (response.status === 200) {
-          dispatch({
-            type: "SET_BARCODE_DETAILS",
-            payload: response.data.barcode_result.data,
-          });
-
           if ("error" in response.data.company_obj) {
+            // match to barcodelookup but private company / company any company that is unable to match to morningstar
+            dispatch({
+              type: "SET_SCANNED_COMPANY_RANKING",
+              payload: {},
+            });
+            dispatch({ type: "RESET_BARCODE_DETAILS" });
+            navigation.navigate("NewProductForm");
           } else {
+            // successful m* and barcodelookup return
+            dispatch({
+              type: "SET_BARCODE_DETAILS",
+              payload: response.data.barcode_result.data,
+            });
             dispatch({
               type: "SET_SCANNED_COMPANY_RANKING",
               payload: response.data.company_obj.scanned_company_ranking,
             });
+
+            navigation.navigate("CompanyProfile");
           }
-          navigation.navigate("CompanyProfile");
         } else {
+          //
           dispatch({
             type: "SET_SCANNED_COMPANY_RANKING",
             payload: {},
           });
-          navigation.navigate("Scanner");
+          dispatch({ type: "RESET_BARCODE_DETAILS" });
+          navigation.navigate("NewProductForm");
         }
       } catch (error) {
         console.log(error);
