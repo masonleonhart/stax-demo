@@ -24,7 +24,6 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { COLORS, FONTS } from "../../../constants/theme";
 import HeaderComponent from "../../reusedComponents/HeaderComponent";
 import fonts from "../../reusedComponents/fonts";
-import { NavigationContainer } from "@react-navigation/native";
 import FilterStack from "../../navigation/FilterStack";
 import { useDispatch, useSelector } from "react-redux";
 import ActivityModal from "../../modals/ActivityModal";
@@ -34,7 +33,7 @@ const MyStatusBar = ({ backgroundColor, ...props }) => (
   </View>
 );
 
-function DiscoverUI({ navigation }) {
+function DiscoverUI({ navigation, route }) {
   const dispatch = useDispatch();
 
   const discoverState = useSelector(
@@ -139,8 +138,11 @@ function DiscoverUI({ navigation }) {
                 {...item}
                 name={item.brand}
                 values_match_score={item.company.values_match_score}
-                industry={item.company.industry}
+                industry={item.category_level_3}
                 parent_logo_image={item.company.parent_logo_image}
+                companyRanking={item.company}
+                navigation={navigation}
+                route={route}
               />
             );
           }}
@@ -156,7 +158,7 @@ function DiscoverUI({ navigation }) {
   );
 }
 
-export default function Discover() {
+export default function DiscoverDrawer() {
   const isFocused = useIsFocused();
 
   function CustomDrawerContent(props) {
@@ -172,17 +174,15 @@ export default function Discover() {
     return <EmptyStateView />;
   }
   return (
-    <NavigationContainer independent={true}>
-      <Drawer.Navigator
-        drawerContent={(props) => <CustomDrawerContent {...props} />}
-      >
-        <Drawer.Screen
-          name="Discover"
-          component={DiscoverUI}
-          options={{ headerShown: false }}
-        />
-      </Drawer.Navigator>
-    </NavigationContainer>
+    <Drawer.Navigator
+      drawerContent={(props) => <CustomDrawerContent {...props} />}
+    >
+      <Drawer.Screen
+        name="DiscoverDrawer"
+        component={DiscoverUI}
+        options={{ headerShown: false }}
+      />
+    </Drawer.Navigator>
   );
 }
 

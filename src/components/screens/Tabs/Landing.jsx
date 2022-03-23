@@ -155,15 +155,14 @@ export default function Landing({ navigation }) {
 
         <View style={styles.valuesWrapper}>
           <View style={SharedStyles.flexRow}>
-            <Text style={styles.headerText}>
-              Discover New Brands{" "}
-              <Text style={styles.headerWorkInProgress}>(WIP)</Text>
-            </Text>
+          <Pressable onPress={() => navigation.navigate("Discover")}>
+              <Text style={styles.headerText}>Discover New Brands</Text>
+            </Pressable>
             <IconButton
               icon="chevron-right"
               size={30}
               color={myTheme.colors.grey}
-              onPress={() => {}}
+              onPress={() => navigation.navigate("Discover")}
             />
           </View>
         </View>

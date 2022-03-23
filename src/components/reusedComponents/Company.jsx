@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Dimensions,
   Linking,
+  Pressable,
 } from "react-native";
 import { MaterialCommunityIcons, Feather } from "react-native-vector-icons";
 import { determineColor, determineMatchType } from "../../constants/helpers";
@@ -15,7 +16,8 @@ import Separator from "./Separator";
 import { AUTH_HEADER } from "@env";
 import SERVER_ADDRESS from "../../constants/server_address";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 
 const SCREEN_HEIGHT = Dimensions.get("screen").height;
 
@@ -202,8 +204,11 @@ const Company = ({
   brand_logo_image,
   link,
   isLiked,
+  companyRanking,
 }) => {
   const [liked, setLiked] = useState(isLiked);
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
   const accessToken = useSelector((store) => store.user.userInfo.accessToken);
   const openLink = (link) => {
     if (!link) {
@@ -234,8 +239,25 @@ const Company = ({
       console.error(error);
     }
   };
+
+  const onCompanyCardPress = (companyRanking, name) => {
+    dispatch({
+      type: "SET_BARCODE_DETAILS",
+      payload: {manufacturer: name},
+    });
+    dispatch({
+      type: "SET_SCANNED_COMPANY_RANKING",
+      payload: companyRanking,
+    });
+
+    navigation.navigate("ScannerStack", { screen: "CompanyProfile" });
+  };
+
   return (
-    <View style={styles.card}>
+    <Pressable
+      style={styles.card}
+      onPress={() => onCompanyCardPress(companyRanking, name)}
+    >
       <HeaderComponent
         companyName={name}
         industry={industry}
@@ -293,7 +315,7 @@ const Company = ({
         separator={true}
       />
       <NewsComponent title="Latest News" newsData={NewsData} />
-    </View>
+    </Pressable>
   );
 };
 
@@ -355,7 +377,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
   },
   imageComponentLeftText: {
-    ...FONTS.h2,
+    ...FONTS.h3,
     marginLeft: "2%",
     color: COLORS.darkBlue,
     flex: 1,
