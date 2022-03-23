@@ -46,16 +46,18 @@ function DiscoverUI({ navigation }) {
   const companyList = discoverState.companyList ?? [];
   const accessToken = useSelector((store) => store.user.userInfo.accessToken);
 
-
   const getCompanyList = async () => {
     try {
       dispatch({ type: "DISCOVER_COMPANY_LIST_LOADING" });
-      const response = await axios.get(
-        `${SERVER_ADDRESS}/api/v1/search?filter=${appliedFilter}&page=${
-          discoverState.page ?? 0
-        }&size=20&brandName=${discoverState.searchValue}`,
-        { headers: { [AUTH_HEADER]: accessToken } }
-      );
+      let url = `${SERVER_ADDRESS}/api/v1/search?filter=${appliedFilter}&page=${
+        discoverState.page ?? 0
+      }&size=20`;
+      if (discoverState.searchValue) {
+        url = url + `&brandName=${discoverState.searchValue}`;
+      }
+      const response = await axios.get(url, {
+        headers: { [AUTH_HEADER]: accessToken },
+      });
       dispatch({
         type: "SET_DISCOVER_COMPANY_LIST",
         payload: [...(discoverState?.companyList ?? []), ...response.data],
@@ -133,7 +135,7 @@ function DiscoverUI({ navigation }) {
               dispatch({ type: "INCREASE_PAGE_NO" });
               return Promise.resolve(true);
             }}
-            keyExtractor={(item,index) => item.name+"_"+index}
+            keyExtractor={(item, index) => item.name + "_" + index}
             renderItem={({ item }) => {
               return (
                 <Company
