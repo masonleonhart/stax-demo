@@ -22,6 +22,13 @@ const discoverCompaniesListState = (state = {}, action) => {
         companyList: [],
         page: 0,
       };
+    case "RESET_FILTER_LIST":
+      return {
+        ...state,
+        appliedFilter: [],
+        companyList: [],
+        page: 0,
+      };
     case "SET_DISCOVER_COMPANY_LIST":
       return {
         ...state,
