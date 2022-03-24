@@ -29,8 +29,8 @@ const NewsData = [
       "https://www.adaptivewfs.com/wp-content/uploads/2020/07/logo-placeholder-image.png",
   },
 ];
-const ImageComponent = ({ uri, styles }) => {
-  return <Image style={[styles]} source={{ uri }} />;
+const ImageComponent = ({ uri, styles, resizeMode }) => {
+  return <Image style={styles} resizeMode={resizeMode} source={{ uri }} />;
 };
 
 const HeaderComponent = ({
@@ -55,6 +55,7 @@ const HeaderComponent = ({
           <ImageComponent
             uri={companyLogoImageUri}
             styles={styles.imageStyle}
+            resizeMode="cover"
           />
         </View>
         <Text style={styles.imageComponentLeftText}>{companyName}</Text>
@@ -201,7 +202,7 @@ const Company = ({
   name,
   values_match_score,
   industry,
-  brand_logo_image,
+  parent_logo_image,
   link,
   isLiked,
   companyRanking,
@@ -263,8 +264,8 @@ const Company = ({
         industry={industry}
         companyCoverImageUri="https://png.pngtree.com/png-clipart/20190619/original/pngtree-vector-picture-icon-png-image_4013511.jpg"
         companyLogoImageUri={
-          brand_logo_image && brand_logo_image !== null
-            ? brand_logo_image
+          parent_logo_image && parent_logo_image !== null
+            ? parent_logo_image
             : "https://www.adaptivewfs.com/wp-content/uploads/2020/07/logo-placeholder-image.png"
         }
       />
@@ -351,13 +352,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignContent: "center",
     alignItems: "center",
+    overflow: "hidden",
     borderRadius: 20,
     borderColor: COLORS.borderColor,
     borderWidth: 1,
     backgroundColor: COLORS.white,
   },
   imageStyle: {
-    resizeMode: "cover",
     width: SCREEN_HEIGHT * 0.1,
     height: SCREEN_HEIGHT * 0.1,
   },
