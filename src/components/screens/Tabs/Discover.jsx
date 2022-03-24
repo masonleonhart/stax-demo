@@ -48,9 +48,11 @@ function DiscoverUI({ navigation, route }) {
   const getCompanyList = async () => {
     try {
       dispatch({ type: "DISCOVER_COMPANY_LIST_LOADING" });
-      let url = `${SERVER_ADDRESS}/api/v1/search?filter=${appliedFilter}&page=${
-        discoverState.page ?? 0
-      }&size=20`;
+      let url = `${SERVER_ADDRESS}/api/v1/search?size=20`;
+      if (appliedFilter) {
+        url = url + `&filter=${appliedFilter}`;
+      }
+      url = url + `&page=${discoverState.page ?? 0}`;
       if (discoverState.searchValue) {
         url = url + `&brandName=${discoverState.searchValue}`;
       }
@@ -122,6 +124,24 @@ function DiscoverUI({ navigation, route }) {
           </View>
         </View>
       </View>
+      {(appliedFilter !== null) && (appliedFilter.length > 0) && (
+        <View style={styles.filtersContainer}>
+          <View style={styles.filterBox}>
+            <Text style={styles.filterDisplayText}>{appliedFilter}</Text>
+            <TouchableOpacity
+              onPress={() => {
+                dispatch({ type: "RESET_FILTER_LIST" });
+              }}
+            >
+              <Ionicons
+                name="close"
+                size={16}
+                color={COLORS.blue}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
       <View style={styles.companyListWrapper}>
         <FlatList
           contentContainerStyle={styles.companyListContainer}
@@ -247,4 +267,21 @@ const styles = StyleSheet.create({
     textAlign: "center",
     paddingTop: 100,
   },
+  filtersContainer: {
+    flexDirection: "row",
+    width: "90%",
+    alignSelf: "center",
+    marginBottom: 15,
+    marginTop: -5,
+  },
+  filterBox: {
+    backgroundColor: COLORS.lightGrayBackground,
+    borderRadius: 15,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    flexDirection: "row",
+  },
+  filterDisplayText: {
+    color: COLORS.blue,
+  }
 });
