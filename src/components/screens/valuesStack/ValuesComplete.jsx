@@ -60,7 +60,7 @@ export default function ValuesComplete({ route, navigation }) {
         payload: { ...response.data.user, accessToken, providerId },
       });
 
-      navigation.navigate("Landing");
+      navigation.navigate("TabStack", { screen: "Landing" });
     } catch (error) {
       console.log(error);
     }
