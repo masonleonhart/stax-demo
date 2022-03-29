@@ -123,7 +123,7 @@ export default function CompanyProfile({ navigation }) {
         </View>
         <View style={[SharedStyles.flexRow, { marginBottom: "5%" }]}>
           <Text style={styles.progressText}>
-            {value.valuePercentageRounded * 100}%
+            {(value.valuePercentageRounded * 100).toFixed(0)}%
           </Text>
           <ProgressBar
             progress={value.valuePercentageRounded}
@@ -140,7 +140,7 @@ export default function CompanyProfile({ navigation }) {
             <Text style={styles.collapsedTextBold}>{companyRanking.name}</Text>,
             scored better than{" "}
             <Text style={styles.collapsedTextBold}>
-              {value.valuePercentageRounded * 100}%
+              {(value.valuePercentageRounded * 100).toFixed(0)}%
             </Text>{" "}
             of its peers within its industry in the{" "}
             <Text style={styles.collapsedTextBold}>{value.name}</Text> category.
