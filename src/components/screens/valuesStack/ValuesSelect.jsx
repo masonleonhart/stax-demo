@@ -10,6 +10,7 @@ import {
   View,
   Pressable,
   ImageBackground,
+  Alert
 } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 
@@ -56,12 +57,17 @@ export default function Values({ navigation }) {
   // stores the selected values in redux store and navigates to the landing page
 
   const onSubmitPress = () => {
-    navigation.navigate("ValuesBreak", selectedValues);
+    if (selectedValues.length !== 5) {
+      Alert.alert("Error", "Not enough values selected.")
+    } else {
+      navigation.navigate("ValuesBreak", selectedValues);
+    }
   };
 
   const styles = StyleSheet.create({
     container: {
       flex: 1,
+      overflow: "visible",
     },
     headerText: {
       marginVertical: "5%",
@@ -107,8 +113,6 @@ export default function Values({ navigation }) {
       fontFamily: fonts.bold,
     },
     continueButton: {
-      borderTopColor: myTheme.colors.grey,
-      borderTopWidth: 1,
       paddingTop: "10%",
       marginTop: "10%",
       marginHorizontal: "5%",
@@ -122,65 +126,68 @@ export default function Values({ navigation }) {
   }
 
   return (
-    <ScrollView style={styles.container}>
-      <ValuesTooManyModal
-        isTooManyDialogVisible={isTooManyDialogVisible}
-        setIsTooManyDialogVisible={setIsTooManyDialogVisible}
-      />
+    <>
+      <ScrollView style={styles.container}>
+        <ValuesTooManyModal
+          isTooManyDialogVisible={isTooManyDialogVisible}
+          setIsTooManyDialogVisible={setIsTooManyDialogVisible}
+        />
 
-      <Text style={styles.headerText}>
-        First, select 5 company values that are most meaningful to you
-      </Text>
-      <Text style={styles.subheaderText}>
-        You will always be able to take this quiz again
-      </Text>
+        <Text style={styles.headerText}>
+          First, select 5 company values that are most meaningful to you
+        </Text>
+        <Text style={styles.subheaderText}>
+          You will always be able to take this quiz again
+        </Text>
 
-      <View style={styles.valuesListWrapper}>
-        {valuesList.map((value) => (
-          <Pressable
-            style={styles.valueCard}
-            key={value.id}
-            onPress={() => onValuePress(value)}
-          >
-            <ImageBackground
-              source={{ uri: value.image_url }}
-              style={styles.imageBackground}
+        <View style={styles.valuesListWrapper}>
+          {valuesList.map((value) => (
+            <Pressable
+              style={styles.valueCard}
+              key={value.id}
+              onPress={() => onValuePress(value)}
             >
-              <View style={[styles.scrim, { backgroundColor: value.scrim }]}>
-                <View style={[SharedStyles.flexRow, styles.valueNameWrapper]}>
+              <ImageBackground
+                source={{ uri: value.image_url }}
+                style={styles.imageBackground}
+              >
+                <View style={[styles.scrim, { backgroundColor: value.scrim }]}>
+                  <View style={[SharedStyles.flexRow, styles.valueNameWrapper]}>
+                    <Text
+                      style={[
+                        styles.valueCardName,
+                        { color: value.text_color },
+                      ]}
+                    >
+                      {value.name}
+                    </Text>
+                    {checkIfSelectd(value.name) && (
+                      <MaterialCommunityIcons
+                        name="check-circle-outline"
+                        color={value.text_color}
+                        size={25}
+                      />
+                    )}
+                  </View>
                   <Text
-                    style={[styles.valueCardName, { color: value.text_color }]}
+                    style={[
+                      styles.valueCardDescription,
+                      { color: value.text_color },
+                    ]}
                   >
-                    {value.name}
+                    {value.description}
                   </Text>
-                  {checkIfSelectd(value.name) && (
-                    <MaterialCommunityIcons
-                      name="check-circle-outline"
-                      color={value.text_color}
-                      size={25}
-                    />
-                  )}
                 </View>
-                <Text
-                  style={[
-                    styles.valueCardDescription,
-                    { color: value.text_color },
-                  ]}
-                >
-                  {value.description}
-                </Text>
-              </View>
-            </ImageBackground>
-          </Pressable>
-        ))}
-      </View>
-
+              </ImageBackground>
+            </Pressable>
+          ))}
+        </View>
+      </ScrollView>
       <MyButton
         style={styles.continueButton}
         text={`${selectedValues.length} / 5 Selected`}
-        disabled={selectedValues.length !== 5}
         onPress={onSubmitPress}
       />
-    </ScrollView>
+    </>
   );
 }

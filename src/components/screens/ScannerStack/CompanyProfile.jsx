@@ -21,7 +21,7 @@ import fonts from "../../reusedComponents/fonts";
 import SharedStyles from "../../reusedComponents/SharedStyles";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
 import companyImage from "../../../../assets/companyImage.jpeg";
-import { determineMatchType } from '../../../constants/helpers';
+import { determineMatchType } from "../../../constants/helpers";
 
 export default function CompanyProfile({ navigation }) {
   const isFocused = useIsFocused();
@@ -39,8 +39,6 @@ export default function CompanyProfile({ navigation }) {
   const [renderMissingText, setRenderMissingText] = useState(false);
 
   const renderedValuesParent = useRef(null);
-
-
 
   const matchValuesToMStarData = (userValues) => {
     let listOfValues = [];
@@ -64,7 +62,9 @@ export default function CompanyProfile({ navigation }) {
 
       const valuePercentage = companyRanking[`${valueModified}_pct_rank`];
 
-      const valuePercentageRounded = Number(parseFloat(valuePercentage).toFixed(2));
+      const valuePercentageRounded = Number(
+        parseFloat(valuePercentage).toFixed(2)
+      );
 
       listOfValues.push({ ...value, valuePercentageRounded });
     }
@@ -100,26 +100,55 @@ export default function CompanyProfile({ navigation }) {
     }
   }, [renderedValuesParent.current]);
 
-  const RenderValue = ({ value }) => (
-    <View style={styles.valueWrapper}>
-      <View style={styles.valueNameWrapper}>
-        <MaterialCommunityIcons
-          name={value.icon_name}
-          color={myTheme.colors.blue}
-          size={30}
-        />
-        <Text style={styles.valueName}>{value.name}</Text>
+  const RenderValue = ({ value }) => {
+    const [isCollapsed, setIsCollapsed] = useState(true);
+
+    return (
+      <View style={styles.valueWrapper}>
+        <View style={SharedStyles.flexRow}>
+          <View style={styles.valueNameWrapper}>
+            <MaterialCommunityIcons
+              name={value.icon_name}
+              color={myTheme.colors.blue}
+              size={30}
+            />
+            <Text style={styles.valueName}>{value.name}</Text>
+          </View>
+          <IconButton
+            icon={isCollapsed ? "chevron-down" : "chevron-up"}
+            size={30}
+            color={myTheme.colors.blue}
+            onPress={() => setIsCollapsed(!isCollapsed)}
+          />
+        </View>
+        <View style={[SharedStyles.flexRow, { marginBottom: "5%" }]}>
+          <Text style={styles.progressText}>
+            {(value.valuePercentageRounded * 100).toFixed(0)}%
+          </Text>
+          <ProgressBar
+            progress={value.valuePercentageRounded}
+            color={myTheme.colors.blue}
+            style={styles.progressBar}
+          />
+        </View>
+        <Collapsible collapsed={isCollapsed}>
+          <Text style={styles.collapsedText}>
+            <Text style={styles.collapsedTextBold}>
+              {barcodeDetails.manufacturer}
+            </Text>
+            , owned by{" "}
+            <Text style={styles.collapsedTextBold}>{companyRanking.name}</Text>,
+            scored better than{" "}
+            <Text style={styles.collapsedTextBold}>
+              {(value.valuePercentageRounded * 100).toFixed(0)}%
+            </Text>{" "}
+            of its peers within its industry in the{" "}
+            <Text style={styles.collapsedTextBold}>{value.name}</Text> category.
+          </Text>
+        </Collapsible>
       </View>
-      <View style={[SharedStyles.flexRow, { marginBottom: "5%" }]}>
-        <Text style={styles.progressText}>{value.valuePercentageRounded * 100}%</Text>
-        <ProgressBar
-          progress={value.valuePercentageRounded}
-          color={myTheme.colors.blue}
-          style={styles.progressBar}
-        />
-      </View>
-    </View>
-  );
+    );
+  };
 
   const styles = StyleSheet.create({
     companyHeader: {
@@ -155,7 +184,7 @@ export default function CompanyProfile({ navigation }) {
     comapnyName: {
       color: "white",
       fontSize: 20,
-      fontFamily: fonts.regular,
+      fontFamily: fonts.medium,
       textAlign: "center",
       marginTop: "2.5%",
     },
@@ -189,6 +218,7 @@ export default function CompanyProfile({ navigation }) {
     valueWrapper: {
       borderBottomColor: myTheme.colors.lightGrey,
       borderBottomWidth: 1,
+      paddingBottom: "5%",
     },
     valueNameWrapper: {
       flexDirection: "row",
@@ -207,15 +237,18 @@ export default function CompanyProfile({ navigation }) {
     progressBar: {
       width: windowWidth * 0.7,
     },
+    collapsedText: {
+      fontSize: 16,
+      flexWrap: "wrap",
+      fontFamily: fonts.regular,
+    },
+    collapsedTextBold: {
+      fontFamily: fonts.bold,
+    },
     matchValue: {
       fontSize: 18,
       fontFamily: fonts.bold,
       color: myTheme.colors.blue,
-    },
-    wipText: {
-      textAlign: "center",
-      fontFamily: fonts.regular,
-      color: myTheme.colors.grey,
     },
     missingValuesText: {
       marginVertical: "5%",
@@ -258,10 +291,10 @@ export default function CompanyProfile({ navigation }) {
           {barcodeDetails.manufacturer
             ? barcodeDetails.manufacturer
             : barcodeDetails.brand
-              ? barcodeDetails.brand
-              : barcodeDetails.title
-                ? barcodeDetails.title
-                : "Company Profile"}
+            ? barcodeDetails.brand
+            : barcodeDetails.title
+            ? barcodeDetails.title
+            : "Company Profile"}
         </Text>
         {"name" in companyRanking && (
           <Text style={styles.parentName}>Owned By: {companyRanking.name}</Text>
@@ -275,8 +308,6 @@ export default function CompanyProfile({ navigation }) {
             <Text style={styles.overallMatch}>Overall Match:</Text>
             <Text style={styles.matchValue}>{overallMatch}</Text>
           </View>
-
-          <Text style={styles.wipText}>(More defined match score is WIP)</Text>
 
           <View ref={renderedValuesParent}>
             {valueMatchList.map((value) => {
