@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
-import { IconButton, Text } from "react-native-paper";
+import { Checkbox, IconButton, Text } from "react-native-paper";
 import SharedStyles from "../reusedComponents/SharedStyles";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { getAllCategory } from "../../constants/category";
 import { COLORS, FONTS, SIZES } from "../../constants/theme";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function FilterStack({ navigation }) {
+
+  const discoverState = useSelector(
+    (store) => store.discover.discoverCompaniesListState
+  );
+
   const dispatch = useDispatch();
   const [categoryStack, setCategoryStack] = useState([]);
   const [currentDepth, setCurrentDepth] = useState(0);
@@ -41,6 +46,11 @@ export default function FilterStack({ navigation }) {
       applyFilter(title);
     }
   };
+  const favApplied = () => {
+    navigation.closeDrawer();
+    const favChecked = !discoverState.favCompanyOnly;
+    dispatch({ type: "SHOW_FAVORITES_ONLY", payload: favChecked });
+  }
   const RenderChild = ({ title, index, hasChild = false }) => {
     return (
       <TouchableOpacity
@@ -85,6 +95,19 @@ export default function FilterStack({ navigation }) {
     );
   };
 
+  const FavCheckbox = ({ }) => {
+    return (
+      <View styles={styles.favContainer}>
+        <Checkbox.Item
+          label="Favorite"
+          uncheckedColor="red"
+          status={discoverState.favCompanyOnly ? 'checked' : 'unchecked'}
+          onPress={favApplied}
+        />
+      </View>
+    );
+  }
+
   return (
     <View style={SharedStyles.filtercontainer}>
       <View style={styles.filterViewMain}>
@@ -103,6 +126,9 @@ export default function FilterStack({ navigation }) {
             </View>
           )}
           <RenderList data={categoryStack[currentDepth]} />
+          {currentDepth == 0 && (
+            <FavCheckbox />
+          )}
         </ScrollView>
       </View>
     </View>

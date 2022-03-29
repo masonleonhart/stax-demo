@@ -45,38 +45,104 @@ function DiscoverUI({ navigation, route }) {
 
   const [searchValue, setSearchValue] = useState(discoverState.searchValue);
 
+  const getApiURL = ({ filter, page, search, favCom }) => {
+    let url = `${SERVER_ADDRESS}/api/v1/search?size=20`;
+    if (filter) {
+      url = url + `&filter=${filter}`;
+    }
+    url = url + `&page=${page ?? 0}`;
+    if (search) {
+      url = url + `&brandName=${search}`;
+    }
+    if (favCom) {
+      url = url + `&fav_only=${favCom}`;
+    }
+    return url;
+  }
+
   const getCompanyList = async () => {
     try {
       dispatch({ type: "DISCOVER_COMPANY_LIST_LOADING" });
-      let url = `${SERVER_ADDRESS}/api/v1/search?size=20`;
-      if (appliedFilter) {
-        url = url + `&filter=${appliedFilter}`;
-      }
-      url = url + `&page=${discoverState.page ?? 0}`;
-      if (discoverState.searchValue) {
-        url = url + `&brandName=${discoverState.searchValue}`;
-      }
-      const response = await axios.get(url, {
+
+      const response = await axios.get(getApiURL(
+        {
+          filter: appliedFilter,
+          page: discoverState.page,
+          search: discoverState.searchValue,
+          favCom: discoverState.favCompanyOnly
+        }
+      ), {
         headers: { [AUTH_HEADER]: accessToken },
       });
-      dispatch({
-        type: "SET_DISCOVER_COMPANY_LIST",
-        payload: [...(discoverState?.companyList ?? []), ...response.data],
-      });
+      if (response.data?.length == 0 && appliedFilter?.length !== 0) {
+        getOtherCompanyList();
+      } else {
+        dispatch({
+          type: "SET_DISCOVER_COMPANY_LIST",
+          payload: [...(discoverState?.companyList ?? []), ...response.data],
+        });
+      }
     } catch (error) {
       dispatch({ type: "DISCOVER_COMPANY_LIST_LOADING_STOP" });
       console.error(error);
     }
   };
 
+  const getOtherCompanyList = async () => {
+    try {
+      const response = await axios.get(getApiURL(
+        {
+          page: discoverState.page,
+          search: discoverState.searchValue
+        }
+      ), {
+        headers: { [AUTH_HEADER]: accessToken },
+      });
+      dispatch({
+        type: "SET_OTHER_DISCOVER_COMPANY_LIST",
+        payload: [...(discoverState?.otherCompanyList ?? []), ...response.data],
+      });
+    } catch (error) {
+      dispatch({ type: "DISCOVER_COMPANY_LIST_LOADING_COMPLETE" });
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    getCompanyList();
-  }, [appliedFilter, discoverState.page, discoverState.searchValue]);
+    if (discoverState.page > 0 && discoverState?.companyList.length == 0) {
+      getOtherCompanyList();
+    } else {
+      getCompanyList();
+    }
+  }, [appliedFilter, discoverState.page, discoverState.searchValue, discoverState.favCompanyOnly]);
+
+  const FilterDisplay = ({ textAsFilter, dispatchType }) => {
+    return (
+      <View style={styles.filtersContainer}>
+        <View style={styles.filterBox}>
+          <Text style={styles.filterDisplayText}>{textAsFilter}</Text>
+          <TouchableOpacity
+            onPress={() => {
+              dispatch({ type: dispatchType });
+            }}
+          >
+            <Ionicons
+              name="close"
+              size={16}
+              color={COLORS.blue}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+    )
+  }
 
   return (
     <View
       style={{
         backgroundColor: COLORS.white,
+        height: "100%",
+        display: "flex",
       }}
     >
       <MyStatusBar backgroundColor={COLORS.blue} barStyle="light-content" />
@@ -88,6 +154,7 @@ function DiscoverUI({ navigation, route }) {
         backgroundColor={COLORS.blue}
       />
 
+      {/* Filter drawer */}
       <View style={styles.searchComponentMainConatainer}>
         <View style={styles.searchComponentIcon}>
           <TouchableOpacity
@@ -104,6 +171,7 @@ function DiscoverUI({ navigation, route }) {
           </TouchableOpacity>
         </View>
 
+        {/* Search component */}
         <View style={styles.searchComponentSearchBarView}>
           <View style={styles.searchInsileIcon}>
             <Feather name="search" size={24} color="#7c82a1" />
@@ -124,55 +192,67 @@ function DiscoverUI({ navigation, route }) {
           </View>
         </View>
       </View>
-      {(appliedFilter !== null) && (appliedFilter.length > 0) && (
-        <View style={styles.filtersContainer}>
-          <View style={styles.filterBox}>
-            <Text style={styles.filterDisplayText}>{appliedFilter}</Text>
-            <TouchableOpacity
-              onPress={() => {
-                dispatch({ type: "RESET_FILTER_LIST" });
-              }}
-            >
-              <Ionicons
-                name="close"
-                size={16}
-                color={COLORS.blue}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
-      )}
-      <View style={styles.companyListWrapper}>
-        <FlatList
-          contentContainerStyle={styles.companyListContainer}
-          data={discoverState.companyList}
-          onEndReachedThreshold={800}
-          onEndReached={async () => {
-            dispatch({ type: "INCREASE_PAGE_NO" });
-            return Promise.resolve(true);
-          }}
-          keyExtractor={(item, index) => item.name + "_" + index}
-          renderItem={({ item }) => {
-            return (
-              <Company
-                {...item}
-                name={item.brand}
-                values_match_score={item.company.values_match_score}
-                industry={item.category_level_3}
-                parent_logo_image={item.company.parent_logo_image}
-                companyRanking={item.company}
-                navigation={navigation}
-                route={route}
-              />
-            );
-          }}
-        />
-        {companyList?.length == 0 && !discoverState.loading && (
-          <Text style={styles.noSearchMatchFound}>No matching data found</Text>
+
+      {/* Applied filters */}
+      <View style={{ flexDirection: "row" }}>
+        {(appliedFilter !== null) && (appliedFilter.length > 0) && (
+          <FilterDisplay textAsFilter={appliedFilter} dispatchType="RESET_FILTER_LIST" />
+        )}
+        {(discoverState.favCompanyOnly !== null) && (discoverState.favCompanyOnly == true) && (
+          <FilterDisplay textAsFilter="Favorites" dispatchType="SHOW_FAVORITES_ONLY" />
         )}
       </View>
+
+      {/* Displaying message while no result */}
+      {
+        (companyList?.length == 0 && !discoverState.loading) ?
+          <Text style={styles.noSearchMatchFound}>No matching data found</Text>
+          :
+          null
+      }
+
+      {/* Displaying other companyList title */}
+      {(companyList?.length == 0 && !discoverState.loading) && (appliedFilter?.length !== 0)
+        && (discoverState.otherCompanyList?.length !== 0) && (
+          <Text style={styles.otherResult}>Try other results:</Text>
+        )}
+
+      {/* Company list */}
+      {(companyList?.length || appliedFilter?.length) && (
+        <View style={styles.companyListWrapper}>
+          <FlatList
+            contentContainerStyle={styles.companyListContainer}
+            data={discoverState.companyList?.length ? discoverState.companyList : discoverState.otherCompanyList}
+            onEndReachedThreshold={800}
+            onEndReached={async () => {
+              {
+                if (discoverState.companyList?.length || discoverState.otherCompanyList?.length) {
+                  dispatch({ type: "INCREASE_PAGE_NO" })
+                }
+              };
+              return Promise.resolve(true);
+            }}
+            keyExtractor={(item, index) => item.name + "_" + index}
+            renderItem={({ item }) => {
+              return (
+                <Company
+                  {...item}
+                  name={item.brand}
+                  values_match_score={item.company.values_match_score}
+                  industry={item.category_level_3}
+                  parent_logo_image={item.company.parent_logo_image}
+                  companyRanking={item.company}
+                  navigation={navigation}
+                  route={route}
+                />
+              );
+            }}
+          />
+        </View>
+      )}
+
       <ActivityModal
-        isDialogVisible={discoverState.loading && !companyList.length}
+        isDialogVisible={discoverState.loading && !companyList.length && !discoverState.otherCompanyList?.length}
       />
     </View>
   );
@@ -216,6 +296,8 @@ const styles = StyleSheet.create({
     marginTop: -20,
   },
   companyListWrapper: {
+    height: "100%",
+    flex: 1,
     backgroundColor: COLORS.lightWhite,
   },
   searchComponentMainConatainer: {
@@ -224,7 +306,7 @@ const styles = StyleSheet.create({
     height: 50,
     marginVertical: 10,
     alignSelf: "center",
-    marginBottom: 20,
+    marginBottom: 15,
   },
   headerDiscoverText: {
     color: COLORS.white,
@@ -265,14 +347,21 @@ const styles = StyleSheet.create({
   },
   noSearchMatchFound: {
     textAlign: "center",
-    paddingTop: 100,
+    paddingVertical: 10,
+    backgroundColor: COLORS.lightGrayBackground,
+  },
+  otherResult: {
+    ...FONTS.h2,
+    color: COLORS.blue,
+    paddingBottom: 10,
+    paddingLeft: "5%",
+    backgroundColor: COLORS.lightGrayBackground,
   },
   filtersContainer: {
     flexDirection: "row",
-    width: "90%",
     alignSelf: "center",
     marginBottom: 15,
-    marginTop: -5,
+    marginLeft: "5%",
   },
   filterBox: {
     backgroundColor: COLORS.lightGrayBackground,
