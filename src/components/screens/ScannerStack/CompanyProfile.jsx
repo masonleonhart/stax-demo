@@ -87,7 +87,7 @@ export default function CompanyProfile({ navigation }) {
         "Unable to match company to parent, no parent data available."
       );
     }
-  }, []);
+  }, [companyRanking]);
 
   useEffect(() => {
     if (
@@ -99,6 +99,10 @@ export default function CompanyProfile({ navigation }) {
       setRenderMissingText(false);
     }
   }, [renderedValuesParent.current]);
+
+
+console.log(valueMatchList)
+
 
   const RenderValue = ({ value }) => {
     const [isCollapsed, setIsCollapsed] = useState(true);
