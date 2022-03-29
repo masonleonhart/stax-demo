@@ -8,6 +8,7 @@ import Landing from "../screens/Tabs/Landing";
 import ScannerStack from "./ScannerStack";
 import Account from "../screens/Tabs/Account";
 import Discover from "../screens/Tabs/Discover";
+import { Pressable } from "react-native";
 
 export default function TabNavigation() {
   const Tab = createBottomTabNavigator();
@@ -42,7 +43,7 @@ export default function TabNavigation() {
       <Tab.Screen
         name="ScannerStack"
         component={ScannerStack}
-        options={{
+        options={({ navigation }) => ({
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
               name="barcode-scan"
@@ -50,7 +51,17 @@ export default function TabNavigation() {
               size={size}
             />
           ),
-        }}
+          tabBarButton: (props) => (
+            <Pressable
+              {...props}
+              onPress={() =>
+                navigation.navigate("ScannerStack", {
+                  screen: "BarcodeScanner",
+                })
+              }
+            />
+          ),
+        })}
       />
       <Tab.Screen
         name="Discover"
