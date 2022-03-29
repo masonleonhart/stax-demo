@@ -10,6 +10,7 @@ const discoverCompaniesListState = (state = {}, action) => {
         ...state,
         searchValue: action.payload,
         companyList: [],
+        otherCompanyList: [],
         page: 0,
       };
     case "SET_FILTER_LIST":
@@ -20,6 +21,7 @@ const discoverCompaniesListState = (state = {}, action) => {
         ...state,
         appliedFilter: action.payload,
         companyList: [],
+        otherCompanyList: [],
         page: 0,
       };
     case "RESET_FILTER_LIST":
@@ -27,6 +29,7 @@ const discoverCompaniesListState = (state = {}, action) => {
         ...state,
         appliedFilter: [],
         companyList: [],
+        otherCompanyList: [],
         page: 0,
       };
     case "SET_DISCOVER_COMPANY_LIST":
@@ -35,7 +38,12 @@ const discoverCompaniesListState = (state = {}, action) => {
         loading: false,
         companyList: action.payload,
       };
-
+    case "SET_OTHER_DISCOVER_COMPANY_LIST":
+      return {
+        ...state,
+        loading: false,
+        otherCompanyList: action.payload,
+      }
     case "DISCOVER_COMPANY_LIST_LOADING_STOP":
       return {
         ...state,
@@ -58,6 +66,14 @@ const discoverCompaniesListState = (state = {}, action) => {
         ...state,
         loading: false,
       };
+    case "SHOW_FAVORITES_ONLY":
+      return {
+        ...state,
+        favCompanyOnly: action.payload,
+        companyList: [],
+        otherCompanyList: [],
+        page: 0,
+      }
     default:
       return state;
   }
