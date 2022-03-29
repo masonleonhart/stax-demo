@@ -325,9 +325,7 @@ export default Company;
 const styles = StyleSheet.create({
   card: {
     backgroundColor: "white",
-
-    borderBottomRightRadius: 16,
-    borderBottomLeftRadius: 16,
+    borderRadius: 16,
     shadowOpacity: 0.2,
     shadowRadius: 4,
     shadowColor: "black",

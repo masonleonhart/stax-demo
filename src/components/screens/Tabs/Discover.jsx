@@ -218,7 +218,7 @@ function DiscoverUI({ navigation, route }) {
         )}
 
       {/* Company list */}
-      {(companyList?.length || appliedFilter?.length) && (
+      {(companyList?.length !== 0 || appliedFilter?.length !== 0) && (
         <View style={styles.companyListWrapper}>
           <FlatList
             contentContainerStyle={styles.companyListContainer}
@@ -293,7 +293,6 @@ const styles = StyleSheet.create({
   },
   companyListContainer: {
     marginHorizontal: 16,
-    marginTop: -20,
   },
   companyListWrapper: {
     height: "100%",
