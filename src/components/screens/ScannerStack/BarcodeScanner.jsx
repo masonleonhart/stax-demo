@@ -86,6 +86,10 @@ export default function BarcodeScanner({ navigation }) {
               type: "SET_SCANNED_COMPANY_RANKING",
               payload: response.data.company_obj.scanned_company_ranking,
             });
+            dispatch({
+              type: "SET_SCANNED_COMPANY_CATEGORY",
+              payload: response.data.company_obj.scanned_brand,
+            });
 
             navigation.navigate("CompanyProfile");
           }

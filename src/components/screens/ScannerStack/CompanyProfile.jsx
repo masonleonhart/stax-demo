@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useIsFocused } from "@react-navigation/native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
+import { AUTH_HEADER } from "@env";
+import SERVER_ADDRESS from "../../../constants/server_address";
+import axios from "axios";
 
 import {
   View,
@@ -9,9 +13,11 @@ import {
   Dimensions,
   Image,
   Alert,
+  FlatList,
 } from "react-native";
 import { Text, IconButton, ProgressBar, useTheme } from "react-native-paper";
 
+import { COLORS, FONTS } from "../../../constants/theme";
 import MyButton from "../../reusedComponents/MyButton";
 
 import Collapsible from "react-native-collapsible";
@@ -22,8 +28,11 @@ import SharedStyles from "../../reusedComponents/SharedStyles";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
 import companyImage from "../../../../assets/companyImage.jpeg";
 import { determineMatchType } from "../../../constants/helpers";
+import Company from "../../reusedComponents/Company";
 
 export default function CompanyProfile({ navigation }) {
+
+  const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const myTheme = useTheme();
   const windowWidth = Dimensions.get("window").width;
@@ -32,6 +41,14 @@ export default function CompanyProfile({ navigation }) {
   const companyRanking = useSelector(
     (store) => store.barcode.scannedCompanyRanking
   );
+  const betterMatches = useSelector(
+    (store) => store.barcode.betterMatches
+  );
+  const betterMatchCategory = useSelector(
+    (store) => store.barcode.barcodeResult
+  );
+  const accessToken = useSelector((store) => store.user.userInfo.accessToken);
+
   const userValues = useSelector((store) => store.user.userInfo.values);
   const userInfo = useSelector((store) => store.user.userInfo);
   const [overallMatch, setOverallMatch] = useState("Poor");
@@ -72,7 +89,41 @@ export default function CompanyProfile({ navigation }) {
     setValueMatchList(listOfValues);
   };
 
+  const getApiURL = ({ filter }) => {
+    let url = `${SERVER_ADDRESS}/api/v1/search?size=4`;
+    if (filter) {
+      url = url + `&filter=${filter}`;
+    }
+    return url;
+  }
+
+  const getCompanyList = async () => {
+    try {
+      const response = await axios.get(getApiURL(
+        {
+          filter: betterMatchCategory.category_level_3,
+        }
+      ), {
+        headers: { [AUTH_HEADER]: accessToken },
+      });
+
+      const repeatationCompanyIndex = response.data.findIndex((Object) =>
+        companyRanking.entity_id === Object.entity_id
+      );
+      response.data.splice(repeatationCompanyIndex, 1)
+
+
+      dispatch({
+        type: "SET_MATCHING_COMPANY_LIST",
+        payload: response.data,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
+    getCompanyList()
     if ("values_match_score" in companyRanking) {
       matchValuesToMStarData(userValues);
 
@@ -99,10 +150,6 @@ export default function CompanyProfile({ navigation }) {
       setRenderMissingText(false);
     }
   }, [renderedValuesParent.current]);
-
-
-console.log(valueMatchList)
-
 
   const RenderValue = ({ value }) => {
     const [isCollapsed, setIsCollapsed] = useState(true);
@@ -267,6 +314,18 @@ console.log(valueMatchList)
       marginTop: "0%",
       marginBottom: "0%",
     },
+    companyList: {
+      backgroundColor: COLORS.white,
+      flex: 1,
+    },
+    companyListContainer: {
+      marginHorizontal: 5,
+      marginTop: -15,
+    },
+    companyListWrapper: {
+      height: "100%",
+      flex: 1,
+    }
   });
 
   // If the screen isn't in focus yet, render a placeholder screen
@@ -295,10 +354,10 @@ console.log(valueMatchList)
           {barcodeDetails.manufacturer
             ? barcodeDetails.manufacturer
             : barcodeDetails.brand
-            ? barcodeDetails.brand
-            : barcodeDetails.title
-            ? barcodeDetails.title
-            : "Company Profile"}
+              ? barcodeDetails.brand
+              : barcodeDetails.title
+                ? barcodeDetails.title
+                : "Company Profile"}
         </Text>
         {"name" in companyRanking && (
           <Text style={styles.parentName}>Owned By: {companyRanking.name}</Text>
@@ -328,6 +387,29 @@ console.log(valueMatchList)
               data available.
             </Text>
           )}
+        </View>
+
+        <View style={styles.companyListWrapper}>
+          {(betterMatches?.length !== 0) && (<Text style={styles.sectionHeaderText}>Better matches:</Text>)}
+          <FlatList
+            scrollEnabled='false'
+            contentContainerStyle={styles.companyListContainer}
+            data={betterMatches}
+            keyExtractor={(item, index) => item.name + "_" + index}
+            renderItem={({ item }) => {
+              return (
+                <Company
+                  {...item}
+                  name={item.brand}
+                  values_match_score={item?.company?.values_match_score}
+                  industry={item.category_level_3}
+                  parent_logo_image={item.company?.parent_logo_image}
+                  companyRanking={item?.company}
+                  navigation={navigation}
+                />
+              );
+            }}
+          />
         </View>
 
         <MyButton
