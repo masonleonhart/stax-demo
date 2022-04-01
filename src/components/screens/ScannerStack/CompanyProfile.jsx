@@ -26,7 +26,6 @@ import { MaterialCommunityIcons } from "react-native-vector-icons";
 import fonts from "../../reusedComponents/fonts";
 import SharedStyles from "../../reusedComponents/SharedStyles";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
-import companyImage from "../../../../assets/companyImage.jpeg";
 import { determineMatchType } from "../../../constants/helpers";
 import Company from "../../reusedComponents/Company";
 
@@ -339,7 +338,12 @@ export default function CompanyProfile({ navigation }) {
       <View style={styles.companyHeader}>
         <View style={styles.imagesWrapper}>
           <Image
-            source={companyImage}
+            source={{
+              uri:
+                betterMatchCategory.parent_logo_image && betterMatchCategory.parent_logo_image !== null
+                  ? betterMatchCategory.parent_logo_image
+                  : "https://www.adaptivewfs.com/wp-content/uploads/2020/07/logo-placeholder-image.png"
+            }}
             style={styles.companyImage}
             resizeMode="contain"
           />
