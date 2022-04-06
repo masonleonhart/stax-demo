@@ -7,6 +7,7 @@ import { useTheme, IconButton } from "react-native-paper";
 
 import Splash from "../screens/topStack/Splash";
 import AuthStack from "./AuthStack";
+import LikedBrands from "../screens/topStack/LikedBrands";
 import TermsOfUse from "../screens/topStack/TermsOfUse";
 import TabStack from "./TabsNav";
 import ValuesStack from "./ValuesStack";
@@ -56,13 +57,21 @@ export default function TopStack() {
       <Stack.Screen name="Splash" component={Splash} />
       <Stack.Screen name="AuthStack" component={AuthStack} />
       <Stack.Screen
+        name="LikedBrands"
+        component={LikedBrands}
+        options={{ headerShown: true, headerTransparent: true }}
+      />
+      <Stack.Screen
         name="TermsOfUse"
         component={TermsOfUse}
         options={{ headerShown: true }}
       />
       <Stack.Screen name="TabStack" component={TabStack} />
       <Stack.Screen name="ValuesStack" component={ValuesStack} />
-      <Stack.Screen name="UpdateUserInfoStack" component={UpdateUserInfoStack} />
+      <Stack.Screen
+        name="UpdateUserInfoStack"
+        component={UpdateUserInfoStack}
+      />
       <Stack.Screen
         name="NewProductForm"
         component={NewProductForm}

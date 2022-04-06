@@ -132,6 +132,7 @@ export default function Account({ navigation }) {
             onPress={() => navigation.navigate("UpdateUserInfoStack")}
           />
         )}
+        <AccountPressable text="Liked Brands" onPress={() => navigation.navigate("LikedBrands")} />
         <AccountPressable
           text="Terms of Use"
           onPress={() => navigation.navigate("TermsOfUse")}

@@ -30,9 +30,11 @@ const HeaderComponent = ({
         >
           {mainTitle}
         </Text>
-        <Text style={subTitleStyle ? subTitleStyle : styles.headerNameText}>
-          {subTitle}
-        </Text>
+        {subTitle && (
+          <Text style={subTitleStyle ? subTitleStyle : styles.headerNameText}>
+            {subTitle}
+          </Text>
+        )}
       </View>
       <View style={styles.userImage}>
         <Pressable onPress={() => navigation.navigate("Account")}>
