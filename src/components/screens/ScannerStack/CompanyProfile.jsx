@@ -199,7 +199,9 @@ export default function CompanyProfile({ navigation }) {
             onPress={() => setIsCollapsed(!isCollapsed)}
           />
         </View>
-        <View style={SharedStyles.flexRow}>{progressBarsArray}</View>
+        <View style={[SharedStyles.flexRow, { marginBottom: "5%" }]}>
+          {progressBarsArray}
+        </View>
         <Collapsible collapsed={isCollapsed}>
           <Text style={styles.collapsedText}>
             <Text style={styles.collapsedTextBold}>
@@ -302,7 +304,7 @@ export default function CompanyProfile({ navigation }) {
     progressBar: {
       width: windowWidth * 0.16,
       height: deviceHeight * 0.0075,
-      borderRadius: 10
+      borderRadius: 10,
     },
     progressBarFilled: {
       backgroundColor: myTheme.colors.blue,
