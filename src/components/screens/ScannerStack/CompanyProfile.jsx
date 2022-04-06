@@ -26,7 +26,6 @@ import { MaterialCommunityIcons } from "react-native-vector-icons";
 import fonts from "../../reusedComponents/fonts";
 import SharedStyles from "../../reusedComponents/SharedStyles";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
-import companyImage from "../../../../assets/companyImage.jpeg";
 import { determineMatchType } from "../../../constants/helpers";
 import Company from "../../reusedComponents/Company";
 
@@ -44,7 +43,7 @@ export default function CompanyProfile({ navigation }) {
   const betterMatches = useSelector(
     (store) => store.barcode.betterMatches
   );
-  const betterMatchCategory = useSelector(
+  const matchingBrand = useSelector(
     (store) => store.barcode.barcodeResult
   );
   const accessToken = useSelector((store) => store.user.userInfo.accessToken);
@@ -101,14 +100,14 @@ export default function CompanyProfile({ navigation }) {
     try {
       const response = await axios.get(getApiURL(
         {
-          filter: betterMatchCategory.category_level_3,
+          filter: matchingBrand.category_level_3,
         }
       ), {
         headers: { [AUTH_HEADER]: accessToken },
       });
 
       const repeatationCompanyIndex = response.data.findIndex((Object) =>
-        companyRanking.entity_id === Object.entity_id
+        matchingBrand.id === Object.id
       );
       response.data.splice(repeatationCompanyIndex, 1)
 
@@ -339,7 +338,12 @@ export default function CompanyProfile({ navigation }) {
       <View style={styles.companyHeader}>
         <View style={styles.imagesWrapper}>
           <Image
-            source={companyImage}
+            source={{
+              uri:
+                matchingBrand.parent_logo_image && matchingBrand.parent_logo_image !== null
+                  ? matchingBrand.parent_logo_image
+                  : "https://s3-symbol-logo.tradingview.com/logo-yazilim--600.png"
+            }}
             style={styles.companyImage}
             resizeMode="contain"
           />

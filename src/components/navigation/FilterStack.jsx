@@ -48,9 +48,25 @@ export default function FilterStack({ navigation }) {
   };
   const favApplied = () => {
     navigation.closeDrawer();
-    const favChecked = !discoverState.favCompanyOnly;
-    dispatch({ type: "SHOW_FAVORITES_ONLY", payload: favChecked });
+    const filterChecked = !discoverState.favCompanyOnly;
+    dispatch({ type: "SHOW_FAVORITES_ONLY", payload: filterChecked });
   }
+  const bCorpApplied = () => {
+    navigation.closeDrawer();
+    const filterChecked = !discoverState.bCorpCompany;
+    dispatch({ type: "SHOW_BCORP_ONLY", payload: filterChecked });
+  }
+  const gabvApplied = () => {
+    navigation.closeDrawer();
+    const filterChecked = !discoverState.gabvCompany;
+    dispatch({ type: "SHOW_GABV_ONLY", payload: filterChecked });
+  }
+  const onePercentApplied = () => {
+    navigation.closeDrawer();
+    const filterChecked = !discoverState.onePercentCompany;
+    dispatch({ type: "SHOW_ONEPERCENT_ONLY", payload: filterChecked });
+  }
+
   const RenderChild = ({ title, index, hasChild = false }) => {
     return (
       <TouchableOpacity
@@ -95,14 +111,14 @@ export default function FilterStack({ navigation }) {
     );
   };
 
-  const FavCheckbox = ({ }) => {
+  const FilterCheckbox = ({ checkboxLabel, checkboxCompany, filterOnPress }) => {
     return (
-      <View styles={styles.favContainer}>
+      <View styles={styles.filterContainer}>
         <Checkbox.Item
-          label="Favorite"
+          label={checkboxLabel}
           uncheckedColor="red"
-          status={discoverState.favCompanyOnly ? 'checked' : 'unchecked'}
-          onPress={favApplied}
+          status={checkboxCompany ? 'checked' : 'unchecked'}
+          onPress={filterOnPress}
         />
       </View>
     );
@@ -126,9 +142,24 @@ export default function FilterStack({ navigation }) {
             </View>
           )}
           <RenderList data={categoryStack[currentDepth]} />
-          {currentDepth == 0 && (
-            <FavCheckbox />
-          )}
+          {currentDepth == 0 && <>
+            <FilterCheckbox
+              checkboxLabel='Favorite'
+              checkboxCompany={discoverState.favCompanyOnly}
+              filterOnPress={favApplied} />
+            <FilterCheckbox
+              checkboxLabel='B-Corp Certified'
+              checkboxCompany={discoverState.bCorpCompany}
+              filterOnPress={bCorpApplied} />
+            <FilterCheckbox
+              checkboxLabel='Global Alliance for Banking'
+              checkboxCompany={discoverState.gabvCompany}
+              filterOnPress={gabvApplied} />
+            <FilterCheckbox
+              checkboxLabel='1% for the Planet Companies'
+              checkboxCompany={discoverState.onePercentCompany}
+              filterOnPress={onePercentApplied} />
+          </>}
         </ScrollView>
       </View>
     </View>

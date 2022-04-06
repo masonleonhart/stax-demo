@@ -74,6 +74,30 @@ const discoverCompaniesListState = (state = {}, action) => {
         otherCompanyList: [],
         page: 0,
       }
+    case "SHOW_BCORP_ONLY":
+      return {
+        ...state,
+        bCorpCompany: action.payload,
+        companyList: [],
+        otherCompanyList: [],
+        page: 0,
+      }
+    case "SHOW_GABV_ONLY":
+      return {
+        ...state,
+        gabvCompany: action.payload,
+        companyList: [],
+        otherCompanyList: [],
+        page: 0,
+      }
+    case "SHOW_ONEPERCENT_ONLY":
+      return {
+        ...state,
+        onePercentCompany: action.payload,
+        companyList: [],
+        otherCompanyList: [],
+        page: 0,
+      }
     default:
       return state;
   }
