@@ -59,9 +59,15 @@ export default function LikedBrands() {
       .then((res) => getBrands());
   };
 
-  const BrandObject = ({ text, id }) => (
-    <View style={styles.brandContainer}>
-      <Text style={styles.brandText}>{text}</Text>
+  const BrandObject = ({ brand, industry, parent, id }) => (
+    <View style={[SharedStyles.flexRow, styles.brandContainer]}>
+      <View style={styles.brandWrapper}>
+        <View style={styles.nameIndustryWrapper}>
+          <Text style={styles.brandText}>{brand}</Text>
+          <Text style={styles.industryText}>{industry}</Text>
+        </View>
+        <Text style={styles.parentText}>Owned by: {parent}</Text>
+      </View>
       <IconButton
         icon="heart-off"
         size={30}
@@ -84,18 +90,33 @@ export default function LikedBrands() {
       borderBottomColor: myTheme.colors.grey,
       borderBottomWidth: 1,
       padding: "5%",
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
-    },
-    brandText: {
-      fontFamily: fonts.medium,
-      fontSize: 22,
     },
     noDataText: {
       textAlign: "center",
       fontFamily: fonts.regular,
       fontSize: 16,
+    },
+    brandWrapper: {
+      width: "80%"
+    },
+    nameIndustryWrapper: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "flex-end",
+      marginBottom: "5%",
+    },
+    brandText: {
+      fontFamily: fonts.medium,
+      fontSize: 22,
+    },
+    industryText: {
+      fontFamily: fonts.regular,
+      fontSize: 16,
+      marginLeft: "5%"
+    },
+    parentText: {
+      fontFamily: fonts.regular,
+      fontSize: 18,
     },
   });
 
@@ -118,8 +139,10 @@ export default function LikedBrands() {
         {likedBrands.length !== 0 ? (
           likedBrands.map((brandObj) => (
             <BrandObject
-              key={brandObj.entity_id}
-              text={brandObj.brand}
+              key={brandObj.id}
+              brand={brandObj.brand}
+              industry={brandObj.category_level_3}
+              parent={brandObj.company}
               id={brandObj.id}
             />
           ))
