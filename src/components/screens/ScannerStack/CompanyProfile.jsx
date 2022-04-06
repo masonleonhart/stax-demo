@@ -30,7 +30,6 @@ import { determineMatchType } from "../../../constants/helpers";
 import Company from "../../reusedComponents/Company";
 
 export default function CompanyProfile({ navigation }) {
-
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const myTheme = useTheme();
@@ -40,12 +39,8 @@ export default function CompanyProfile({ navigation }) {
   const companyRanking = useSelector(
     (store) => store.barcode.scannedCompanyRanking
   );
-  const betterMatches = useSelector(
-    (store) => store.barcode.betterMatches
-  );
-  const matchingBrand = useSelector(
-    (store) => store.barcode.barcodeResult
-  );
+  const betterMatches = useSelector((store) => store.barcode.betterMatches);
+  const matchingBrand = useSelector((store) => store.barcode.barcodeResult);
   const accessToken = useSelector((store) => store.user.userInfo.accessToken);
 
   const userValues = useSelector((store) => store.user.userInfo.values);
@@ -94,23 +89,23 @@ export default function CompanyProfile({ navigation }) {
       url = url + `&filter=${filter}`;
     }
     return url;
-  }
+  };
 
   const getCompanyList = async () => {
     try {
-      const response = await axios.get(getApiURL(
-        {
+      const response = await axios.get(
+        getApiURL({
           filter: matchingBrand.category_level_3,
+        }),
+        {
+          headers: { [AUTH_HEADER]: accessToken },
         }
-      ), {
-        headers: { [AUTH_HEADER]: accessToken },
-      });
-
-      const repeatationCompanyIndex = response.data.findIndex((Object) =>
-        matchingBrand.id === Object.id
       );
-      response.data.splice(repeatationCompanyIndex, 1)
 
+      const repeatationCompanyIndex = response.data.findIndex(
+        (Object) => matchingBrand.id === Object.id
+      );
+      response.data.splice(repeatationCompanyIndex, 1);
 
       dispatch({
         type: "SET_MATCHING_COMPANY_LIST",
@@ -122,7 +117,7 @@ export default function CompanyProfile({ navigation }) {
   };
 
   useEffect(() => {
-    getCompanyList()
+    getCompanyList();
     if ("values_match_score" in companyRanking) {
       matchValuesToMStarData(userValues);
 
@@ -152,6 +147,39 @@ export default function CompanyProfile({ navigation }) {
 
   const RenderValue = ({ value }) => {
     const [isCollapsed, setIsCollapsed] = useState(true);
+    const progressBarsArray = [];
+
+    const renderProgressBars = (pct) => {
+      let filledBars;
+
+      if (pct >= 0 && pct < 0.2) {
+        filledBars = 1;
+      } else if (pct >= 0.2 && pct < 0.4) {
+        filledBars = 2;
+      } else if (pct >= 0.4 && pct < 0.6) {
+        filledBars = 3;
+      } else if (pct >= 0.6 && pct < 0.8) {
+        filledBars = 4;
+      } else if (pct >= 0.8 && pct <= 1) {
+        filledBars = 5;
+      }
+
+      const unfilledBars = 5 - filledBars;
+
+      for (let i = 0; i < filledBars; i++) {
+        progressBarsArray.push(
+          <View style={[styles.progressBar, styles.progressBarFilled]} />
+        );
+      }
+
+      for (let i = 0; i < unfilledBars; i++) {
+        progressBarsArray.push(
+          <View style={[styles.progressBar, styles.progressBarOpaque]} />
+        );
+      }
+    };
+
+    renderProgressBars(value.valuePercentageRounded);
 
     return (
       <View style={styles.valueWrapper}>
@@ -171,16 +199,7 @@ export default function CompanyProfile({ navigation }) {
             onPress={() => setIsCollapsed(!isCollapsed)}
           />
         </View>
-        <View style={[SharedStyles.flexRow, { marginBottom: "5%" }]}>
-          <Text style={styles.progressText}>
-            {(value.valuePercentageRounded * 100).toFixed(0)}%
-          </Text>
-          <ProgressBar
-            progress={value.valuePercentageRounded}
-            color={myTheme.colors.blue}
-            style={styles.progressBar}
-          />
-        </View>
+        <View style={SharedStyles.flexRow}>{progressBarsArray}</View>
         <Collapsible collapsed={isCollapsed}>
           <Text style={styles.collapsedText}>
             <Text style={styles.collapsedTextBold}>
@@ -280,12 +299,16 @@ export default function CompanyProfile({ navigation }) {
       marginLeft: "5%",
       fontFamily: fonts.bold,
     },
-    progressText: {
-      fontSize: 16,
-      fontFamily: fonts.medium,
-    },
     progressBar: {
-      width: windowWidth * 0.7,
+      width: windowWidth * 0.16,
+      height: deviceHeight * 0.0075,
+      borderRadius: 10
+    },
+    progressBarFilled: {
+      backgroundColor: myTheme.colors.blue,
+    },
+    progressBarOpaque: {
+      backgroundColor: "rgba(0, 26, 114, .25)",
     },
     collapsedText: {
       fontSize: 16,
@@ -324,7 +347,7 @@ export default function CompanyProfile({ navigation }) {
     companyListWrapper: {
       height: "100%",
       flex: 1,
-    }
+    },
   });
 
   // If the screen isn't in focus yet, render a placeholder screen
@@ -340,9 +363,10 @@ export default function CompanyProfile({ navigation }) {
           <Image
             source={{
               uri:
-                matchingBrand.parent_logo_image && matchingBrand.parent_logo_image !== null
+                matchingBrand.parent_logo_image &&
+                matchingBrand.parent_logo_image !== null
                   ? matchingBrand.parent_logo_image
-                  : "https://s3-symbol-logo.tradingview.com/logo-yazilim--600.png"
+                  : "https://s3-symbol-logo.tradingview.com/logo-yazilim--600.png",
             }}
             style={styles.companyImage}
             resizeMode="contain"
@@ -358,10 +382,10 @@ export default function CompanyProfile({ navigation }) {
           {barcodeDetails.manufacturer
             ? barcodeDetails.manufacturer
             : barcodeDetails.brand
-              ? barcodeDetails.brand
-              : barcodeDetails.title
-                ? barcodeDetails.title
-                : "Company Profile"}
+            ? barcodeDetails.brand
+            : barcodeDetails.title
+            ? barcodeDetails.title
+            : "Company Profile"}
         </Text>
         {"name" in companyRanking && (
           <Text style={styles.parentName}>Owned By: {companyRanking.name}</Text>
@@ -394,9 +418,11 @@ export default function CompanyProfile({ navigation }) {
         </View>
 
         <View style={styles.companyListWrapper}>
-          {(betterMatches?.length !== 0) && (<Text style={styles.sectionHeaderText}>Better matches:</Text>)}
+          {betterMatches?.length !== 0 && (
+            <Text style={styles.sectionHeaderText}>Better matches:</Text>
+          )}
           <FlatList
-            scrollEnabled='false'
+            scrollEnabled="false"
             contentContainerStyle={styles.companyListContainer}
             data={betterMatches}
             keyExtractor={(item, index) => item.name + "_" + index}
