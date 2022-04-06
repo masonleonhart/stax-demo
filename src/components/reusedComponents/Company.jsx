@@ -217,12 +217,11 @@ const Company = ({
     }
     Linking.openURL(link);
   };
-  const share = () => {};
+  const share = () => { };
   const toggleLike = async (id, liked) => {
     try {
-      const url = `${SERVER_ADDRESS}/api/v1/${
-        liked ? "remove-user-favourite-company" : "favourite-company"
-      }`;
+      const url = `${SERVER_ADDRESS}/api/v1/${liked ? "remove-user-favourite-company" : "favourite-company"
+        }`;
 
       const response = await axios.post(
         url,
@@ -244,7 +243,7 @@ const Company = ({
   const onCompanyCardPress = (companyRanking, name) => {
     dispatch({
       type: "SET_BARCODE_DETAILS",
-      payload: {manufacturer: name},
+      payload: { manufacturer: name },
     });
     dispatch({
       type: "SET_SCANNED_COMPANY_RANKING",
@@ -326,6 +325,8 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "white",
     borderRadius: 16,
+    borderTopEndRadius: 0,
+    borderTopStartRadius: 0,
     shadowOpacity: 0.2,
     shadowRadius: 4,
     shadowColor: "black",
@@ -334,13 +335,15 @@ const styles = StyleSheet.create({
       width: 0,
     },
     elevation: 1,
-    marginVertical: 20,
+    marginBottom: 20,
     paddingBottom: 5,
   },
   thumb: {
     height: 200,
     resizeMode: "cover",
     borderRadius: 16,
+    borderTopRightRadius: 0,
+    borderTopLeftRadius: 0,
     width: "100%",
   },
   newsImageContainer: {
@@ -357,8 +360,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
   },
   imageStyle: {
-    width: SCREEN_HEIGHT * 0.1,
-    height: SCREEN_HEIGHT * 0.1,
+    width: SCREEN_HEIGHT * 0.12,
+    height: SCREEN_HEIGHT * 0.12,
   },
   flexRowCenterStyle: {
     flexDirection: "row",

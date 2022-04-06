@@ -43,7 +43,7 @@ export default function CompanyProfile({ navigation }) {
   const betterMatches = useSelector(
     (store) => store.barcode.betterMatches
   );
-  const betterMatchCategory = useSelector(
+  const matchingBrand = useSelector(
     (store) => store.barcode.barcodeResult
   );
   const accessToken = useSelector((store) => store.user.userInfo.accessToken);
@@ -100,14 +100,14 @@ export default function CompanyProfile({ navigation }) {
     try {
       const response = await axios.get(getApiURL(
         {
-          filter: betterMatchCategory.category_level_3,
+          filter: matchingBrand.category_level_3,
         }
       ), {
         headers: { [AUTH_HEADER]: accessToken },
       });
 
       const repeatationCompanyIndex = response.data.findIndex((Object) =>
-        companyRanking.entity_id === Object.entity_id
+        matchingBrand.id === Object.id
       );
       response.data.splice(repeatationCompanyIndex, 1)
 
@@ -340,9 +340,9 @@ export default function CompanyProfile({ navigation }) {
           <Image
             source={{
               uri:
-                betterMatchCategory.parent_logo_image && betterMatchCategory.parent_logo_image !== null
-                  ? betterMatchCategory.parent_logo_image
-                  : "https://www.adaptivewfs.com/wp-content/uploads/2020/07/logo-placeholder-image.png"
+                matchingBrand.parent_logo_image && matchingBrand.parent_logo_image !== null
+                  ? matchingBrand.parent_logo_image
+                  : "https://s3-symbol-logo.tradingview.com/logo-yazilim--600.png"
             }}
             style={styles.companyImage}
             resizeMode="contain"

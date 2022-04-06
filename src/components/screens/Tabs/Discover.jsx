@@ -45,7 +45,7 @@ function DiscoverUI({ navigation, route }) {
 
   const [searchValue, setSearchValue] = useState(discoverState.searchValue);
 
-  const getApiURL = ({ filter, page, search, favCom }) => {
+  const getApiURL = ({ filter, page, search, favCom, bCorpCompany, onePercentageForThePlanet, GABV }) => {
     let url = `${SERVER_ADDRESS}/api/v1/search?size=20`;
     if (filter) {
       url = url + `&filter=${filter}`;
@@ -56,6 +56,15 @@ function DiscoverUI({ navigation, route }) {
     }
     if (favCom) {
       url = url + `&fav_only=${favCom}`;
+    }
+    if (bCorpCompany) {
+      url = url + `&bCorpCompany=${bCorpCompany}`;
+    }
+    if (onePercentageForThePlanet) {
+      url = url + `&onePercentageForThePlanet=${onePercentageForThePlanet}`;
+    }
+    if (GABV) {
+      url = url + `&GABV=${GABV}`;
     }
     return url;
   }
@@ -69,7 +78,10 @@ function DiscoverUI({ navigation, route }) {
           filter: appliedFilter,
           page: discoverState.page,
           search: discoverState.searchValue,
-          favCom: discoverState.favCompanyOnly
+          favCom: discoverState.favCompanyOnly,
+          bCorpCompany: discoverState.bCorpCompany,
+          onePercentageForThePlanet: discoverState.onePercentCompany,
+          GABV: discoverState.gabvCompany,
         }
       ), {
         headers: { [AUTH_HEADER]: accessToken },
@@ -114,25 +126,23 @@ function DiscoverUI({ navigation, route }) {
     } else {
       getCompanyList();
     }
-  }, [appliedFilter, discoverState.page, discoverState.searchValue, discoverState.favCompanyOnly]);
+  }, [appliedFilter, discoverState.page, discoverState.searchValue, discoverState.favCompanyOnly, discoverState.bCorpCompany, discoverState.gabvCompany, discoverState.onePercentCompany]);
 
   const FilterDisplay = ({ textAsFilter, dispatchType }) => {
     return (
-      <View style={styles.filtersContainer}>
-        <View style={styles.filterBox}>
-          <Text style={styles.filterDisplayText}>{textAsFilter}</Text>
-          <TouchableOpacity
-            onPress={() => {
-              dispatch({ type: dispatchType });
-            }}
-          >
-            <Ionicons
-              name="close"
-              size={16}
-              color={COLORS.blue}
-            />
-          </TouchableOpacity>
-        </View>
+      <View style={styles.filterBox}>
+        <Text style={styles.filterDisplayText}>{textAsFilter}</Text>
+        <TouchableOpacity
+          onPress={() => {
+            dispatch({ type: dispatchType });
+          }}
+        >
+          <Ionicons
+            name="close"
+            size={16}
+            color={COLORS.blue}
+          />
+        </TouchableOpacity>
       </View>
     )
   }
@@ -194,12 +204,21 @@ function DiscoverUI({ navigation, route }) {
       </View>
 
       {/* Applied filters */}
-      <View style={{ flexDirection: "row" }}>
+      <View style={styles.filtersContainer}>
         {(appliedFilter !== null) && (appliedFilter.length > 0) && (
           <FilterDisplay textAsFilter={appliedFilter} dispatchType="RESET_FILTER_LIST" />
         )}
         {(discoverState.favCompanyOnly !== null) && (discoverState.favCompanyOnly == true) && (
           <FilterDisplay textAsFilter="Favorites" dispatchType="SHOW_FAVORITES_ONLY" />
+        )}
+        {(discoverState.bCorpCompany !== null) && (discoverState.bCorpCompany == true) && (
+          <FilterDisplay textAsFilter="B-Corp Certified" dispatchType="SHOW_BCORP_ONLY" />
+        )}
+        {(discoverState.gabvCompany !== null) && (discoverState.gabvCompany == true) && (
+          <FilterDisplay textAsFilter="GA for Banking" dispatchType="SHOW_GABV_ONLY" />
+        )}
+        {(discoverState.onePercentCompany !== null) && (discoverState.onePercentCompany == true) && (
+          <FilterDisplay textAsFilter="One Percent" dispatchType="SHOW_ONEPERCENT_ONLY" />
         )}
       </View>
 
@@ -297,7 +316,6 @@ const styles = StyleSheet.create({
   companyListWrapper: {
     height: "100%",
     flex: 1,
-    backgroundColor: COLORS.lightWhite,
   },
   searchComponentMainConatainer: {
     flexDirection: "row",
@@ -357,17 +375,19 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.lightGrayBackground,
   },
   filtersContainer: {
-    flexDirection: "row",
-    alignSelf: "center",
-    marginBottom: 15,
-    marginLeft: "5%",
+    flexDirection: 'row',
+    marginHorizontal: '5%',
+    marginRight: '5%',
+    flexWrap: 'wrap',
   },
   filterBox: {
     backgroundColor: COLORS.lightGrayBackground,
     borderRadius: 15,
     paddingVertical: 5,
-    paddingHorizontal: 10,
+    paddingHorizontal: '3%',
     flexDirection: "row",
+    marginBottom: '3%',
+    marginRight: '2%',
   },
   filterDisplayText: {
     color: COLORS.blue,
