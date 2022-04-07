@@ -33,17 +33,18 @@ const MyStatusBar = ({ backgroundColor, ...props }) => (
   </View>
 );
 
-function DiscoverUI({ navigation, route }) {
+function DiscoverUI({ navigation }) {
   const dispatch = useDispatch();
 
   const discoverState = useSelector(
     (store) => store.discover.discoverCompaniesListState
   );
-  const appliedFilter = discoverState.appliedFilter ?? "";
+  const appliedFilter = discoverState.appliedFilter ?? '';
   const companyList = discoverState.companyList ?? [];
   const accessToken = useSelector((store) => store.user.userInfo.accessToken);
 
   const [searchValue, setSearchValue] = useState(discoverState.searchValue);
+  const [clearSearch, setClearSearch] = useState(false);
 
   const getApiURL = ({ filter, page, search, favCom, bCorpCompany, onePercentageForThePlanet, GABV }) => {
     let url = `${SERVER_ADDRESS}/api/v1/search?size=20`;
@@ -189,16 +190,30 @@ function DiscoverUI({ navigation, route }) {
               style={styles.searchComponentSearchBar}
               placeholder="Search"
               value={searchValue}
+              returnKeyType='search'
               onChangeText={(value) => {
                 setSearchValue(value);
               }}
+              onFocus={() => {
+                setClearSearch(true);
+              }}
               onBlur={() => {
+                setClearSearch(false);
                 dispatch({
                   type: "SEARCH_COMPANY",
                   payload: searchValue,
                 });
               }}
-            ></TextInput>
+            />
+            {(clearSearch && searchValue?.length) ?
+              <TouchableOpacity
+                onPress={() => {
+                  setSearchValue('');
+                }}
+              >
+                <Feather name="x-circle" size={20} color="#7c82a1" />
+              </TouchableOpacity>
+              : <></>}
           </View>
         </View>
       </View>
@@ -261,8 +276,6 @@ function DiscoverUI({ navigation, route }) {
                   industry={item.category_level_3}
                   parent_logo_image={item.company.parent_logo_image}
                   companyRanking={item.company}
-                  navigation={navigation}
-                  route={route}
                 />
               );
             }}
@@ -351,7 +364,7 @@ const styles = StyleSheet.create({
     marginLeft: 11,
   },
   searchComponentSearchBar: {
-    width: "80%",
+    width: "73%",
     backgroundColor: COLORS.lightGrayBackground,
     height: 50,
     marginLeft: 10,

@@ -1,7 +1,19 @@
 import { combineReducers } from "redux";
 
+const defaultState = {
+  companyList: [],
+  otherCompanyList: [],
+  page: 0,
+  searchValue: '',
+  appliedFilter: ''
+}
+
 const discoverCompaniesListState = (state = {}, action) => {
   switch (action.type) {
+    case "RESET_DISCOVER_STATE":
+      return { ...defaultState };
+    case "RESET_AND_SET_FILTER":
+      return { ...defaultState, appliedFilter: action.payload, };
     case "SEARCH_COMPANY":
       if (action.payload == state.searchValue) {
         return state;

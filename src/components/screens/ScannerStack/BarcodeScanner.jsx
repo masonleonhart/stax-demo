@@ -87,11 +87,11 @@ export default function BarcodeScanner({ navigation }) {
               payload: response.data.company_obj.scanned_company_ranking,
             });
             dispatch({
-              type: "SET_SCANNED_COMPANY_CATEGORY",
+              type: "SET_SCANNED_COMPANY_BRAND",
               payload: response.data.company_obj.scanned_brand,
             });
 
-            navigation.navigate("CompanyProfile");
+            navigation.navigate("CompanyProfile", { showBetterMatches: true });
           }
         } else {
           //
