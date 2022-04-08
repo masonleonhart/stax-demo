@@ -168,13 +168,13 @@ export default function CompanyProfile({ navigation }) {
 
       for (let i = 0; i < filledBars; i++) {
         progressBarsArray.push(
-          <View style={[styles.progressBar, styles.progressBarFilled]} />
+          <View key={i} style={[styles.progressBar, styles.progressBarFilled]} />
         );
       }
 
       for (let i = 0; i < unfilledBars; i++) {
         progressBarsArray.push(
-          <View style={[styles.progressBar, styles.progressBarOpaque]} />
+          <View key={i + filledBars} style={[styles.progressBar, styles.progressBarOpaque]} />
         );
       }
     };
@@ -358,6 +358,8 @@ export default function CompanyProfile({ navigation }) {
     return <EmptyStateView />;
   }
 
+  console.log(matchingBrand)
+
   return (
     <ScrollView>
       <View style={styles.companyHeader}>
@@ -445,8 +447,7 @@ export default function CompanyProfile({ navigation }) {
         </View>
 
         <MyButton
-          disabled={true}
-          text="Discover Better Aligned Companies (WIP)"
+          text="Discover New Brands"
           style={styles.discoverButton}
           labelStyle={styles.discoverButtonLabel}
           buttonColor={"#e3e3e3"}

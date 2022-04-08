@@ -43,39 +43,41 @@ export default function LikedBrands() {
       });
   };
 
-  const handleUnlike = (id) => {
-    console.log(id);
+  const BrandObject = ({ brand, industry, parent, id }) => {
+    const [icon, setIcon] = useState("heart");
+  
+    const handleUnlike = (id) => {
+      axios
+        .post(
+          `${SERVER_ADDRESS}/api/v1/remove-user-favourite-company`,
+          {
+            company_id: id,
+          },
+          {
+            headers: { [AUTH_HEADER]: accessToken },
+          }
+        )
+        .then(() => setIcon("heart-outline"));
+    };
 
-    axios
-      .post(
-        `${SERVER_ADDRESS}/api/v1/remove-user-favourite-company`,
-        {
-          company_id: id,
-        },
-        {
-          headers: { [AUTH_HEADER]: accessToken },
-        }
-      )
-      .then((res) => getBrands());
-  };
-
-  const BrandObject = ({ brand, industry, parent, id }) => (
-    <View style={[SharedStyles.flexRow, styles.brandContainer]}>
-      <View style={styles.brandWrapper}>
-        <View style={styles.nameIndustryWrapper}>
-          <Text style={styles.brandText}>{brand}</Text>
-          <Text style={styles.industryText}>{industry}</Text>
+    return (
+      <View style={[SharedStyles.flexRow, styles.brandContainer]}>
+        <View style={styles.brandWrapper}>
+          <View style={styles.nameIndustryWrapper}>
+            <Text style={styles.brandText}>{brand}</Text>
+            <Text style={styles.industryText}>{industry}</Text>
+          </View>
+          <Text style={styles.parentText}>Owned by: {parent}</Text>
         </View>
-        <Text style={styles.parentText}>Owned by: {parent}</Text>
+        <IconButton
+          icon={icon}
+          size={30}
+          color={myTheme.colors.grey}
+          onPress={() => handleUnlike(id)}
+        />
       </View>
-      <IconButton
-        icon="heart-off"
-        size={30}
-        color={myTheme.colors.grey}
-        onPress={() => handleUnlike(id)}
-      />
-    </View>
-  );
+    );
+  };
 
   const styles = StyleSheet.create({
     container: {
@@ -97,12 +99,9 @@ export default function LikedBrands() {
       fontSize: 16,
     },
     brandWrapper: {
-      width: "80%"
+      width: "80%",
     },
     nameIndustryWrapper: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "flex-end",
       marginBottom: "5%",
     },
     brandText: {
@@ -112,7 +111,7 @@ export default function LikedBrands() {
     industryText: {
       fontFamily: fonts.regular,
       fontSize: 16,
-      marginLeft: "5%"
+      marginTop: "2.5%",
     },
     parentText: {
       fontFamily: fonts.regular,

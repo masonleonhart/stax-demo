@@ -309,7 +309,7 @@ const Company = ({
         separator={true}
       />
       <LineComponent
-        title="DiscountCode"
+        title="Discount Code"
         subtitile="-"
         subtitileColor={COLORS.black}
         separator={true}
