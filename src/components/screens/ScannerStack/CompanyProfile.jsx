@@ -463,7 +463,7 @@ export default function CompanyProfile({ navigation, ...props }) {
             })
             navigation.navigate("Discover")
           }}
-          text="Discover Better Aligned Companies (WIP)"
+          text="Discover Better Aligned Companies"
           style={styles.discoverButton}
           labelStyle={styles.discoverButtonLabel}
           buttonColor={"#e3e3e3"}
