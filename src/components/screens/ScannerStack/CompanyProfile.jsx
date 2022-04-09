@@ -33,6 +33,7 @@ export default function CompanyProfile({ navigation, ...props }) {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const myTheme = useTheme();
+  const scrollToTopRef = useRef(null);
   const windowWidth = Dimensions.get("window").width;
   const deviceHeight = Dimensions.get("window").height;
   const barcodeDetails = useSelector((store) => store.barcode.barcodeDetails);
@@ -117,6 +118,11 @@ export default function CompanyProfile({ navigation, ...props }) {
     }
   };
 
+  const scrollToTop = () => {
+    if (scrollToTopRef)
+      scrollToTopRef.current.scrollTo({ x: 0, y: 0, animated: true });
+  };
+
   useEffect(() => {
     { (props?.route?.params?.showBetterMatches) && getCompanyList() }
     if ("values_match_score" in companyRanking) {
@@ -133,6 +139,8 @@ export default function CompanyProfile({ navigation, ...props }) {
         "Unable to match company to parent, no parent data available."
       );
     }
+    scrollToTop();
+    // window.scrollTo(0, 0);
   }, [companyRanking]);
 
   useEffect(() => {
@@ -360,7 +368,7 @@ export default function CompanyProfile({ navigation, ...props }) {
   }
 
   return (
-    <ScrollView >
+    <ScrollView scrollsToTop={true} ref={scrollToTopRef}>
       <View style={styles.companyHeader}>
         <View style={styles.imagesWrapper}>
           <Image
