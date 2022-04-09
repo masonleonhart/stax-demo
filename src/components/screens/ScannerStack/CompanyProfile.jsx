@@ -29,10 +29,11 @@ import EmptyStateView from "../../reusedComponents/EmptyStateView";
 import { determineMatchType } from "../../../constants/helpers";
 import Company from "../../reusedComponents/Company";
 
-export default function CompanyProfile({ navigation }) {
+export default function CompanyProfile({ navigation, ...props }) {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const myTheme = useTheme();
+  const scrollToTopRef = useRef(null);
   const windowWidth = Dimensions.get("window").width;
   const deviceHeight = Dimensions.get("window").height;
   const barcodeDetails = useSelector((store) => store.barcode.barcodeDetails);
@@ -42,6 +43,7 @@ export default function CompanyProfile({ navigation }) {
   const betterMatches = useSelector((store) => store.barcode.betterMatches);
   const matchingBrand = useSelector((store) => store.barcode.barcodeResult);
   const accessToken = useSelector((store) => store.user.userInfo.accessToken);
+  const relatedBrandsOnDiscover = useSelector((store) => store.discover.discoverCompaniesListState);
 
   const userValues = useSelector((store) => store.user.userInfo.values);
   const userInfo = useSelector((store) => store.user.userInfo);
@@ -116,8 +118,13 @@ export default function CompanyProfile({ navigation }) {
     }
   };
 
+  const scrollToTop = () => {
+    if (scrollToTopRef)
+      scrollToTopRef.current.scrollTo({ x: 0, y: 0, animated: true });
+  };
+
   useEffect(() => {
-    getCompanyList();
+    { (props?.route?.params?.showBetterMatches) && getCompanyList() }
     if ("values_match_score" in companyRanking) {
       matchValuesToMStarData(userValues);
 
@@ -132,6 +139,8 @@ export default function CompanyProfile({ navigation }) {
         "Unable to match company to parent, no parent data available."
       );
     }
+    scrollToTop();
+    // window.scrollTo(0, 0);
   }, [companyRanking]);
 
   useEffect(() => {
@@ -359,14 +368,14 @@ export default function CompanyProfile({ navigation }) {
   }
 
   return (
-    <ScrollView>
+    <ScrollView scrollsToTop={true} ref={scrollToTopRef}>
       <View style={styles.companyHeader}>
         <View style={styles.imagesWrapper}>
           <Image
             source={{
               uri:
                 matchingBrand.parent_logo_image &&
-                matchingBrand.parent_logo_image !== null
+                  matchingBrand.parent_logo_image !== null
                   ? matchingBrand.parent_logo_image
                   : "https://s3-symbol-logo.tradingview.com/logo-yazilim--600.png",
             }}
@@ -384,10 +393,10 @@ export default function CompanyProfile({ navigation }) {
           {barcodeDetails.manufacturer
             ? barcodeDetails.manufacturer
             : barcodeDetails.brand
-            ? barcodeDetails.brand
-            : barcodeDetails.title
-            ? barcodeDetails.title
-            : "Company Profile"}
+              ? barcodeDetails.brand
+              : barcodeDetails.title
+                ? barcodeDetails.title
+                : "Company Profile"}
         </Text>
         {"name" in companyRanking && (
           <Text style={styles.parentName}>Owned By: {companyRanking.name}</Text>
@@ -420,33 +429,41 @@ export default function CompanyProfile({ navigation }) {
         </View>
 
         <View style={styles.companyListWrapper}>
-          {betterMatches?.length !== 0 && (
+          {betterMatches?.length !== 0 && props?.route?.params?.showBetterMatches && (
             <Text style={styles.sectionHeaderText}>Better matches:</Text>
           )}
-          <FlatList
-            scrollEnabled="false"
-            contentContainerStyle={styles.companyListContainer}
-            data={betterMatches}
-            keyExtractor={(item, index) => item.name + "_" + index}
-            renderItem={({ item }) => {
-              return (
-                <Company
-                  {...item}
-                  name={item.brand}
-                  values_match_score={item?.company?.values_match_score}
-                  industry={item.category_level_3}
-                  parent_logo_image={item.company?.parent_logo_image}
-                  companyRanking={item?.company}
-                  navigation={navigation}
-                />
-              );
-            }}
-          />
+          {(props?.route?.params?.showBetterMatches) &&
+            <FlatList
+              scrollEnabled="false"
+              contentContainerStyle={styles.companyListContainer}
+              data={betterMatches}
+              keyExtractor={(item, index) => item.name + "_" + index}
+              renderItem={({ item }) => {
+                return (
+                  <Company
+                    {...item}
+                    name={item.brand}
+                    values_match_score={item?.company?.values_match_score}
+                    industry={item.category_level_3}
+                    parent_logo_image={item.company?.parent_logo_image}
+                    companyRanking={item?.company}
+                    navigation={navigation}
+                  />
+                );
+              }}
+            />
+          }
         </View>
 
         <MyButton
-          disabled={true}
-          text="Discover Better Aligned Companies (WIP)"
+          onPress={() => {
+            dispatch({
+              type: "RESET_AND_SET_FILTER",
+              payload: matchingBrand.category_level_3,
+            })
+            navigation.navigate("Discover")
+          }}
+          text="Discover Better Aligned Companies"
           style={styles.discoverButton}
           labelStyle={styles.discoverButtonLabel}
           buttonColor={"#e3e3e3"}

@@ -35,7 +35,7 @@ const scannedCompanyRanking = (state = {}, action) => {
 
 const barcodeResult = (state = {}, action) => {
   switch (action.type) {
-    case "SET_SCANNED_COMPANY_CATEGORY":
+    case "SET_SCANNED_COMPANY_BRAND":
       return action.payload
     default:
       return state;
