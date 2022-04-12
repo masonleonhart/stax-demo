@@ -71,6 +71,8 @@ export default function CompanyProfile({ navigation, ...props }) {
         valueModified = "carbon_intensity";
       } else if (valueModified.includes("ethical_practices")) {
         valueModified = "business_ethics";
+      } else if (valueModified.includes("small_business")) {
+        valueModified = "small_business";
       }
 
       const valuePercentage = companyRanking[`${valueModified}_pct_rank`];
@@ -140,7 +142,6 @@ export default function CompanyProfile({ navigation, ...props }) {
       );
     }
     scrollToTop();
-    // window.scrollTo(0, 0);
   }, [companyRanking]);
 
   useEffect(() => {
