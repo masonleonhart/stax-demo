@@ -6,7 +6,7 @@ import { useTheme } from "react-native-paper";
 
 import Landing from "../screens/Tabs/Landing";
 import ScannerStack from "./ScannerStack";
-import Account from "../screens/Tabs/Account";
+import AccountStack from "./AccountStack";
 import Discover from "../screens/Tabs/Discover";
 import { Pressable } from "react-native";
 
@@ -20,7 +20,7 @@ export default function TabNavigation() {
         backgroundColor: "white",
       }}
       screenOptions={{
-        headerTransparent: true,
+        headerShown: false,
         headerTitle: "",
         tabBarShowLabel: false,
         tabBarActiveTintColor: myTheme.colors.blue,
@@ -73,8 +73,8 @@ export default function TabNavigation() {
         }}
       />
       <Tab.Screen
-        name="Account"
-        component={Account}
+        name="AccountStack"
+        component={AccountStack}
         options={{
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons

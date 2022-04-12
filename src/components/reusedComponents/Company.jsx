@@ -197,9 +197,7 @@ const NewsComponent = ({ newsData, title }) => {
     </>
   );
 };
-const Company = ({
-  ...company
-}) => {
+const Company = ({ ...company }) => {
   const {
     id,
     name,
@@ -220,11 +218,12 @@ const Company = ({
     }
     Linking.openURL(link);
   };
-  const share = () => { };
+  const share = () => {};
   const toggleLike = async (id, liked) => {
     try {
-      const url = `${SERVER_ADDRESS}/api/v1/${liked ? "remove-user-favourite-company" : "favourite-company"
-        }`;
+      const url = `${SERVER_ADDRESS}/api/v1/${
+        liked ? "remove-user-favourite-company" : "favourite-company"
+      }`;
 
       const response = await axios.post(
         url,
@@ -257,7 +256,10 @@ const Company = ({
       payload: company,
     });
 
-    navigation.navigate("ScannerStack", { screen: "CompanyProfile", showBetterMatches: false });
+    navigation.navigate("ScannerStack", {
+      screen: "CompanyProfile",
+      params: { showBetterMatches: false, backLocation: "Discover" },
+    });
   };
 
   return (

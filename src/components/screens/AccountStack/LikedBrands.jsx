@@ -45,7 +45,31 @@ export default function LikedBrands() {
 
   const BrandObject = ({ brand, industry, parent, id }) => {
     const [icon, setIcon] = useState("heart");
-  
+    const [liked, setLiked] = useState(true);
+
+    const toggleLike = async (id, liked) => {
+      try {
+        const url = `${SERVER_ADDRESS}/api/v1/${
+          liked ? "remove-user-favourite-company" : "favourite-company"
+        }`;
+
+        const response = await axios.post(
+          url,
+          {
+            company_id: id,
+          },
+          {
+            headers: { [AUTH_HEADER]: accessToken },
+          }
+        );
+        if (response.status) {
+          setLiked((prev) => !prev);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     const handleUnlike = (id) => {
       axios
         .post(
@@ -60,6 +84,8 @@ export default function LikedBrands() {
         .then(() => setIcon("heart-outline"));
     };
 
+    const handleLike = (id) => {};
+
     return (
       <View style={[SharedStyles.flexRow, styles.brandContainer]}>
         <View style={styles.brandWrapper}>
@@ -70,10 +96,10 @@ export default function LikedBrands() {
           <Text style={styles.parentText}>Owned by: {parent}</Text>
         </View>
         <IconButton
-          icon={icon}
+          icon={liked ? "heart" : "heart-outline"}
           size={30}
           color={myTheme.colors.grey}
-          onPress={() => handleUnlike(id)}
+          onPress={() => toggleLike(id, liked)}
         />
       </View>
     );
@@ -132,6 +158,7 @@ export default function LikedBrands() {
       <HeaderComponent
         mainTitle="Liked Brands"
         backgroundColor={myTheme.colors.red}
+        backButton={true}
       />
 
       <View style={[styles.container]}>

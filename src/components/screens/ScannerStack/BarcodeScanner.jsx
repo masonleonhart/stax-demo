@@ -91,7 +91,7 @@ export default function BarcodeScanner({ navigation }) {
               payload: response.data.company_obj.scanned_brand,
             });
 
-            navigation.navigate("CompanyProfile", { showBetterMatches: true });
+            navigation.navigate("CompanyProfile", { showBetterMatches: true, backLocation: "BarcodeScanner" });
           }
         } else {
           //
