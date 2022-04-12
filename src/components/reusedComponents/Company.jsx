@@ -198,15 +198,18 @@ const NewsComponent = ({ newsData, title }) => {
   );
 };
 const Company = ({
-  id,
-  name,
-  values_match_score,
-  industry,
-  parent_logo_image,
-  link,
-  isLiked,
-  companyRanking,
+  ...company
 }) => {
+  const {
+    id,
+    name,
+    values_match_score,
+    industry,
+    parent_logo_image,
+    link,
+    isLiked,
+    companyRanking,
+  } = company;
   const [liked, setLiked] = useState(isLiked);
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -249,8 +252,12 @@ const Company = ({
       type: "SET_SCANNED_COMPANY_RANKING",
       payload: companyRanking,
     });
+    dispatch({
+      type: "SET_SCANNED_COMPANY_BRAND",
+      payload: company,
+    });
 
-    navigation.navigate("ScannerStack", { screen: "CompanyProfile" });
+    navigation.navigate("ScannerStack", { screen: "CompanyProfile", showBetterMatches: false });
   };
 
   return (

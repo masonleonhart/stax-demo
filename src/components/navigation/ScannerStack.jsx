@@ -6,7 +6,7 @@ import { useTheme, IconButton } from "react-native-paper";
 import BarcodeScanner from "../screens/ScannerStack/BarcodeScanner";
 import CompanyProfile from "../screens/ScannerStack/CompanyProfile";
 
-export default function ScannerStack() {
+export default function ScannerStack({ ...props }) {
   const Stack = createStackNavigator();
   const myTheme = useTheme();
 
@@ -26,6 +26,9 @@ export default function ScannerStack() {
       <Stack.Screen
         name="CompanyProfile"
         component={CompanyProfile}
+        initialParams={{
+          showBetterMatches: props.route.params.showBetterMatches ?? true,
+        }}
       />
     </Stack.Navigator>
   );
