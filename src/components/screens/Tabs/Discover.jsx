@@ -157,13 +157,18 @@ function DiscoverUI({ navigation }) {
       }}
     >
       <MyStatusBar backgroundColor={COLORS.blue} barStyle="light-content" />
-      <HeaderComponent
-        mainTitle="Discover"
-        subTitle="Aligned Companies"
-        mainTitleStyle={styles.headerDiscoverText}
-        subTitleStyle={styles.headerNameText}
-        backgroundColor={COLORS.blue}
-      />
+      <TouchableOpacity
+        activeOpacity={1}
+        onPress={() => Keyboard.dismiss()}
+      >
+        <HeaderComponent
+          mainTitle="Discover"
+          subTitle="Aligned Companies"
+          mainTitleStyle={styles.headerDiscoverText}
+          subTitleStyle={styles.headerNameText}
+          backgroundColor={COLORS.blue}
+        />
+      </TouchableOpacity>
 
       {/* Filter drawer */}
       <View style={styles.searchComponentMainConatainer}>
@@ -209,6 +214,7 @@ function DiscoverUI({ navigation }) {
               <TouchableOpacity
                 onPress={() => {
                   setSearchValue('');
+                  Keyboard.dismiss();
                 }}
               >
                 <Feather name="x-circle" size={20} color="#7c82a1" />
