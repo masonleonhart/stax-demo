@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/core";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { AUTH_HEADER } from "@env";
 import SERVER_ADDRESS from "../../../constants/server_address";
+import { AUTH_HEADER } from "@env";
 
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 

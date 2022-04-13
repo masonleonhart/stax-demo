@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View, Pressable } from "react-native";
+import { IconButton } from "react-native-paper";
 import React from "react";
 import { COLORS, FONTS, SIZES } from "../../constants/theme";
 import fonts from "./fonts";
@@ -12,6 +13,7 @@ const HeaderComponent = ({
   backgroundColor,
   mainTitleStyle,
   subTitleStyle,
+  backButton,
 }) => {
   const userInfo = useSelector((store) => store.user.userInfo);
   const navigation = useNavigation();
@@ -24,6 +26,15 @@ const HeaderComponent = ({
         { backgroundColor: backgroundColor },
       ]}
     >
+      {backButton && (
+        <IconButton
+          icon="chevron-left"
+          size={30}
+          style={styles.headerBackButtoon}
+          color={"white"}
+          onPress={() => navigation.goBack()}
+        />
+      )}
       <View style={styles.headerTextContainer}>
         <Text
           style={mainTitleStyle ? mainTitleStyle : styles.headerSettingsText}
@@ -55,6 +66,13 @@ const styles = StyleSheet.create({
     height: SIZES.height * 0.25,
     paddingHorizontal: "5%",
     marginBottom: "2.5%",
+  },
+  headerBackButtoon: {
+    position: "absolute",
+    top: 0,
+    marginTop: "7.5%",
+    marginLeft: "5%",
+    borderRadius: 100
   },
   headerTextContainer: {
     marginTop: "5%",

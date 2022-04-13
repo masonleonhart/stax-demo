@@ -43,39 +43,67 @@ export default function LikedBrands() {
       });
   };
 
-  const handleUnlike = (id) => {
-    console.log(id);
+  const BrandObject = ({ brand, industry, parent, id }) => {
+    const [icon, setIcon] = useState("heart");
+    const [liked, setLiked] = useState(true);
 
-    axios
-      .post(
-        `${SERVER_ADDRESS}/api/v1/remove-user-favourite-company`,
-        {
-          company_id: id,
-        },
-        {
-          headers: { [AUTH_HEADER]: accessToken },
+    const toggleLike = async (id, liked) => {
+      try {
+        const url = `${SERVER_ADDRESS}/api/v1/${
+          liked ? "remove-user-favourite-company" : "favourite-company"
+        }`;
+
+        const response = await axios.post(
+          url,
+          {
+            company_id: id,
+          },
+          {
+            headers: { [AUTH_HEADER]: accessToken },
+          }
+        );
+        if (response.status) {
+          setLiked((prev) => !prev);
         }
-      )
-      .then((res) => getBrands());
-  };
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-  const BrandObject = ({ brand, industry, parent, id }) => (
-    <View style={[SharedStyles.flexRow, styles.brandContainer]}>
-      <View style={styles.brandWrapper}>
-        <View style={styles.nameIndustryWrapper}>
-          <Text style={styles.brandText}>{brand}</Text>
-          <Text style={styles.industryText}>{industry}</Text>
+    const handleUnlike = (id) => {
+      axios
+        .post(
+          `${SERVER_ADDRESS}/api/v1/remove-user-favourite-company`,
+          {
+            company_id: id,
+          },
+          {
+            headers: { [AUTH_HEADER]: accessToken },
+          }
+        )
+        .then(() => setIcon("heart-outline"));
+    };
+
+    const handleLike = (id) => {};
+
+    return (
+      <View style={[SharedStyles.flexRow, styles.brandContainer]}>
+        <View style={styles.brandWrapper}>
+          <View style={styles.nameIndustryWrapper}>
+            <Text style={styles.brandText}>{brand}</Text>
+            <Text style={styles.industryText}>{industry}</Text>
+          </View>
+          <Text style={styles.parentText}>Owned by: {parent}</Text>
         </View>
-        <Text style={styles.parentText}>Owned by: {parent}</Text>
+        <IconButton
+          icon={liked ? "heart" : "heart-outline"}
+          size={30}
+          color={myTheme.colors.grey}
+          onPress={() => toggleLike(id, liked)}
+        />
       </View>
-      <IconButton
-        icon="heart-off"
-        size={30}
-        color={myTheme.colors.grey}
-        onPress={() => handleUnlike(id)}
-      />
-    </View>
-  );
+    );
+  };
 
   const styles = StyleSheet.create({
     container: {
@@ -97,12 +125,9 @@ export default function LikedBrands() {
       fontSize: 16,
     },
     brandWrapper: {
-      width: "80%"
+      width: "80%",
     },
     nameIndustryWrapper: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "flex-end",
       marginBottom: "5%",
     },
     brandText: {
@@ -112,7 +137,7 @@ export default function LikedBrands() {
     industryText: {
       fontFamily: fonts.regular,
       fontSize: 16,
-      marginLeft: "5%"
+      marginTop: "2.5%",
     },
     parentText: {
       fontFamily: fonts.regular,
@@ -133,6 +158,7 @@ export default function LikedBrands() {
       <HeaderComponent
         mainTitle="Liked Brands"
         backgroundColor={myTheme.colors.red}
+        backButton={true}
       />
 
       <View style={[styles.container]}>

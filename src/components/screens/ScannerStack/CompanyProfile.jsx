@@ -15,7 +15,7 @@ import {
   Alert,
   FlatList,
 } from "react-native";
-import { Text, IconButton, ProgressBar, useTheme } from "react-native-paper";
+import { Text, IconButton, useTheme } from "react-native-paper";
 
 import { COLORS, FONTS } from "../../../constants/theme";
 import MyButton from "../../reusedComponents/MyButton";
@@ -43,7 +43,9 @@ export default function CompanyProfile({ navigation, ...props }) {
   const betterMatches = useSelector((store) => store.barcode.betterMatches);
   const matchingBrand = useSelector((store) => store.barcode.barcodeResult);
   const accessToken = useSelector((store) => store.user.userInfo.accessToken);
-  const relatedBrandsOnDiscover = useSelector((store) => store.discover.discoverCompaniesListState);
+  const relatedBrandsOnDiscover = useSelector(
+    (store) => store.discover.discoverCompaniesListState
+  );
 
   const userValues = useSelector((store) => store.user.userInfo.values);
   const userInfo = useSelector((store) => store.user.userInfo);
@@ -126,7 +128,9 @@ export default function CompanyProfile({ navigation, ...props }) {
   };
 
   useEffect(() => {
-    { (props?.route?.params?.showBetterMatches) && getCompanyList() }
+    {
+      props?.route?.params?.showBetterMatches && getCompanyList();
+    }
     if ("values_match_score" in companyRanking) {
       matchValuesToMStarData(userValues);
 
@@ -178,13 +182,19 @@ export default function CompanyProfile({ navigation, ...props }) {
 
       for (let i = 0; i < filledBars; i++) {
         progressBarsArray.push(
-          <View style={[styles.progressBar, styles.progressBarFilled]} />
+          <View
+            key={i}
+            style={[styles.progressBar, styles.progressBarFilled]}
+          />
         );
       }
 
       for (let i = 0; i < unfilledBars; i++) {
         progressBarsArray.push(
-          <View style={[styles.progressBar, styles.progressBarOpaque]} />
+          <View
+            key={i + filledBars}
+            style={[styles.progressBar, styles.progressBarOpaque]}
+          />
         );
       }
     };
@@ -376,7 +386,7 @@ export default function CompanyProfile({ navigation, ...props }) {
             source={{
               uri:
                 matchingBrand.parent_logo_image &&
-                  matchingBrand.parent_logo_image !== null
+                matchingBrand.parent_logo_image !== null
                   ? matchingBrand.parent_logo_image
                   : "https://s3-symbol-logo.tradingview.com/logo-yazilim--600.png",
             }}
@@ -394,14 +404,27 @@ export default function CompanyProfile({ navigation, ...props }) {
           {barcodeDetails.manufacturer
             ? barcodeDetails.manufacturer
             : barcodeDetails.brand
-              ? barcodeDetails.brand
-              : barcodeDetails.title
-                ? barcodeDetails.title
-                : "Company Profile"}
+            ? barcodeDetails.brand
+            : barcodeDetails.title
+            ? barcodeDetails.title
+            : "Company Profile"}
         </Text>
         {"name" in companyRanking && (
           <Text style={styles.parentName}>Owned By: {companyRanking.name}</Text>
         )}
+        <IconButton
+          icon="chevron-left"
+          size={30}
+          style={{
+            position: "absolute",
+            top: 0,
+            marginTop: "7.5%",
+            marginLeft: "5%",
+            borderRadius: 100
+          }}
+          color={"white"}
+          onPress={() => navigation.navigate(`${props?.route?.params?.backLocation}`)}
+        />
       </View>
 
       <View style={SharedStyles.container}>
@@ -430,10 +453,11 @@ export default function CompanyProfile({ navigation, ...props }) {
         </View>
 
         <View style={styles.companyListWrapper}>
-          {betterMatches?.length !== 0 && props?.route?.params?.showBetterMatches && (
-            <Text style={styles.sectionHeaderText}>Better matches:</Text>
-          )}
-          {(props?.route?.params?.showBetterMatches) &&
+          {betterMatches?.length !== 0 &&
+            props?.route?.params?.showBetterMatches && (
+              <Text style={styles.sectionHeaderText}>Better matches:</Text>
+            )}
+          {props?.route?.params?.showBetterMatches && (
             <FlatList
               scrollEnabled="false"
               contentContainerStyle={styles.companyListContainer}
@@ -453,7 +477,7 @@ export default function CompanyProfile({ navigation, ...props }) {
                 );
               }}
             />
-          }
+          )}
         </View>
 
         <MyButton
@@ -461,8 +485,8 @@ export default function CompanyProfile({ navigation, ...props }) {
             dispatch({
               type: "RESET_AND_SET_FILTER",
               payload: matchingBrand.category_level_3,
-            })
-            navigation.navigate("Discover")
+            });
+            navigation.navigate("Discover");
           }}
           text="Discover Better Aligned Companies"
           style={styles.discoverButton}
