@@ -36,7 +36,7 @@ export default function LikedBrands() {
 
   const getApiURL = ({ page, favCom }) => {
     let url = `${SERVER_ADDRESS}/api/v1/search?`;
-    //url = url + `&fav_only=true`;
+    url = url + `&fav_only=true`;
     url = url + `&page=${page ?? 0}`;
     return url;
   }
@@ -86,21 +86,7 @@ export default function LikedBrands() {
       }
     };
 
-    const handleUnlike = (id) => {
-      axios
-        .post(
-          `${SERVER_ADDRESS}/api/v1/remove-user-favourite-company`,
-          {
-            company_id: id,
-          },
-          {
-            headers: { [AUTH_HEADER]: accessToken },
-          }
-        )
-        .then(() => setIcon("heart-outline"));
-    };
 
-    const handleLike = (id) => { };
 
     const onCompanyCardPress = (companyRanking, parent) => {
       dispatch({
@@ -205,15 +191,13 @@ export default function LikedBrands() {
       />
 
       <View style={[styles.container]}>
-        {(likedBrands.length !== 0 && likedBrands !== undefined) ? (
+        {(likedBrands?.length) ? (
           <FlatList
             data={likedBrands}
             onEndReachedThreshold={100}
             onEndReached={async () => {
               {
-                if (likedBrands?.length) {
-                  setPage(prev => prev + 1)
-                }
+                setPage(prev => prev + 1)
               };
               return Promise.resolve(true);
             }}
