@@ -116,7 +116,7 @@ export default function Account({ navigation }) {
   }
 
   return (
-    <ScrollView>
+    <>
       <HeaderComponent
         mainTitle="User Settings"
         subTitle={userInfo?.first_name}
@@ -124,21 +124,23 @@ export default function Account({ navigation }) {
         subTitleStyle={styles.headerNameText}
         backgroundColor={COLORS.red}
       />
-      <View style={SharedStyles.container}>
-        <AccountPressable text="My Values" onPress={valuesNavButton} />
-        {userInfo.providerId === "password" && (
+      <ScrollView>
+        <View style={SharedStyles.container}>
+          <AccountPressable text="My Values" onPress={valuesNavButton} />
+          {userInfo.providerId === "password" && (
+            <AccountPressable
+              text="Update User Information"
+              onPress={() => navigation.navigate("UpdateUserInfoStack")}
+            />
+          )}
+          <AccountPressable text="Liked Brands" onPress={() => navigation.navigate("LikedBrands")} />
           <AccountPressable
-            text="Update User Information"
-            onPress={() => navigation.navigate("UpdateUserInfoStack")}
+            text="Terms of Use"
+            onPress={() => navigation.navigate("TermsOfUse")}
           />
-        )}
-        <AccountPressable text="Liked Brands" onPress={() => navigation.navigate("LikedBrands")} />
-        <AccountPressable
-          text="Terms of Use"
-          onPress={() => navigation.navigate("TermsOfUse")}
-        />
-        <MyButton text="Sign Out" onPress={onSignOut} />
-      </View>
-    </ScrollView>
+          <MyButton text="Sign Out" onPress={onSignOut} />
+        </View>
+      </ScrollView>
+    </>
   );
 }
