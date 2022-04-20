@@ -114,7 +114,7 @@ export default function Landing({ navigation }) {
   }
 
   return (
-    <ScrollView>
+    <>
       <HeaderComponent
         mainTitle="Welcome back"
         subTitle={userInfo?.first_name}
@@ -122,109 +122,111 @@ export default function Landing({ navigation }) {
         subTitleStyle={styles.headerNameText}
         backgroundColor={COLORS.red}
       />
-      <View style={[SharedStyles.container]}>
-        <View style={styles.valuesWrapper}>
-          <View style={SharedStyles.flexRow}>
-            <Pressable onPress={topValuesButtonPress}>
-              <Text style={styles.headerText}>My Top Values</Text>
-            </Pressable>
-            <IconButton
-              icon="chevron-right"
-              size={30}
-              color={myTheme.colors.grey}
-              onPress={topValuesButtonPress}
-            />
+      <ScrollView>
+        <View style={[SharedStyles.container]}>
+          <View style={styles.valuesWrapper}>
+            <View style={SharedStyles.flexRow}>
+              <Pressable onPress={topValuesButtonPress}>
+                <Text style={styles.headerText}>My Top Values</Text>
+              </Pressable>
+              <IconButton
+                icon="chevron-right"
+                size={30}
+                color={myTheme.colors.grey}
+                onPress={topValuesButtonPress}
+              />
+            </View>
+
+            {userValues.map((value) => (
+              <RenderValue
+                key={value.id}
+                icon={value.icon_name}
+                name={value.name}
+              />
+            ))}
+
+            {userValues.length === 0 && (
+              <MyButton
+                style={styles.valuesButton}
+                text="Take Our Values Quiz"
+                onPress={() => navigation.navigate("ValuesStack")}
+              />
+            )}
           </View>
 
-          {userValues.map((value) => (
-            <RenderValue
-              key={value.id}
-              icon={value.icon_name}
-              name={value.name}
-            />
-          ))}
+          <View style={styles.valuesWrapper}>
+            <View style={SharedStyles.flexRow}>
+              <Pressable onPress={() => navigation.navigate("Discover")}>
+                <Text style={styles.headerText}>Discover New Brands</Text>
+              </Pressable>
+              <IconButton
+                icon="chevron-right"
+                size={30}
+                color={myTheme.colors.grey}
+                onPress={() => navigation.navigate("Discover")}
+              />
+            </View>
+          </View>
 
-          {userValues.length === 0 && (
-            <MyButton
-              style={styles.valuesButton}
-              text="Take Our Values Quiz"
-              onPress={() => navigation.navigate("ValuesStack")}
-            />
-          )}
-        </View>
+          <View style={styles.valuesWrapper}>
+            <View style={SharedStyles.flexRow}>
+              <Text style={styles.headerText}>
+                News Feed <Text style={styles.headerWorkInProgress}>(WIP)</Text>
+              </Text>
+              <IconButton
+                icon="chevron-right"
+                size={30}
+                color={myTheme.colors.grey}
+                onPress={() => { }}
+              />
+            </View>
+          </View>
 
-        <View style={styles.valuesWrapper}>
-          <View style={SharedStyles.flexRow}>
-          <Pressable onPress={() => navigation.navigate("Discover")}>
-              <Text style={styles.headerText}>Discover New Brands</Text>
-            </Pressable>
-            <IconButton
-              icon="chevron-right"
-              size={30}
-              color={myTheme.colors.grey}
-              onPress={() => navigation.navigate("Discover")}
-            />
+          <View style={styles.valuesWrapper}>
+            <View style={SharedStyles.flexRow}>
+              <Text style={styles.headerText}>
+                My Accounts <Text style={styles.headerWorkInProgress}>(WIP)</Text>
+              </Text>
+              <IconButton
+                icon="chevron-right"
+                size={30}
+                color={myTheme.colors.grey}
+                onPress={() => { }}
+              />
+            </View>
+          </View>
+
+          <View style={styles.valuesWrapper}>
+            <View style={SharedStyles.flexRow}>
+              <Text style={styles.headerText}>
+                Latest Transactions{" "}
+                <Text style={styles.headerWorkInProgress}>(WIP)</Text>
+              </Text>
+              <IconButton
+                icon="chevron-right"
+                size={30}
+                color={myTheme.colors.grey}
+                onPress={() => { }}
+              />
+            </View>
+          </View>
+
+          <View style={styles.valuesWrapper}>
+            <View style={SharedStyles.flexRow}>
+              <Text style={styles.headerText}>
+                My Job Board{" "}
+                <Text style={styles.headerWorkInProgress}>(WIP)</Text>
+              </Text>
+              <IconButton
+                icon="chevron-right"
+                size={30}
+                color={myTheme.colors.grey}
+                onPress={() => { }}
+              />
+            </View>
           </View>
         </View>
-
-        <View style={styles.valuesWrapper}>
-          <View style={SharedStyles.flexRow}>
-            <Text style={styles.headerText}>
-              News Feed <Text style={styles.headerWorkInProgress}>(WIP)</Text>
-            </Text>
-            <IconButton
-              icon="chevron-right"
-              size={30}
-              color={myTheme.colors.grey}
-              onPress={() => {}}
-            />
-          </View>
-        </View>
-
-        <View style={styles.valuesWrapper}>
-          <View style={SharedStyles.flexRow}>
-            <Text style={styles.headerText}>
-              My Accounts <Text style={styles.headerWorkInProgress}>(WIP)</Text>
-            </Text>
-            <IconButton
-              icon="chevron-right"
-              size={30}
-              color={myTheme.colors.grey}
-              onPress={() => {}}
-            />
-          </View>
-        </View>
-
-        <View style={styles.valuesWrapper}>
-          <View style={SharedStyles.flexRow}>
-            <Text style={styles.headerText}>
-              Latest Transactions{" "}
-              <Text style={styles.headerWorkInProgress}>(WIP)</Text>
-            </Text>
-            <IconButton
-              icon="chevron-right"
-              size={30}
-              color={myTheme.colors.grey}
-              onPress={() => {}}
-            />
-          </View>
-        </View>
-
-        <View style={styles.valuesWrapper}>
-          <View style={SharedStyles.flexRow}>
-            <Text style={styles.headerText}>
-              My Job Board{" "}
-              <Text style={styles.headerWorkInProgress}>(WIP)</Text>
-            </Text>
-            <IconButton
-              icon="chevron-right"
-              size={30}
-              color={myTheme.colors.grey}
-              onPress={() => {}}
-            />
-          </View>
-        </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </>
   );
 }
