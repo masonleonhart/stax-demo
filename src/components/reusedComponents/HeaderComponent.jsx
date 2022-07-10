@@ -15,8 +15,10 @@ const HeaderComponent = ({
   subTitleStyle,
   backButton,
 }) => {
-  const userInfo = useSelector((store) => store.user.userInfo);
+  const usersName = useSelector((store) => store.user.personalName);
   const navigation = useNavigation();
+
+  console.log(usersName)
 
   return (
     <View
@@ -50,8 +52,8 @@ const HeaderComponent = ({
       <View style={styles.userImage}>
         <Pressable onPress={() => navigation.navigate("Account")}>
           <Text style={styles.userInitials}>
-            {userInfo?.first_name[0]}
-            {userInfo?.last_name[0]}
+            {usersName?.first_name[0]}
+            {usersName?.last_name[0]}
           </Text>
         </Pressable>
       </View>

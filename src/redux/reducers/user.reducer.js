@@ -7,7 +7,7 @@ import { combineReducers } from "redux";
 
 // holds details for submitted values
 
-const personalName = (state = { first_name: "", last_name: "" }, action) => {
+const personalName = (state = { first_name: "Mason", last_name: "Leonhart" }, action) => {
   switch (action.type) {
     case "SET_PERSONAL_NAME":
       return action.payload;
@@ -41,5 +41,5 @@ const valuesQuizSelection = (state = [], action) => {
 export default combineReducers({
   personalName,
   email,
-  valuesQuizSelection
+  valuesQuizSelection,
 });

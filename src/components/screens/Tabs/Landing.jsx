@@ -25,7 +25,7 @@ export default function Landing({ navigation }) {
   const myTheme = useTheme();
   const dispatch = useDispatch();
   const userValues = useSelector((store) => store.user.valuesQuizSelection);
-  const userInfo = useSelector((store) => store.user.userInfo);
+  const usersName = useSelector((store) => store.user.personalName);
 
   const topValuesButtonPress = () => {
     if (userValues.length === 0) {
@@ -115,7 +115,7 @@ export default function Landing({ navigation }) {
     <>
       <HeaderComponent
         mainTitle="Welcome back"
-        subTitle={userInfo?.first_name}
+        subTitle={usersName?.first_name}
         mainTitleStyle={styles.headerWelcomeText}
         subTitleStyle={styles.headerNameText}
         backgroundColor={COLORS.red}
