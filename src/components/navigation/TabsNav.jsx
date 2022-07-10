@@ -63,7 +63,7 @@ export default function TabNavigation() {
           ),
         })}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Discover"
         component={Discover}
         options={{
@@ -71,7 +71,7 @@ export default function TabNavigation() {
             <MaterialCommunityIcons name="magnify" color={color} size={size} />
           ),
         }}
-      />
+      /> */}
       <Tab.Screen
         name="AccountStack"
         component={AccountStack}

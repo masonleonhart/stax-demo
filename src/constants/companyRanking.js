@@ -1,6 +1,6 @@
 const rankingCategory =
 {
-    women_in_leadership: {
+    diverse_leadership: {
         modified: "diversity",
         type: "percent",
     },
@@ -24,7 +24,7 @@ const rankingCategory =
         modified: "human_rights",
         type: "int",
     },
-    ethical_practices: {
+    business_ethics: {
         modified: "business_ethics",
         type: "int",
     },

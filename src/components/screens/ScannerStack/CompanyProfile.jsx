@@ -2,9 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 
-import { AUTH_HEADER } from "@env";
-import SERVER_ADDRESS from "../../../constants/server_address";
-
 import {
   View,
   ScrollView,
@@ -26,7 +23,10 @@ import fonts from "../../reusedComponents/fonts";
 import SharedStyles from "../../reusedComponents/SharedStyles";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
 import { determineMatchType } from "../../../constants/helpers";
-import { getAllRankingParam, getCompanyDescription } from "../../../constants/companyRanking";
+import {
+  getAllRankingParam,
+  getCompanyDescription,
+} from "../../../constants/companyRanking";
 import Company from "../../reusedComponents/Company";
 
 export default function CompanyProfile({ navigation, ...props }) {
@@ -36,16 +36,15 @@ export default function CompanyProfile({ navigation, ...props }) {
   const scrollToTopRef = useRef(null);
   const windowWidth = Dimensions.get("window").width;
   const deviceHeight = Dimensions.get("window").height;
-  const barcodeDetails = useSelector((store) => store.barcode.barcodeDetails);
+  const scanDetails = useSelector((store) => store.barcode.scanDetails);
   const companyRanking = useSelector(
     (store) => store.barcode.scannedCompanyRanking
   );
   const betterMatches = useSelector((store) => store.barcode.betterMatches);
   const matchingBrand = useSelector((store) => store.barcode.barcodeResult);
-  const accessToken = useSelector((store) => store.user.userInfo.accessToken);
 
-  const userValues = useSelector((store) => store.user.userInfo.values);
-  const userInfo = useSelector((store) => store.user.userInfo);
+  const userValues = useSelector((store) => store.user.valuesQuizSelection);
+  const usersName = useSelector((store) => store.user.personalName);
   const [overallMatch, setOverallMatch] = useState("Poor");
   const [valueMatchList, setValueMatchList] = useState([]);
   const [renderMissingText, setRenderMissingText] = useState(false);
@@ -57,50 +56,28 @@ export default function CompanyProfile({ navigation, ...props }) {
 
   const matchValuesToMStarData = (userValues) => {
     let listOfValues = [];
+    console.log(scanDetails);
 
     userValues.forEach((parameter) => {
       let valueModified = parameter?.name.toLowerCase().split(" ").join("_");
       valueModified = categoryList[valueModified];
       let value;
-      value = companyRanking[`${valueModified?.modified}${valueModified?.type == 'percent' ? '_pct_rank' : '_1'}`];
-      value = valueModified?.type == 'percent' ? Number(parseFloat(value).toFixed(2)) : parseInt(value);
+      value =
+        scanDetails[
+          `${valueModified?.modified}${
+            valueModified?.type == "percent" ? `_pct_rank` : `_1`
+          }`
+        ];
+      value =
+        valueModified?.type == "percent"
+          ? Number(parseFloat(value).toFixed(2))
+          : parseInt(value);
       let type = valueModified?.type;
       listOfValues.push({ ...parameter, value, type });
+
+      // console.log({ ...parameter, value, type })
     });
     setValueMatchList(listOfValues);
-  };
-
-  const getApiURL = ({ filter }) => {
-    let url = `${SERVER_ADDRESS}/api/v1/search?size=4`;
-    if (filter) {
-      url = url + `&filter=${filter}`;
-    }
-    return url;
-  };
-
-  const getCompanyList = async () => {
-    // try {
-    //   const response = await axios.get(
-    //     getApiURL({
-    //       filter: matchingBrand.category_level_3,
-    //     }),
-    //     {
-    //       headers: { [AUTH_HEADER]: accessToken },
-    //     }
-    //   );
-
-    //   const repeatationCompanyIndex = response.data.findIndex(
-    //     (Object) => matchingBrand.id === Object.id
-    //   );
-    //   response.data.splice(repeatationCompanyIndex, 1);
-
-    //   dispatch({
-    //     type: "SET_MATCHING_COMPANY_LIST",
-    //     payload: response.data,
-    //   });
-    // } catch (error) {
-    //   console.error(error);
-    // }
   };
 
   const scrollToTop = () => {
@@ -109,13 +86,10 @@ export default function CompanyProfile({ navigation, ...props }) {
   };
 
   useEffect(() => {
-    {
-      props?.route?.params?.showBetterMatches && getCompanyList();
-    }
-    if ("values_match_score" in companyRanking) {
+    if ("values_match_score" in scanDetails) {
       matchValuesToMStarData(userValues);
 
-      setOverallMatch(determineMatchType(companyRanking.values_match_score));
+      setOverallMatch(determineMatchType(scanDetails.values_match_score));
     } else {
       setOverallMatch("Poor");
 
@@ -127,7 +101,7 @@ export default function CompanyProfile({ navigation, ...props }) {
       );
     }
     scrollToTop();
-  }, [companyRanking]);
+  }, [scanDetails]);
 
   useEffect(() => {
     if (
@@ -147,25 +121,20 @@ export default function CompanyProfile({ navigation, ...props }) {
     const pct = rankingObj?.value;
 
     let filledBars;
-    if (rankingObj?.type == 'percent') {
-      if (pct <= 0) { filledBars = 1; }
-      else if (pct >= 1) { filledBars = 5; }
-      else {
-        filledBars = Math.ceil((parseInt(pct * 10) + 1) / 2);
-      }
-    } else if (rankingObj?.type == 'int') {
-      if (pct == 6) { filledBars = 1 }
-      else { filledBars = 6 - pct }
+
+    if (pct <= 0) {
+      filledBars = 1;
+    } else if (pct >= 1) {
+      filledBars = 5;
+    } else {
+      filledBars = Math.ceil((parseInt(pct * 10) + 1) / 2);
     }
 
     const unfilledBars = 5 - filledBars;
 
     for (let i = 0; i < filledBars; i++) {
       progressBarsArray.push(
-        <View
-          key={i}
-          style={[styles.progressBar, styles.progressBarFilled]}
-        />
+        <View key={i} style={[styles.progressBar, styles.progressBarFilled]} />
       );
     }
 
@@ -176,12 +145,12 @@ export default function CompanyProfile({ navigation, ...props }) {
           style={[styles.progressBar, styles.progressBarOpaque]}
         />
       );
-    };
+    }
 
     return (
       <>
-        {((typeof (rankingObj?.value) === "number")) &&
-          (<View style={styles.valueWrapper}>
+        {typeof rankingObj?.value === "number" && (
+          <View style={styles.valueWrapper}>
             <View style={SharedStyles.flexRow}>
               <View style={styles.valueNameWrapper}>
                 <MaterialCommunityIcons
@@ -202,34 +171,23 @@ export default function CompanyProfile({ navigation, ...props }) {
               {progressBarsArray}
             </View>
             <Collapsible collapsed={isCollapsed}>
-              {(rankingObj?.type == 'percent') &&
-                (<Text style={styles.collapsedText}>
-                  <Text style={styles.collapsedTextBold}>
-                    {barcodeDetails.manufacturer}
-                  </Text>
-                  , owned by{" "}
-                  <Text style={styles.collapsedTextBold}>{companyRanking.name}</Text>,
-                  scored better than{" "}
-                  <Text style={styles.collapsedTextBold}>
-                    {(rankingObj?.value * 100).toFixed(0)}%
-                  </Text>{" "}
-                  of its peers within its industry in the{" "}
-                  <Text style={styles.collapsedTextBold}>{rankingObj?.name}</Text> category.
-                </Text>)}
-              {(rankingObj?.type == 'int') &&
-                (<Text style={styles.collapsedText}>
-                  <Text style={styles.collapsedTextBold}>
-                    {barcodeDetails?.manufacturer}
-                  </Text>
-                  , owned by{" "}
-                  <Text style={styles.collapsedTextBold}>{companyRanking?.name}</Text>,
-                  {" "}
-                  {descriptionText[rankingObj?.value]}
-                  {" "}issues reported regarding{" "}
-                  {descriptionText[rankingObj?.name]}
-                </Text>)}
+              <Text style={styles.collapsedText}>
+                <Text style={styles.collapsedTextBold}>{scanDetails.name}</Text>
+                , owned by{" "}
+                <Text style={styles.collapsedTextBold}>
+                  {scanDetails.parent}
+                </Text>
+                , scored better than{" "}
+                <Text style={styles.collapsedTextBold}>
+                  {(rankingObj?.value * 100).toFixed(0)}%
+                </Text>{" "}
+                of its peers within its industry in the{" "}
+                <Text style={styles.collapsedTextBold}>{rankingObj?.name}</Text>{" "}
+                category.
+              </Text>
             </Collapsible>
-          </View>)}
+          </View>
+        )}
       </>
     );
   };
@@ -378,32 +336,23 @@ export default function CompanyProfile({ navigation, ...props }) {
           <Image
             source={{
               uri:
-                matchingBrand.parent_logo_image &&
-                  matchingBrand.parent_logo_image !== null
-                  ? matchingBrand.parent_logo_image
+                scanDetails.logo && scanDetails.logo !== null
+                  ? scanDetails.logo
                   : "https://s3-symbol-logo.tradingview.com/logo-yazilim--600.png",
             }}
             style={styles.companyImage}
-            resizeMode="contain"
+            resizeMode="cover"
           />
           <View style={styles.userImage}>
             <Text style={styles.userInitials}>
-              {userInfo?.first_name[0]}
-              {userInfo?.last_name[0]}
+              {usersName?.first_name[0]}
+              {usersName?.last_name[0]}
             </Text>
           </View>
         </View>
-        <Text style={styles.comapnyName}>
-          {barcodeDetails.manufacturer
-            ? barcodeDetails.manufacturer
-            : barcodeDetails.brand
-              ? barcodeDetails.brand
-              : barcodeDetails.title
-                ? barcodeDetails.title
-                : "Company Profile"}
-        </Text>
-        {"name" in companyRanking && (
-          <Text style={styles.parentName}>Owned By: {companyRanking.name}</Text>
+        <Text style={styles.comapnyName}>{scanDetails.name}</Text>
+        {"parent" in scanDetails && (
+          <Text style={styles.parentName}>Owned By: {scanDetails.parent}</Text>
         )}
         <IconButton
           icon="chevron-left"
@@ -413,10 +362,12 @@ export default function CompanyProfile({ navigation, ...props }) {
             top: 0,
             marginTop: "7.5%",
             marginLeft: "5%",
-            borderRadius: 100
+            borderRadius: 100,
           }}
           color={"white"}
-          onPress={() => navigation.navigate(`${props?.route?.params?.backLocation}`)}
+          onPress={() =>
+            navigation.navigate(`${props?.route?.params?.backLocation}`)
+          }
         />
       </View>
 
@@ -432,7 +383,9 @@ export default function CompanyProfile({ navigation, ...props }) {
             <View ref={renderedValuesParent}>
               {valueMatchList.map((rankingObj) => {
                 if (rankingObj?.value) {
-                  return <RenderValue key={rankingObj?.id} rankingObj={rankingObj} />;
+                  return (
+                    <RenderValue key={rankingObj?.id} rankingObj={rankingObj} />
+                  );
                 }
               })}
             </View>
@@ -446,7 +399,7 @@ export default function CompanyProfile({ navigation, ...props }) {
             )}
           </View>
 
-          <View style={styles.companyListWrapper}>
+          {/* <View style={styles.companyListWrapper}>
             {betterMatches?.length !== 0 &&
               props?.route?.params?.showBetterMatches && (
                 <Text style={styles.sectionHeaderText}>Better matches:</Text>
@@ -472,7 +425,7 @@ export default function CompanyProfile({ navigation, ...props }) {
                 }}
               />
             )}
-          </View>
+          </View> */}
 
           <MyButton
             onPress={() => {
@@ -489,13 +442,7 @@ export default function CompanyProfile({ navigation, ...props }) {
           />
 
           <MyButton
-            onPress={() =>
-              navigation.navigate("ReportProductForm", {
-                screen: "report",
-                companyRanking,
-                barcodeDetails,
-              })
-            }
+            onPress={() => {}}
             text="Report This Product"
             buttonColor={myTheme.colors.red}
           />

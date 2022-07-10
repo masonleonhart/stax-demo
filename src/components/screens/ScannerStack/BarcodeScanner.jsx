@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Dimensions } from "react-native";
-import SERVER_ADDRESS from "../../../constants/server_address";
-import { AUTH_HEADER } from "@env";
 
 import { StyleSheet, Text, View } from "react-native";
 
 import SharedStyles from "../../reusedComponents/SharedStyles";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
 import ActivityModal from "../../modals/ActivityModal";
+import { demoBrands } from "../../../constants/companies";
 
 export default function BarcodeScanner({ navigation }) {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const windowHeight = Dimensions.get("window").height;
   const windowWidth = Dimensions.get("window").width;
-  const accessToken = useSelector((store) => store.user.userInfo.accessToken);
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [isDialogVisible, setIsDialogVisible] = useState(false);
@@ -44,69 +42,79 @@ export default function BarcodeScanner({ navigation }) {
   // in a reducer, send the type and data to the api and navigate to company profile if successful return,
   // or to new product form if error
 
-  const handleBarCodeScanned = async ({ type, data }) => {
+  const handleBarCodeScanned = () => {
     setScanned(true);
     setIsDialogVisible(true);
 
-    if (type.includes("UPC-E") || type.includes("EAN-13")) {
-      dispatch({ type: "SET_MOST_RECENT_SCAN", payload: { type, data } });
+    setTimeout(() => {
+      const randomBrandIndex = Math.floor(Math.random() * 3);
 
-      // try {
-      //   const response = await axios.post(
-      //     `${SERVER_ADDRESS}/api/v1/upc`,
-      //     { data, type },
-      //     { headers: { [AUTH_HEADER]: accessToken } }
-      //   );
+      dispatch({
+        type: "SET_SCAN_DETAILS",
+        payload: demoBrands[randomBrandIndex]
+      });
 
-      //   if (response.data.status_code === 400) {
-      //     // Catches upc not in barcode lookup
-      //     dispatch({
-      //       type: "SET_SCANNED_COMPANY_RANKING",
-      //       payload: {},
-      //     });
-      //     dispatch({ type: "RESET_BARCODE_DETAILS" });
-      //     navigation.navigate("NewProductForm");
-      //   } else if (response.status === 200) {
-      //     if ("error" in response.data.company_obj) {
-      //       // match to barcodelookup but private company / company any company that is unable to match to morningstar
-      //       dispatch({
-      //         type: "SET_SCANNED_COMPANY_RANKING",
-      //         payload: {},
-      //       });
-      //       dispatch({ type: "RESET_BARCODE_DETAILS" });
-      //       navigation.navigate("NewProductForm");
-      //     } else {
-      //       // successful m* and barcodelookup return
-      //       dispatch({
-      //         type: "SET_BARCODE_DETAILS",
-      //         payload: response.data.barcode_result.data,
-      //       });
-      //       dispatch({
-      //         type: "SET_SCANNED_COMPANY_RANKING",
-      //         payload: response.data.company_obj.scanned_company_ranking,
-      //       });
-      //       dispatch({
-      //         type: "SET_SCANNED_COMPANY_BRAND",
-      //         payload: response.data.company_obj.scanned_brand,
-      //       });
+      navigation.navigate("CompanyProfile", {
+        showBetterMatches: true,
+        backLocation: "BarcodeScanner",
+      });
+    }, 1000);
 
-      //       navigation.navigate("CompanyProfile", { showBetterMatches: true, backLocation: "BarcodeScanner" });
-      //     }
-      //   } else {
-      //     //
-      //     dispatch({
-      //       type: "SET_SCANNED_COMPANY_RANKING",
-      //       payload: {},
-      //     });
-      //     dispatch({ type: "RESET_BARCODE_DETAILS" });
-      //     navigation.navigate("NewProductForm");
-      //   }
-      // } catch (error) {
-      //   console.log(error);
-      //   dispatch({ type: "RESET_BARCODE_DETAILS" });
-      //   navigation.navigate("NewProductForm");
-      // }
-    }
+    // try {
+    //   const response = await axios.post(
+    //     `${SERVER_ADDRESS}/api/v1/upc`,
+    //     { data, type },
+    //     { headers: { [AUTH_HEADER]: accessToken } }
+    //   );
+
+    //   if (response.data.status_code === 400) {
+    //     // Catches upc not in barcode lookup
+    //     dispatch({
+    //       type: "SET_SCANNED_COMPANY_RANKING",
+    //       payload: {},
+    //     });
+    //     dispatch({ type: "RESET_BARCODE_DETAILS" });
+    //     navigation.navigate("NewProductForm");
+    //   } else if (response.status === 200) {
+    //     if ("error" in response.data.company_obj) {
+    //       // match to barcodelookup but private company / company any company that is unable to match to morningstar
+    //       dispatch({
+    //         type: "SET_SCANNED_COMPANY_RANKING",
+    //         payload: {},
+    //       });
+    //       dispatch({ type: "RESET_BARCODE_DETAILS" });
+    //       navigation.navigate("NewProductForm");
+    //     } else {
+    //       // successful m* and barcodelookup return
+          // dispatch({
+          //   type: "SET_BARCODE_DETAILS",
+          //   payload: response.data.barcode_result.data,
+          // });
+    //       dispatch({
+    //         type: "SET_SCANNED_COMPANY_RANKING",
+    //         payload: response.data.company_obj.scanned_company_ranking,
+    //       });
+    //       dispatch({
+    //         type: "SET_SCANNED_COMPANY_BRAND",
+    //         payload: response.data.company_obj.scanned_brand,
+    //       });
+
+    //       navigation.navigate("CompanyProfile", { showBetterMatches: true, backLocation: "BarcodeScanner" });
+    //     }
+    //   } else {
+    //     //
+    //     dispatch({
+    //       type: "SET_SCANNED_COMPANY_RANKING",
+    //       payload: {},
+    //     });
+    //     dispatch({ type: "RESET_BARCODE_DETAILS" });
+    //     navigation.navigate("NewProductForm");
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    //   dispatch({ type: "RESET_BARCODE_DETAILS" });
+    //   navigation.navigate("NewProductForm");
+    // }
   };
 
   const styles = StyleSheet.create({

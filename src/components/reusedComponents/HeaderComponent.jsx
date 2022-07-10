@@ -18,8 +18,6 @@ const HeaderComponent = ({
   const usersName = useSelector((store) => store.user.personalName);
   const navigation = useNavigation();
 
-  console.log(usersName)
-
   return (
     <View
       style={[

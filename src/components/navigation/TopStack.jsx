@@ -11,8 +11,6 @@ import TermsOfUse from "../screens/topStack/TermsOfUse";
 import TabStack from "./TabsNav";
 import ValuesStack from "./ValuesStack";
 import UpdateUserInfoStack from "./UpdateUserInfoStack";
-import NewProductForm from "../screens/topStack/NewProductForm";
-import ReportProductForm from "../screens/topStack/ReportProductForm";
 
 export default function TopStack() {
   const Stack = createStackNavigator();
@@ -65,16 +63,6 @@ export default function TopStack() {
       <Stack.Screen
         name="UpdateUserInfoStack"
         component={UpdateUserInfoStack}
-      />
-      <Stack.Screen
-        name="NewProductForm"
-        component={NewProductForm}
-        options={{ headerShown: true }}
-      />
-      <Stack.Screen
-        name="ReportProductForm"
-        component={ReportProductForm}
-        options={{ headerShown: true }}
       />
     </Stack.Navigator>
   );

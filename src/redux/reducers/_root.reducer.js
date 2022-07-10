@@ -36,7 +36,7 @@ const valuesList = (
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSx-MftU146rqnu3qXiH1-PvbhqkBtqxln3nA&usqp=CAU",
       scrim: "rgba(0, 0, 0, .3)",
       text_color: "white",
-      name: "Respect to Human Rights",
+      name: "Respect for Human Rights",
       description:
         "Stand against violence, human trafficking, and other abuses",
       icon_name: "earth",
@@ -77,13 +77,13 @@ const valuesList = (
     {
       id: 6,
       image_url:
-        "https://thumbs.dreamstime.com/b/professional-workers-labor-day-cartoons-set-characters-people-jobs-154742856.jpg",
+        "https://www.peoriaaz.gov/home/showpublishedimage/9435/637255685106600000",
       scrim: "rgba(0, 0, 0, .2)",
       text_color: "white",
-      name: "Care for Workers",
+      name: "Small Business",
       description:
-        "Provide employees with healthcare and a safe working enviornment",
-      icon_name: "account-hard-hat",
+        "Business is considered local to the community or region",
+      icon_name: "store",
       },
   ],
   action
