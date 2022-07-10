@@ -6,11 +6,8 @@ import { useSelector } from "react-redux";
 import { useTheme, IconButton } from "react-native-paper";
 
 import Splash from "../screens/topStack/Splash";
-import AuthStack from "./AuthStack";
-import TermsOfUse from "../screens/topStack/TermsOfUse";
 import TabStack from "./TabsNav";
 import ValuesStack from "./ValuesStack";
-import UpdateUserInfoStack from "./UpdateUserInfoStack";
 
 export default function TopStack() {
   const Stack = createStackNavigator();
@@ -52,18 +49,8 @@ export default function TopStack() {
       })}
     >
       <Stack.Screen name="Splash" component={Splash} />
-      <Stack.Screen name="AuthStack" component={AuthStack} />
-      <Stack.Screen
-        name="TermsOfUse"
-        component={TermsOfUse}
-        options={{ headerShown: true }}
-      />
       <Stack.Screen name="TabStack" component={TabStack} />
       <Stack.Screen name="ValuesStack" component={ValuesStack} />
-      <Stack.Screen
-        name="UpdateUserInfoStack"
-        component={UpdateUserInfoStack}
-      />
     </Stack.Navigator>
   );
 }

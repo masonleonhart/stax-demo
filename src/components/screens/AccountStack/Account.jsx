@@ -25,7 +25,7 @@ export default function Account({ navigation }) {
   const dispatch = useDispatch();
   const deviceHeight = Dimensions.get("screen").height;
   const userInfo = useSelector((store) => store.user.userInfo);
-  const userValues = useSelector((store) => store.user.userInfo.values);
+  const userValues = useSelector((store) => store.user.valuesQuizSelection);
 
   const valuesNavButton = () => {
     if (userValues.length === 0) {
@@ -38,16 +38,6 @@ export default function Account({ navigation }) {
       navigation.navigate("ValuesStack", {
         screen: "ValuesComplete",
       });
-    }
-  };
-
-  const onSignOut = async () => {
-    try {
-      navigation.navigate("AuthStack", { screen: "Login" });
-
-      await auth.signOut();
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -124,18 +114,10 @@ export default function Account({ navigation }) {
       <ScrollView>
         <View style={SharedStyles.container}>
           <AccountPressable text="My Values" onPress={valuesNavButton} />
-          {userInfo.providerId === "password" && (
-            <AccountPressable
-              text="Update User Information"
-              onPress={() => navigation.navigate("UpdateUserInfoStack")}
-            />
-          )}
-          <AccountPressable text="Liked Brands" onPress={() => navigation.navigate("LikedBrands")} />
-          <AccountPressable
-            text="Terms of Use"
-            onPress={() => navigation.navigate("TermsOfUse")}
-          />
-          <MyButton text="Sign Out" onPress={onSignOut} />
+          <AccountPressable text="Update User Information" onPress={() => {}} />
+          <AccountPressable text="Liked Brands" onPress={() => {}} />
+          <AccountPressable text="Terms of Use" onPress={() => {}} />
+          <MyButton text="Sign Out" onPress={() => {}} />
         </View>
       </ScrollView>
     </>
