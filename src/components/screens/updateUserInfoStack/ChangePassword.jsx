@@ -16,8 +16,6 @@ import SharedStyles from "../../reusedComponents/SharedStyles";
 import fonts from "../../reusedComponents/fonts";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
 
-import firebase from "firebase";
-
 export default function ChangePassword({ navigation }) {
   const isFocused = useIsFocused();
   const myTheme = useTheme();
@@ -30,8 +28,6 @@ export default function ChangePassword({ navigation }) {
   const [continueClicks, setContinueClicks] = useState(0);
   const [securePassword, setSecurePassword] = useState(true);
   const [isDialogVisible, setIsDialogVisible] = useState(false);
-
-  const user = firebase.auth().currentUser;
 
   useEffect(() => {
     // Make it so that the password fields have to match, (red if they dont match and button doesn't work)

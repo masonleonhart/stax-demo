@@ -23,7 +23,6 @@ import EmptyStateView from "../../reusedComponents/EmptyStateView";
 
 export default function Values({ navigation }) {
   const isFocused = useIsFocused();
-  const myTheme = useTheme();
   const [isTooManyDialogVisible, setIsTooManyDialogVisible] = useState(false);
   const [selectedValues, setSelectedValues] = useState([]);
   const valuesList = useSelector((store) => store.valuesList);

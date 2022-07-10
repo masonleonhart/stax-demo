@@ -16,7 +16,6 @@ import SharedStyles from "../../reusedComponents/SharedStyles";
 import fonts from "../../reusedComponents/fonts";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
 
-import Firebase from "../../../../config/firebase";
 import HeaderComponent from "../../reusedComponents/HeaderComponent";
 import { COLORS } from "../../../constants/theme";
 
@@ -27,8 +26,6 @@ export default function Account({ navigation }) {
   const deviceHeight = Dimensions.get("screen").height;
   const userInfo = useSelector((store) => store.user.userInfo);
   const userValues = useSelector((store) => store.user.userInfo.values);
-
-  const auth = Firebase.auth();
 
   const valuesNavButton = () => {
     if (userValues.length === 0) {

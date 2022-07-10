@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useIsFocused } from "@react-navigation/core";
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
 
 import SERVER_ADDRESS from "../../../constants/server_address";
 
@@ -14,8 +13,6 @@ import SharedStyles from "../../reusedComponents/SharedStyles";
 import fonts from "../../reusedComponents/fonts";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
 
-import firebase from "firebase";
-
 export default function VerifyPassword({ navigation }) {
   const isFocused = useIsFocused();
   const myTheme = useTheme();
@@ -27,7 +24,6 @@ export default function VerifyPassword({ navigation }) {
   const [securePassword, setSecurePassword] = useState(true);
   const [isDialogVisible, setIsDialogVisible] = useState(false);
 
-  const user = firebase.auth().currentUser;
 
   const verifyPassword = async () => {
     if (!password) {
@@ -38,41 +34,37 @@ export default function VerifyPassword({ navigation }) {
 
     setIsDialogVisible(true);
 
-    try {
-      const crediental = firebase.auth.EmailAuthProvider.credential(
-        email,
-        password
-      );
+    // try {
 
-      const response = await user.reauthenticateWithCredential(crediental);
+    //   const response = await user.reauthenticateWithCredential(crediental);
 
-      const authenticateData = {
-        access_token: response.user.toJSON().stsTokenManager.accessToken,
-        first_name,
-        last_name,
-        email,
-      };
+    //   const authenticateData = {
+    //     access_token: response.user.toJSON().stsTokenManager.accessToken,
+    //     first_name,
+    //     last_name,
+    //     email,
+    //   };
 
-      const serverResponse = await axios.post(
-        `${SERVER_ADDRESS}/api/v1/authenticate-user`,
-        authenticateData
-      );
+    //   const serverResponse = await axios.post(
+    //     `${SERVER_ADDRESS}/api/v1/authenticate-user`,
+    //     authenticateData
+    //   );
 
-      const userData = {
-        ...serverResponse.data,
-        accessToken: response.user.toJSON().stsTokenManager.accessToken,
-        providerId: response.user.providerData[0].providerId,
-      };
+    //   const userData = {
+    //     ...serverResponse.data,
+    //     accessToken: response.user.toJSON().stsTokenManager.accessToken,
+    //     providerId: response.user.providerData[0].providerId,
+    //   };
 
-      await dispatch({ type: "SET_USER_INFO", payload: userData });
+    //   await dispatch({ type: "SET_USER_INFO", payload: userData });
 
-      setIsDialogVisible(false);
-      navigation.navigate("UpdateUserInfoLanding");
-    } catch (error) {
-      Alert.alert("Error", error.message);
+    //   setIsDialogVisible(false);
+    //   navigation.navigate("UpdateUserInfoLanding");
+    // } catch (error) {
+    //   Alert.alert("Error", error.message);
 
-      setIsDialogVisible(false);
-    }
+    //   setIsDialogVisible(false);
+    // }
   };
 
   // Shared theme for text inputs

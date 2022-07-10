@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useIsFocused } from "@react-navigation/core";
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
 import { AUTH_HEADER } from "@env";
 import SERVER_ADDRESS from "../../../constants/server_address";
 
@@ -42,22 +41,7 @@ export default function LikedBrands() {
   }
 
   const getBrands = () => {
-    axios
-      .get(getApiURL(
-        {
-          page: page,
-        }
-      ), {
-        headers: { [AUTH_HEADER]: accessToken },
-      })
-      .then((response) => {
-        setLikedBrands([...likedBrands, ...response.data]);
         setIsDialogVisible(false);
-      })
-      .catch((e) => {
-        console.log(e);
-        setIsDialogVisible(false);
-      });
   };
 
   const BrandObject = ({ brand, industry, parent, id, companyRanking, values_match_score }) => {
@@ -69,18 +53,7 @@ export default function LikedBrands() {
         const url = `${SERVER_ADDRESS}/api/v1/${liked ? "remove-user-favourite-company" : "favourite-company"
           }`;
 
-        const response = await axios.post(
-          url,
-          {
-            company_id: id,
-          },
-          {
-            headers: { [AUTH_HEADER]: accessToken },
-          }
-        );
-        if (response.status) {
           setLiked((prev) => !prev);
-        }
       } catch (error) {
         console.error(error);
       }

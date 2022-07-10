@@ -4,7 +4,6 @@ import Company from "../../reusedComponents/Company.jsx";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { AUTH_HEADER } from "@env";
 import SERVER_ADDRESS from "../../../constants/server_address";
-import axios from "axios";
 
 import {
   View,
@@ -71,54 +70,54 @@ function DiscoverUI({ navigation }) {
   }
 
   const getCompanyList = async () => {
-    try {
-      dispatch({ type: "DISCOVER_COMPANY_LIST_LOADING" });
+    // try {
+    //   dispatch({ type: "DISCOVER_COMPANY_LIST_LOADING" });
 
-      const response = await axios.get(getApiURL(
-        {
-          filter: appliedFilter,
-          page: discoverState.page,
-          search: discoverState.searchValue,
-          favCom: discoverState.favCompanyOnly,
-          bCorpCompany: discoverState.bCorpCompany,
-          onePercentageForThePlanet: discoverState.onePercentCompany,
-          GABV: discoverState.gabvCompany,
-        }
-      ), {
-        headers: { [AUTH_HEADER]: accessToken },
-      });
-      if (response.data?.length == 0 && appliedFilter?.length !== 0) {
-        getOtherCompanyList();
-      } else {
-        dispatch({
-          type: "SET_DISCOVER_COMPANY_LIST",
-          payload: [...(discoverState?.companyList ?? []), ...response.data],
-        });
-      }
-    } catch (error) {
-      dispatch({ type: "DISCOVER_COMPANY_LIST_LOADING_STOP" });
-      console.error(error);
-    }
+    //   const response = await axios.get(getApiURL(
+    //     {
+    //       filter: appliedFilter,
+    //       page: discoverState.page,
+    //       search: discoverState.searchValue,
+    //       favCom: discoverState.favCompanyOnly,
+    //       bCorpCompany: discoverState.bCorpCompany,
+    //       onePercentageForThePlanet: discoverState.onePercentCompany,
+    //       GABV: discoverState.gabvCompany,
+    //     }
+    //   ), {
+    //     headers: { [AUTH_HEADER]: accessToken },
+    //   });
+    //   if (response.data?.length == 0 && appliedFilter?.length !== 0) {
+    //     getOtherCompanyList();
+    //   } else {
+    //     dispatch({
+    //       type: "SET_DISCOVER_COMPANY_LIST",
+    //       payload: [...(discoverState?.companyList ?? []), ...response.data],
+    //     });
+    //   }
+    // } catch (error) {
+    //   dispatch({ type: "DISCOVER_COMPANY_LIST_LOADING_STOP" });
+    //   console.error(error);
+    // }
   };
 
   const getOtherCompanyList = async () => {
-    try {
-      const response = await axios.get(getApiURL(
-        {
-          page: discoverState.page,
-          search: discoverState.searchValue
-        }
-      ), {
-        headers: { [AUTH_HEADER]: accessToken },
-      });
-      dispatch({
-        type: "SET_OTHER_DISCOVER_COMPANY_LIST",
-        payload: [...(discoverState?.otherCompanyList ?? []), ...response.data],
-      });
-    } catch (error) {
-      dispatch({ type: "DISCOVER_COMPANY_LIST_LOADING_COMPLETE" });
-      console.error(error);
-    }
+    // try {
+    //   const response = await axios.get(getApiURL(
+    //     {
+    //       page: discoverState.page,
+    //       search: discoverState.searchValue
+    //     }
+    //   ), {
+    //     headers: { [AUTH_HEADER]: accessToken },
+    //   });
+    //   dispatch({
+    //     type: "SET_OTHER_DISCOVER_COMPANY_LIST",
+    //     payload: [...(discoverState?.otherCompanyList ?? []), ...response.data],
+    //   });
+    // } catch (error) {
+    //   dispatch({ type: "DISCOVER_COMPANY_LIST_LOADING_COMPLETE" });
+    //   console.error(error);
+    // }
   };
 
   useEffect(() => {

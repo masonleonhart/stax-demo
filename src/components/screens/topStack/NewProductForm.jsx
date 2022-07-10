@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useIsFocused } from "@react-navigation/core";
-import axios from "axios";
 import SERVER_ADDRESS from "../../../constants/server_address";
 import { AUTH_HEADER } from "@env";
 
@@ -80,23 +79,23 @@ export default function NoScanReturn(props) {
 
   const submitButtonPress = async () => {
     setIsDialogVisible(true);
-    try {
-      const response = await axios.post(
-        `${SERVER_ADDRESS}/api/v1/add_new_products`,
-        {
-          ...formDetails,
-          ...formStore,
-        },
-        { headers: { [AUTH_HEADER]: accessToken } }
-      );
+    // try {
+    //   const response = await axios.post(
+    //     `${SERVER_ADDRESS}/api/v1/add_new_products`,
+    //     {
+    //       ...formDetails,
+    //       ...formStore,
+    //     },
+    //     { headers: { [AUTH_HEADER]: accessToken } }
+    //   );
 
-      await setUpcPostStatus(true);
-    } catch (error) {
-      console.log("Error in posting new upc");
-      console.log(error);
+    //   await setUpcPostStatus(true);
+    // } catch (error) {
+    //   console.log("Error in posting new upc");
+    //   console.log(error);
 
-      await setUpcPostStatus(false);
-    }
+    //   await setUpcPostStatus(false);
+    // }
   };
 
   // Shared theme for text inputs

@@ -36,8 +36,6 @@ import StaxLogo from "../../../../assets/StaxLogoVerticleWhiteNew.png";
 import SharedStyles from "../../reusedComponents/SharedStyles";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
 
-import Firebase from "../../../../config/firebase";
-import firebase from "firebase";
 
 // Renders the login page
 
@@ -50,8 +48,6 @@ export default function Login({ navigation }) {
     email: "",
     password: "",
   });
-
-  const auth = Firebase.auth();
 
   const onLogin = async () => {
     try {
@@ -84,31 +80,6 @@ export default function Login({ navigation }) {
   const googleSignIn = async () => {
     setIsDialogVisible(true);
 
-    try {
-      const credential = await firebase.auth.GoogleAuthProvider.credential(
-        response.params.id_token
-      );
-
-      const decodedIdToken = jwt_decode(response.params.id_token);
-
-      await dispatch({
-        type: "SET_PERSONAL_NAME",
-        payload: {
-          first_name: decodedIdToken.given_name,
-          last_name: decodedIdToken.family_name,
-        },
-      });
-
-      await dispatch({ type: "SET_EMAIL", payload: decodedIdToken.email });
-
-      await auth.signInWithCredential(credential);
-
-      setIsDialogVisible(false);
-    } catch (error) {
-      Alert.alert("Error", error);
-
-      setIsDialogVisible(false);
-    }
   };
 
   useEffect(() => {

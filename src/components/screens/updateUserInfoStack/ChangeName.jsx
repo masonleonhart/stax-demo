@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/core";
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
 
 import SERVER_ADDRESS from "../../../constants/server_address";
 import { AUTH_HEADER } from "@env";
@@ -31,42 +30,42 @@ export default function ChangeName({ navigation }) {
     if (!canContinue) {
       Alert.alert("Error", "Missing field, please complete the form.");
     } else {
-      try {
-        setIsDialogVisible(true);
+      // try {
+      //   setIsDialogVisible(true);
 
-        const response = await axios.post(
-          `${SERVER_ADDRESS}/api/v1/update_user_name`,
-          {
-            user_id: userInfo.id,
-            first_name: form.first_name,
-            last_name: form.last_name,
-          },
-          { headers: { [AUTH_HEADER]: userInfo.accessToken } }
-        );
+      //   const response = await axios.post(
+      //     `${SERVER_ADDRESS}/api/v1/update_user_name`,
+      //     {
+      //       user_id: userInfo.id,
+      //       first_name: form.first_name,
+      //       last_name: form.last_name,
+      //     },
+      //     { headers: { [AUTH_HEADER]: userInfo.accessToken } }
+      //   );
 
-        await dispatch({
-          type: "SET_USER_INFO",
-          payload: {
-            ...response.data.user,
-            accessToken: userInfo.accessToken,
-            providerId: userInfo.providerId,
-          },
-        });
+      //   await dispatch({
+      //     type: "SET_USER_INFO",
+      //     payload: {
+      //       ...response.data.user,
+      //       accessToken: userInfo.accessToken,
+      //       providerId: userInfo.providerId,
+      //     },
+      //   });
 
-        setIsDialogVisible(false);
+      //   setIsDialogVisible(false);
 
-        Alert.alert("Success", "Name updated successfully", [
-          {
-            text: "OK",
-            onPress: () =>
-              navigation.navigate("UpdateUserInfoLanding"),
-          },
-        ]);
-      } catch (error) {
-        setIsDialogVisible(false);
-        console.log(error);
-        // Alert.alert("Error", error);
-      }
+      //   Alert.alert("Success", "Name updated successfully", [
+      //     {
+      //       text: "OK",
+      //       onPress: () =>
+      //         navigation.navigate("UpdateUserInfoLanding"),
+      //     },
+      //   ]);
+      // } catch (error) {
+      //   setIsDialogVisible(false);
+      //   console.log(error);
+      //   // Alert.alert("Error", error);
+      // }
     }
   };
 

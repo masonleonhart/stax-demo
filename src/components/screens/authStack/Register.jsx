@@ -20,8 +20,6 @@ import fonts from "../../reusedComponents/fonts";
 
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
 
-import Firebase from "../../../../config/firebase";
-
 // Renders the Register view
 
 export default function RegisterAccount({ navigation }) {
@@ -40,8 +38,6 @@ export default function RegisterAccount({ navigation }) {
   const [passwordError, setPasswordError] = useState(false);
   const [continueClicks, setContinueClicks] = useState(0);
   const [isDialogVisible, setIsDialogVisible] = useState(false);
-
-  const auth = Firebase.auth();
 
   // If there is a form error or any of the fields are empty, you are not allowed to continue
 

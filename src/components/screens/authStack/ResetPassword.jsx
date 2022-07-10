@@ -15,8 +15,6 @@ import SharedStyles from "../../reusedComponents/SharedStyles";
 import fonts from "../../reusedComponents/fonts";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
 
-import firebase from "firebase";
-
 export default function ResetPassword({ navigation }) {
   const isFocused = useIsFocused();
   const myTheme = useTheme();
@@ -24,8 +22,6 @@ export default function ResetPassword({ navigation }) {
     email: "",
   });
   const [isDialogVisible, setIsDialogVisible] = useState(false);
-
-  const auth = firebase.auth();
 
   const changePassword = async () => {
     if (!form.email) {

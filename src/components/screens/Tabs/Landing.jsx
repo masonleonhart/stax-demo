@@ -9,7 +9,6 @@ import {
   ScrollView,
   View,
   StyleSheet,
-  Dimensions,
   Pressable,
 } from "react-native";
 
@@ -25,8 +24,7 @@ export default function Landing({ navigation }) {
   const isFocused = useIsFocused();
   const myTheme = useTheme();
   const dispatch = useDispatch();
-  const deviceHeight = Dimensions.get("screen").height;
-  const userValues = useSelector((store) => store.user.userInfo.values);
+  const userValues = useSelector((store) => store.user.valuesQuizSelection);
   const userInfo = useSelector((store) => store.user.userInfo);
 
   const topValuesButtonPress = () => {

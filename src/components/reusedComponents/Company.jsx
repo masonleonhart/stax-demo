@@ -15,7 +15,6 @@ import { COLORS, FONTS, SIZES } from "../../constants/theme";
 import Separator from "./Separator";
 import { AUTH_HEADER } from "@env";
 import SERVER_ADDRESS from "../../constants/server_address";
-import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 
@@ -224,19 +223,7 @@ const Company = ({ ...company }) => {
       const url = `${SERVER_ADDRESS}/api/v1/${
         liked ? "remove-user-favourite-company" : "favourite-company"
       }`;
-
-      const response = await axios.post(
-        url,
-        {
-          company_id: id,
-        },
-        {
-          headers: { [AUTH_HEADER]: accessToken },
-        }
-      );
-      if (response.status) {
         setLiked((prev) => !prev);
-      }
     } catch (error) {
       console.error(error);
     }

@@ -1,29 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useIsFocused } from "@react-navigation/core";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
-import SERVER_ADDRESS from "../../../constants/server_address";
-import { AUTH_HEADER } from "@env";
 
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 
-import { View, ScrollView, StyleSheet, Pressable } from "react-native";
+import { View, StyleSheet, Pressable } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import DraggableFlatList from "react-native-draggable-flatlist";
 
 import MyButton from "../../reusedComponents/MyButton";
 
-import SharedStyles from "../../reusedComponents/SharedStyles";
 import EmptyStateView from "../../reusedComponents/EmptyStateView";
 import fonts from "../../reusedComponents/fonts";
 
-export default function ValuesComplete({ route, navigation }) {
+export default function ValuesComplete({ navigation }) {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const quizSelection = useSelector((store) => store.user.valuesQuizSelection);
-  const accessToken = useSelector((store) => store.user.userInfo.accessToken);
-  const userId = useSelector((store) => store.user.userInfo.id);
-  const providerId = useSelector((store) => store.user.userInfo.providerId);
   const myTheme = useTheme();
 
   // returns user to values select
@@ -34,36 +27,8 @@ export default function ValuesComplete({ route, navigation }) {
 
   // Sends the values to be stored into state and navigates to landing
 
-  const onContinuePress = async () => {
-    const getArrayOfId = () => {
-      let array = [];
-
-      for (const value of quizSelection) {
-        array.push(value.id);
-      }
-
-      return array;
-    };
-
-    try {
-      const response = await axios.post(
-        `${SERVER_ADDRESS}/api/v1/update_values`,
-        {
-          user_id: userId,
-          values: getArrayOfId(),
-        },
-        { headers: { [AUTH_HEADER]: accessToken } }
-      );
-
-      await dispatch({
-        type: "SET_USER_INFO",
-        payload: { ...response.data.user, accessToken, providerId },
-      });
-
-      navigation.navigate("TabStack", { screen: "Landing" });
-    } catch (error) {
-      console.log(error);
-    }
+  const onContinuePress = () => {
+    dispatch({ type: "SET_USER_VALUES", payload: quizSelection })
   };
 
   const styles = StyleSheet.create({
@@ -134,7 +99,7 @@ export default function ValuesComplete({ route, navigation }) {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollView}>
+    <View style={styles.scrollView}>
       <Text style={styles.headerText}>Your Results</Text>
       <Text style={styles.subheaderText}>
         Here are your values, starting with your highest result! To reorder,
@@ -151,11 +116,11 @@ export default function ValuesComplete({ route, navigation }) {
         renderItem={renderItem}
       />
 
-      <MyButton onPress={onContinuePress} text="Go to my Dashboard" />
+      <MyButton onPress={() => navigation.navigate("TabStack", { screen: "Landing" })} text="Go to my Dashboard" />
 
       <Pressable onPress={onRetakePress}>
         <Text style={styles.retakeText}>Retake Quiz</Text>
       </Pressable>
-    </ScrollView>
+    </View>
   );
 }

@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { AUTH_HEADER } from "@env";
 import SERVER_ADDRESS from "../../../constants/server_address";
-import axios from "axios";
 
 import {
   View,
@@ -80,28 +79,28 @@ export default function CompanyProfile({ navigation, ...props }) {
   };
 
   const getCompanyList = async () => {
-    try {
-      const response = await axios.get(
-        getApiURL({
-          filter: matchingBrand.category_level_3,
-        }),
-        {
-          headers: { [AUTH_HEADER]: accessToken },
-        }
-      );
+    // try {
+    //   const response = await axios.get(
+    //     getApiURL({
+    //       filter: matchingBrand.category_level_3,
+    //     }),
+    //     {
+    //       headers: { [AUTH_HEADER]: accessToken },
+    //     }
+    //   );
 
-      const repeatationCompanyIndex = response.data.findIndex(
-        (Object) => matchingBrand.id === Object.id
-      );
-      response.data.splice(repeatationCompanyIndex, 1);
+    //   const repeatationCompanyIndex = response.data.findIndex(
+    //     (Object) => matchingBrand.id === Object.id
+    //   );
+    //   response.data.splice(repeatationCompanyIndex, 1);
 
-      dispatch({
-        type: "SET_MATCHING_COMPANY_LIST",
-        payload: response.data,
-      });
-    } catch (error) {
-      console.error(error);
-    }
+    //   dispatch({
+    //     type: "SET_MATCHING_COMPANY_LIST",
+    //     payload: response.data,
+    //   });
+    // } catch (error) {
+    //   console.error(error);
+    // }
   };
 
   const scrollToTop = () => {
