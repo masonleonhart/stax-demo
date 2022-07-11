@@ -18,15 +18,15 @@ const rankingCategory =
     },
     reduced_waste: {
         modified: "waste",
-        type: "int",
+        type: "percent",
     },
     respect_for_human_rights: {
         modified: "human_rights",
-        type: "int",
+        type: "percent",
     },
     business_ethics: {
         modified: "business_ethics",
-        type: "int",
+        type: "percent",
     },
 };
 
